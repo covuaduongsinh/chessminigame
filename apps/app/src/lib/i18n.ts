@@ -5,7 +5,6 @@ import vi from '../locales/vi.json';
 
 export type Lang = 'vi' | 'en';
 
-
 void i18n.use(initReactI18next).init({
   resources: { vi: { translation: vi }, en: { translation: en } },
   // Mặc định tiếng Việt; người dùng đổi sang tiếng Anh trong Cài đặt.

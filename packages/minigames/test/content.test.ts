@@ -13,9 +13,9 @@ import {
 } from '../src';
 
 describe('danh mục mini-game', () => {
-  it('có ít nhất 36 bài, mỗi cấp 6 bài, id không trùng', () => {
-    expect(MINIGAMES.length).toBeGreaterThanOrEqual(36);
-    for (const l of LEVELS) expect(miniGamesOf(l.key)).toHaveLength(6);
+  it('có ít nhất 40 bài, mỗi cấp ít nhất 6 bài, id không trùng', () => {
+    expect(MINIGAMES.length).toBeGreaterThanOrEqual(40);
+    for (const l of LEVELS) expect(miniGamesOf(l.key).length).toBeGreaterThanOrEqual(6);
     expect(new Set(MINIGAMES.map((g) => g.id)).size).toBe(MINIGAMES.length);
   });
 
@@ -163,5 +163,27 @@ describe('ván kinh điển', () => {
   it('đủ 10 ván và 12 thế tàn cuộc', () => {
     expect(CLASSICS).toHaveLength(10);
     expect(ENDGAMES).toHaveLength(12);
+  });
+});
+
+describe('ăn liên hoàn & đặt Vua', () => {
+  it('đi nước không ăn quân thì bị nhắc luật', () => {
+    const s = new MiniGameSession(getMiniGame('xe-7')!, { seed: 1 });
+    const ev = s.playerMove('a1', 'a3');
+    expect(ev[0]).toMatchObject({ type: 'illegal' });
+    expect(ev[0]?.type === 'illegal' && ev[0].message?.vi).toContain('phải ăn');
+  });
+  it('đi sai luật quân thì có lời giải thích', () => {
+    const s = new MiniGameSession(getMiniGame('ma-1')!, { seed: 1 });
+    const ev = s.playerMove('b1', 'b3');
+    expect(ev[0]?.type === 'illegal' && ev[0].message?.vi).toContain('chữ L');
+  });
+  it('đặt Vua: đáp án tự tính đúng', () => {
+    const r = getMiniGame('vua-7')!.rounds[0]!;
+    if (r.mode !== 'quiz') throw new Error();
+    const [check, stale, mate] = r.questions;
+    expect(check?.kind === 'squares' && check.answer.length).toBe(8);
+    expect(stale?.kind === 'squares' && stale.answer).toEqual(['a8']);
+    expect(mate?.kind === 'squares' && mate.answer).toContain('h8');
   });
 });

@@ -10,7 +10,7 @@ import {
   toPgn,
   toSan,
 } from '@duongsinh/chess-core';
-import { CLASSICS } from '@duongsinh/minigames';
+import { CLASSICS, illegalMessage } from '@duongsinh/minigames';
 import {
   type Arrow,
   Board,
@@ -96,6 +96,8 @@ export default function AnalysisScreen() {
     const m = findUci(pos, `${from}${to}${promotion ?? ''}`);
     if (!m) {
       play('wrong');
+      const why = illegalMessage(pos, from, to);
+      if (why) setMessage(`⚠ ${L(why)}`);
       return;
     }
     const san = toSan(pos, m);

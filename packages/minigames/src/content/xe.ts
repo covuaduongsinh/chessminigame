@@ -167,4 +167,31 @@ export const XE: MiniGame[] = [
     ],
     skills: ['rook', 'endgame', 'checkmate'],
   },
+  {
+    id: 'xe-7',
+    level: 'xe',
+    order: 7,
+    title: { vi: 'Xe ăn liên hoàn', en: 'Rook Chain Captures' },
+    story: {
+      vi: 'Xe như đoàn tàu chở hàng: mỗi chặng phải dừng ở một ga có Tốt đen. Em vạch lộ trình sao cho tàu không bị dừng giữa đường nhé!',
+      en: 'The rook is a freight train: every stop must be a station with a black pawn. Plan a route so the train never gets stuck!',
+    },
+    goal: {
+      vi: 'Ăn hết Tốt đen, nước nào cũng phải ăn quân.',
+      en: 'Capture every black pawn — every move must capture.',
+    },
+    lesson: {
+      vi: 'Xe đi được xa — hãy nhìn cả hàng và cột trước khi đi.',
+      en: 'Rooks travel far — scan the whole rank and file first.',
+    },
+    rounds: [
+      {
+        mode: 'collect',
+        mustCapture: true,
+        fen: '8/1p4p1/8/p2p4/8/8/3p2p1/R7 w - - 0 1',
+        targets: ['a5', 'd5', 'd2', 'g2', 'g7', 'b7'],
+      },
+    ],
+    skills: ['rook', 'calculation'],
+  },
 ];

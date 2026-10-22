@@ -12,6 +12,7 @@ import {
   toSan,
 } from '@duongsinh/chess-core';
 import { bestMove, chooseMove, createRng } from '@duongsinh/engine';
+import { illegalMessage, MUST_CAPTURE_MESSAGE } from './explain';
 import {
   applyCollectMove,
   attackedByEnemy,
@@ -29,7 +30,7 @@ export type SessionStatus = 'playing' | 'round-won' | 'won' | 'lost';
 export type SessionEvent =
   | { type: 'move'; uci: string; san: string; by: 'player' | 'engine' }
   | { type: 'collect'; square: Square; remaining: number }
-  | { type: 'illegal' }
+  | { type: 'illegal'; message: L10n | null }
   | { type: 'mistake'; message: L10n }
   | { type: 'correct' }
   | { type: 'trap'; square: Square }
@@ -62,6 +63,10 @@ const MSG = {
   },
   pieceLost: { vi: 'Em bị mất quân rồi.', en: 'You lost a piece.' },
   checkmated: { vi: 'Em bị chiếu hết rồi.', en: 'You were checkmated.' },
+  noCapture: {
+    vi: 'Hết quân để ăn rồi — thử thứ tự khác nhé!',
+    en: 'Nothing left to capture — try a different order!',
+  },
 } satisfies Record<string, L10n>;
 
 export interface QuizState {
@@ -253,7 +258,10 @@ export class MiniGameSession {
     const uci = `${from}${to}${promotion ?? ''}`;
     let m = findUci(this.position, uci);
     if (!m && !promotion) m = findUci(this.position, `${uci}q`);
-    if (!m) return [{ type: 'illegal' }];
+    if (!m) return [{ type: 'illegal', message: illegalMessage(this.position, from, to) }];
+    if (r.mode === 'collect' && r.mustCapture && !m.captured) {
+      return [{ type: 'illegal', message: MUST_CAPTURE_MESSAGE }];
+    }
 
     if (r.mode === 'puzzle') return this.puzzleMove(m);
 

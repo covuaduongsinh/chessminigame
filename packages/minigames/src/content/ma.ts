@@ -163,4 +163,31 @@ export const MA: MiniGame[] = [
     ],
     skills: ['knight', 'calculation'],
   },
+  {
+    id: 'ma-7',
+    level: 'ma',
+    order: 7,
+    title: { vi: 'Mã ăn liên hoàn', en: 'Knight Chain Captures' },
+    story: {
+      vi: 'Thử thách khó dành cho bạn nào đã thành thạo chú Mã: nước nào cũng phải ăn một quân. Đi sai thứ tự là sẽ bị "kẹt" giữa đường đấy!',
+      en: 'A tough challenge for knight experts: every move must capture. Take them in the wrong order and you get stuck!',
+    },
+    goal: {
+      vi: 'Ăn hết Tốt đen, nước nào cũng phải ăn quân.',
+      en: 'Capture every black pawn — every move must capture.',
+    },
+    lesson: {
+      vi: 'Nghĩ trước vài nước: thứ tự quan trọng không kém nước đi.',
+      en: 'Think a few moves ahead: order matters as much as the moves.',
+    },
+    rounds: [
+      {
+        mode: 'collect',
+        mustCapture: true,
+        fen: '8/5p2/3p4/1p4p1/4p3/2p5/8/1N6 w - - 0 1',
+        targets: ['c3', 'e4', 'g5', 'f7', 'd6', 'b5'],
+      },
+    ],
+    skills: ['knight', 'calculation'],
+  },
 ];

@@ -21,6 +21,8 @@ export interface CollectRound {
   avoidAttacked?: boolean;
   /** Giới hạn số nước. */
   moveLimit?: number;
+  /** Mọi nước đều phải ăn quân ("ăn liên hoàn"). */
+  mustCapture?: boolean;
 }
 
 /** Đua phong cấp: bên nào phong cấp trước thắng; mất hết Tốt là thua. */

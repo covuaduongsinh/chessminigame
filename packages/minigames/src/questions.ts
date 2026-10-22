@@ -1,4 +1,5 @@
 import {
+  ALL_SQUARES,
   FILES,
   isLightSquare,
   MoveFlag,
@@ -143,4 +144,37 @@ export function placeOn(fen: string, square: Square, piece: string): string {
   const lower = piece.toLowerCase();
   pos.put(square, { color: piece === lower ? 'b' : 'w', type: lower as 'p' });
   return pos.toFen();
+}
+
+/**
+ * "Đặt Vua": chạm vào mọi ô mà nếu đặt Vua đen vào đó thì Vua bị chiếu / bị chiếu hết / hết nước.
+ * `fen` chỉ có quân Trắng, lượt Đen. Bỏ qua ô sát Vua trắng (thế không hợp lệ).
+ */
+export function placeKingQuestion(
+  fen: string,
+  kind: 'check' | 'mate' | 'stalemate',
+  prompt: L10n,
+): Question {
+  const answer: Square[] = [];
+  const base = Position.fromFen(fen);
+  const wk = base.kings[0]!;
+  for (const sq of ALL_SQUARES) {
+    if (base.get(sq)) continue;
+    const pos = Position.fromFen(fen);
+    pos.put(sq, { color: 'b', type: 'k' });
+    const k = pos.kings[1]!;
+    if (wk !== -1 && Math.abs((wk & 7) - (k & 7)) <= 1 && Math.abs((wk >> 4) - (k >> 4)) <= 1)
+      continue;
+    const check = pos.inCheck('b');
+    const moves = pos.legalMoves().length;
+    if (
+      (kind === 'check' && check) ||
+      (kind === 'mate' && check && moves === 0) ||
+      (kind === 'stalemate' && !check && moves === 0)
+    ) {
+      answer.push(sq);
+    }
+  }
+  if (answer.length === 0) throw new Error(`Không có ô nào cho câu hỏi đặt Vua (${kind}): ${fen}`);
+  return { kind: 'squares', prompt, fen, answer };
 }

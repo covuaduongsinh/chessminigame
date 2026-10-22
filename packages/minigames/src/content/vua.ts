@@ -1,5 +1,5 @@
 import { START_FEN } from '@duongsinh/chess-core';
-import { movesQuestion, outcomeQuestion } from '../questions';
+import { movesQuestion, outcomeQuestion, placeKingQuestion } from '../questions';
 import type { MiniGame } from '../types';
 
 export const VUA: MiniGame[] = [
@@ -162,5 +162,40 @@ export const VUA: MiniGame[] = [
     },
     rounds: [{ mode: 'play', fen: START_FEN, engineLevel: 1 }],
     skills: ['game', 'opening', 'strategy'],
+  },
+  {
+    id: 'vua-7',
+    level: 'vua',
+    order: 7,
+    title: { vi: 'Đặt Vua', en: 'Place the King' },
+    story: {
+      vi: 'Trò chơi ngược: quân Trắng đã đứng sẵn, em là người đặt Vua đen lên bàn. Đặt ở đâu thì Vua bị chiếu? Ở đâu thì bị chiếu hết? Còn ở đâu thì hết nước đi?',
+      en: 'A reverse puzzle: White is set up — you place the black king. Where is it in check? Checkmated? Stalemated?',
+    },
+    goal: { vi: 'Chạm hết các ô đúng.', en: 'Tap every correct square.' },
+    lesson: {
+      vi: 'Chiếu = bị tấn công. Chiếu hết = bị tấn công và không thoát được. Hết nước = không bị tấn công nhưng không đi được.',
+      en: 'Check = attacked. Mate = attacked with no escape. Stalemate = not attacked but no moves.',
+    },
+    rounds: [
+      {
+        mode: 'quiz',
+        questions: [
+          placeKingQuestion('8/8/8/8/3N4/8/8/K7 b - - 0 1', 'check', {
+            vi: 'Đặt Vua đen vào đâu thì bị Mã chiếu? Chạm hết các ô.',
+            en: 'Where would the black king be in check from the knight? Tap them all.',
+          }),
+          placeKingQuestion('8/2Q5/1K6/8/8/8/8/8 b - - 0 1', 'stalemate', {
+            vi: 'Đặt Vua đen vào đâu thì HẾT NƯỚC ĐI (hòa)?',
+            en: 'Where would the black king be STALEMATED?',
+          }),
+          placeKingQuestion('8/6Q1/5K2/8/8/8/8/8 b - - 0 1', 'mate', {
+            vi: 'Đặt Vua đen vào đâu thì bị CHIẾU HẾT?',
+            en: 'Where would the black king be CHECKMATED?',
+          }),
+        ],
+      },
+    ],
+    skills: ['king', 'checkmate', 'board-vision'],
   },
 ];

@@ -197,6 +197,7 @@ export function solveCollect(
       const pos = Position.fromFen(node.fen);
       for (const m of pos.legalMoves()) {
         if (m.promotion && m.promotion !== 'q') continue;
+        if (round.mustCapture && !m.captured) continue;
         const step = applyCollectMove(pos, round, node.mask, m);
         const uci = `${squareName(m.from)}${squareName(m.to)}${m.promotion ?? ''}`;
         if (!step.lost) {

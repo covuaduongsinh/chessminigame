@@ -1,5 +1,6 @@
 import { type Color, Game, type PieceType, type Square, squareName } from '@duongsinh/chess-core';
 import { hint as engineHint, getLevel, LEVELS, thinkAsync } from '@duongsinh/engine';
+import { illegalMessage } from '@duongsinh/minigames';
 import {
   type Arrow,
   Board,
@@ -40,6 +41,7 @@ export default function PlayScreen() {
   const [hintArrow, setHintArrow] = useState<Arrow | null>(null);
   const [promo, setPromo] = useState<{ from: Square; to: Square } | null>(null);
   const [over, setOver] = useState<{ title: string; text: string } | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const token = useRef(0);
   const levelRef = useRef(level);
   levelRef.current = level;
@@ -111,8 +113,11 @@ export default function PlayScreen() {
     const e = game.move({ from, to, promotion });
     if (!e) {
       play('wrong');
+      const why = illegalMessage(game.position, from, to);
+      if (why) setNotice(L(why));
       return;
     }
+    setNotice(null);
     play(e.captured ? 'capture' : e.san.includes('+') ? 'check' : 'move');
     setHintArrow(null);
     rerender();
@@ -171,6 +176,11 @@ export default function PlayScreen() {
           <Text style={styles.status}>
             {busy ? t('game.thinking') : game.turn === myColor ? t('game.yourTurn') : ''}
           </Text>
+          {notice ? (
+            <Text style={styles.notice} testID="notice">
+              {notice}
+            </Text>
+          ) : null}
         </View>
         <View style={[styles.side, isWide && { width: 360 }]}>
           <Card style={{ gap: 10 }}>
@@ -283,4 +293,11 @@ const styles = StyleSheet.create({
   stats: { fontFamily: fonts.medium, fontSize: 12, color: colors.muted },
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   status: { fontFamily: fonts.medium, fontSize: 14, color: colors.blue, minHeight: 20 },
+  notice: {
+    fontFamily: fonts.medium,
+    fontSize: 14,
+    color: colors.red,
+    maxWidth: 520,
+    textAlign: 'center',
+  },
 });

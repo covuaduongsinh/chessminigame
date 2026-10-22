@@ -152,4 +152,31 @@ export const HAU: MiniGame[] = [
     ],
     skills: ['checkmate', 'tactics'],
   },
+  {
+    id: 'hau-7',
+    level: 'hau',
+    order: 7,
+    title: { vi: 'Hậu ăn liên hoàn', en: 'Queen Chain Captures' },
+    story: {
+      vi: 'Hậu mạnh nhất nhưng hôm nay có luật đặc biệt: mỗi nước đều phải ăn một Tốt. Na bảo: "Nhìn cả đường thẳng lẫn đường chéo nhé!"',
+      en: 'The queen is strongest, but today every move must capture a pawn. Na says: "Look along lines AND diagonals!"',
+    },
+    goal: {
+      vi: 'Ăn hết Tốt đen, nước nào cũng phải ăn quân.',
+      en: 'Capture every black pawn — every move must capture.',
+    },
+    lesson: {
+      vi: 'Hậu có tới 8 hướng đi — kiểm tra đủ cả 8 hướng.',
+      en: 'The queen has 8 directions — check all of them.',
+    },
+    rounds: [
+      {
+        mode: 'collect',
+        mustCapture: true,
+        fen: '8/1p4p1/5p2/8/3p4/8/1p3p2/3Q4 w - - 0 1',
+        targets: ['d4', 'g7', 'b7', 'b2', 'f6', 'f2'],
+      },
+    ],
+    skills: ['queen', 'calculation'],
+  },
 ];

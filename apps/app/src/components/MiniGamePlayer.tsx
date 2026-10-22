@@ -97,6 +97,7 @@ export function MiniGamePlayer({
             break;
           case 'illegal':
             play('wrong');
+            if (e.message) setBanner({ text: L(e.message), tone: 'bad' });
             break;
           case 'correct':
             setBanner(null);

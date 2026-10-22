@@ -1,3 +1,4 @@
+export { explainIllegalMove, type IllegalExplanation, type IllegalReason } from './explain';
 export { Game, type HistoryEntry, resultString } from './game';
 export { PgnError, type PgnGame, type PgnMove, parsePgn, splitPgn, toPgn } from './pgn';
 export { Position, START_FEN } from './position';

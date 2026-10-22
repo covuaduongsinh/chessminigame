@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Game, Position, parsePgn, parseSan, toSan } from '../src';
+import { explainIllegalMove, Game, Position, parsePgn, parseSan, toSan } from '../src';
 
 describe('FEN', () => {
   it('đọc rồi ghi lại giống hệt', () => {
@@ -107,5 +107,29 @@ describe('PGN', () => {
     const back = parsePgn(g.pgn({ White: 'An', Black: 'Bình' }));
     expect(back.moves.map((m) => m.san)).toEqual(['e4', 'e5', 'Qh5', 'Nc6', 'Bc4', 'Nf6', 'Qxf7#']);
     expect(back.result).toBe('1-0');
+  });
+});
+
+describe('giải thích nước đi sai', () => {
+  const why = (fen: string, from: string, to: string) =>
+    explainIllegalMove(Position.fromFen(fen), from as never, to as never)?.reason ?? null;
+  it('các lỗi thường gặp của trẻ', () => {
+    const start = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    expect(why(start, 'e2', 'e4')).toBeNull();
+    expect(why(start, 'e7', 'e5')).toBe('not-your-turn');
+    expect(why(start, 'e3', 'e4')).toBe('no-piece');
+    expect(why(start, 'a1', 'a3')).toBe('blocked');
+    expect(why(start, 'a1', 'a2')).toBe('own-piece');
+    expect(why(start, 'g1', 'g3')).toBe('cannot-move-like-that');
+    expect(why(start, 'e2', 'f3')).toBe('pawn-diagonal-empty');
+    expect(why('8/8/8/8/4p3/4P3/8/8 w - - 0 1', 'e3', 'e4')).toBe('pawn-straight-capture');
+    expect(why('8/8/8/8/8/4P3/8/8 w - - 0 1', 'e3', 'e2')).toBe('pawn-backward');
+    expect(why('8/8/8/8/8/4P3/8/8 w - - 0 1', 'e3', 'e5')).toBe('cannot-move-like-that');
+  });
+  it('Vua, chiếu và ghim', () => {
+    expect(why('4k3/8/8/8/8/8/8/4K2r w - - 0 1', 'e1', 'f1')).toBe('king-into-check');
+    expect(why('4k3/8/8/8/8/8/3P4/r3K3 w - - 0 1', 'd2', 'd3')).toBe('in-check');
+    expect(why('4k3/4r3/8/8/8/8/4B3/4K3 w - - 0 1', 'e2', 'd3')).toBe('pinned');
+    expect(why('4k3/8/8/8/8/8/8/4K2R w - - 0 1', 'e1', 'g1')).toBe('castle-rule');
   });
 });
