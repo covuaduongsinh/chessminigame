@@ -1,44 +1,57 @@
 {
   "expo": {
-    "name": "probe",
-    "slug": "probe",
-    "version": "1.0.0",
-    "orientation": "portrait",
+    "name": "Dương Sinh Chess",
+    "slug": "duongsinh-chess",
+    "version": "0.1.0",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
-    "scheme": "probe",
-    "userInterfaceStyle": "automatic",
+    "scheme": "duongsinh",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#F8F9FC",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "bundleIdentifier": "vn.duongsinh.chess",
+      "supportsTablet": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "vn.duongsinh.chess",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#2B3990",
+        "foregroundImage": "./assets/images/icon.png"
       },
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "output": "server",
-      "favicon": "./assets/images/favicon.png"
+      "output": "single",
+      "favicon": "./assets/images/favicon.png",
+      "name": "Dương Sinh Chess — Vui trí tuệ",
+      "shortName": "Dương Sinh",
+      "lang": "vi",
+      "themeColor": "#2B3990",
+      "backgroundColor": "#F8F9FC"
     },
     "plugins": [
       "expo-router",
+      "expo-localization",
+      "expo-audio",
+      "expo-font",
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "backgroundColor": "#2B3990",
+          "image": "./assets/images/icon.png",
+          "imageWidth": 120
         }
-      ],
-      "expo-localization",
-      "expo-audio"
+      ]
     ],
     "experiments": {
-      "typedRoutes": true,
+      "typedRoutes": false,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {}
     }
   }
 }
