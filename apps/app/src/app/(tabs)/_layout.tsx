@@ -29,7 +29,7 @@ export default function TabsLayout() {
         tabBarInactiveTintColor: colors.muted,
         tabBarLabelStyle: { fontFamily: fonts.bold, fontSize: 12 },
         tabBarStyle: wide
-          ? { backgroundColor: colors.white, borderColor: colors.border, width: 200 }
+          ? { backgroundColor: colors.white, borderColor: colors.border, width: 220, minWidth: 220 }
           : { backgroundColor: colors.white, borderColor: colors.border, minHeight: 62 },
         tabBarActiveBackgroundColor: wide ? colors.primaryLight : undefined,
       }}

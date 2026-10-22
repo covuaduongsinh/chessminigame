@@ -62,7 +62,7 @@ test('câu hỏi tìm ô', async ({ page }) => {
   await page.goto('/minigame/tot-1');
   await page.getByText('Bắt đầu').click();
   for (let i = 0; i < 8; i++) {
-    const m = /ô ([a-h][1-8])/.exec(await page.getByTestId('prompt').innerText());
+    const m = /ô ([a-h][1-8])/.exec((await page.getByTestId('prompt').textContent()) ?? '');
     if (!m) break;
     await tap(page, m[1]!);
   }
