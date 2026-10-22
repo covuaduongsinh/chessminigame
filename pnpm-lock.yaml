@@ -28,6 +28,15 @@ importers:
         specifier: workspace:*
         version: link:../chess-core
 
+  packages/minigames:
+    dependencies:
+      "@duongsinh/chess-core":
+        specifier: workspace:*
+        version: link:../chess-core
+      "@duongsinh/engine":
+        specifier: workspace:*
+        version: link:../engine
+
 packages:
   "@biomejs/biome@2.6.2":
     resolution:
