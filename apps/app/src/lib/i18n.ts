@@ -1,4 +1,3 @@
-import { getLocales } from 'expo-localization';
 import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 import en from '../locales/en.json';
@@ -6,11 +5,11 @@ import vi from '../locales/vi.json';
 
 export type Lang = 'vi' | 'en';
 
-const deviceLang = (): Lang => (getLocales()[0]?.languageCode === 'en' ? 'en' : 'vi');
 
 void i18n.use(initReactI18next).init({
   resources: { vi: { translation: vi }, en: { translation: en } },
-  lng: deviceLang(),
+  // Mặc định tiếng Việt; người dùng đổi sang tiếng Anh trong Cài đặt.
+  lng: 'vi',
   fallbackLng: 'vi',
   interpolation: { escapeValue: false },
   returnNull: false,

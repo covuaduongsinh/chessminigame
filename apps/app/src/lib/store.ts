@@ -1,4 +1,4 @@
-import type { ProgressDelta } from '@duongsinh/sync';
+import { type ProgressDelta, randomNickname } from '@duongsinh/sync';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -131,6 +131,16 @@ export const useSettings = create<SettingsState>()(
       avatar: 'p',
       set: (patch) => set(patch),
     }),
-    { name: 'ds-settings', storage: createJSONStorage(() => AsyncStorage) },
+    {
+      name: 'ds-settings',
+      storage: createJSONStorage(() => AsyncStorage),
+      // Lần đầu mở app: tự đặt một tên ngẫu nhiên (dùng được cả khi ngoại tuyến).
+      onRehydrateStorage: () => (state) => {
+        if (state && !state.nickname) {
+          const n = randomNickname();
+          state.set({ nickname: n.nickname, avatar: n.avatar });
+        }
+      },
+    },
   ),
 );

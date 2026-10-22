@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-native-svg';
 import { Piece } from './Piece';
-import { BOARD_THEMES, type BoardTheme, colors } from './theme';
+import { BOARD_THEMES, type BoardTheme, colors, fonts } from './theme';
 
 export interface Arrow {
   from: Square;
@@ -107,15 +107,17 @@ const AnimatedPiece = memo(function AnimatedPiece({
   const offset = useRef(
     new Animated.ValueXY(from ? { x: from.x - x, y: from.y - y } : { x: 0, y: 0 }),
   ).current;
+  const fromX = from?.x;
+  const fromY = from?.y;
   useEffect(() => {
-    if (from) {
+    if (fromX !== undefined && fromY !== undefined) {
       Animated.timing(offset, {
         toValue: { x: 0, y: 0 },
         duration: 180,
         useNativeDriver: false,
       }).start();
     }
-  }, [from, offset]);
+  }, [fromX, fromY, offset]);
   return (
     <Animated.View
       pointerEvents="none"
@@ -429,7 +431,7 @@ export const Board = memo(function Board({
                   x={i * cell + cell - fs * 0.35}
                   y={size - fs * 0.3}
                   fontSize={fs}
-                  fontWeight="700"
+                  fontFamily={fonts.bold}
                   textAnchor="end"
                   fill={(i + 7) % 2 === 0 ? theme.coordLight : theme.coordDark}
                 >
@@ -439,7 +441,7 @@ export const Board = memo(function Board({
                   x={fs * 0.3}
                   y={i * cell + fs}
                   fontSize={fs}
-                  fontWeight="700"
+                  fontFamily={fonts.bold}
                   fill={i % 2 === 0 ? theme.coordLight : theme.coordDark}
                 >
                   {rankChar}
