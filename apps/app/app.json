@@ -19,7 +19,7 @@
       "package": "vn.duongsinh.chess",
       "adaptiveIcon": {
         "backgroundColor": "#2B3990",
-        "foregroundImage": "./assets/images/icon.png"
+        "foregroundImage": "./assets/images/adaptive-icon.png"
       },
       "predictiveBackGestureEnabled": false
     },
@@ -41,8 +41,8 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#2B3990",
-          "image": "./assets/images/icon.png",
-          "imageWidth": 120
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 160
         }
       ]
     ],
@@ -52,6 +52,7 @@
     },
     "extra": {
       "router": {}
-    }
+    },
+    "description": "Học cờ vua cho trẻ em theo lộ trình 6 cấp Tốt → Mã → Tượng → Xe → Hậu → Vua — Vui trí tuệ."
   }
 }

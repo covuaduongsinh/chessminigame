@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint · Typecheck · Test · E2E web
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint (Biome)
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit test (chess-core, engine, minigames)
+        run: pnpm test
+
+      - name: Xuất bản web
+        run: pnpm --filter @duongsinh/app export:web
+        env:
+          # E2E không phụ thuộc mạng: tắt đồng bộ Supabase.
+          EXPO_PUBLIC_SYNC: "off"
+
+      - name: Cài Chromium cho Playwright
+        run: pnpm --filter @duongsinh/app exec playwright install --with-deps chromium
+
+      - name: E2E (Playwright)
+        run: pnpm --filter @duongsinh/app e2e
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: web-dist
+          path: apps/app/dist
+          retention-days: 7

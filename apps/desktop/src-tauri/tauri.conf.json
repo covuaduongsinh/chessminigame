@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Dương Sinh Chess",
+  "mainBinaryName": "duongsinh-chess",
+  "version": "0.1.0",
+  "identifier": "vn.duongsinh.chess",
+  "build": {
+    "frontendDist": "../../app/dist",
+    "devUrl": "http://localhost:8081",
+    "beforeDevCommand": "pnpm --filter @duongsinh/app web",
+    "beforeBuildCommand": "pnpm --filter @duongsinh/app export:web"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Dương Sinh Chess — Vui trí tuệ",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 380,
+        "minHeight": 600,
+        "center": true,
+        "resizable": true,
+        "backgroundColor": "#F8F9FC"
+      }
+    ],
+    "security": {
+      "csp": {
+        "default-src": "'self'",
+        "script-src": "'self'",
+        "style-src": "'self' 'unsafe-inline'",
+        "img-src": "'self' data: blob:",
+        "font-src": "'self' data:",
+        "media-src": "'self' data: blob:",
+        "connect-src": "'self' ipc: http://ipc.localhost https://*.supabase.co wss://*.supabase.co https://lichess.org"
+      },
+      "dangerousDisableAssetCspModification": ["style-src"]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Education",
+    "publisher": "Công ty CP Cờ vua Dương Sinh",
+    "copyright": "© 2026 Công ty CP Cờ vua Dương Sinh",
+    "shortDescription": "Học cờ vua cho trẻ em — Vui trí tuệ",
+    "longDescription": "Ứng dụng học cờ vua cho trẻ em theo lộ trình 6 cấp Tốt → Mã → Tượng → Xe → Hậu → Vua của Cờ vua Dương Sinh.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      }
+    }
+  },
+  "plugins": {}
+}

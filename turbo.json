@@ -11,7 +11,9 @@
     },
     "export:web": {
       "dependsOn": [],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "env": ["EXPO_PUBLIC_*"]
     }
-  }
+  },
+  "globalPassThroughEnv": ["CHROMIUM_PATH"]
 }

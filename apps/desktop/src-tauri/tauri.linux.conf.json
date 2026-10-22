@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Duong Sinh Chess",
+  "bundle": {
+    "linux": {
+      "deb": { "desktopTemplate": "./linux/duongsinh-chess.desktop" },
+      "rpm": { "desktopTemplate": "./linux/duongsinh-chess.desktop" }
+    }
+  }
+}

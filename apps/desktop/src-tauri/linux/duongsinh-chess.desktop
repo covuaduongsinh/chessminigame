@@ -1,0 +1,9 @@
+[Desktop Entry]
+Categories={{categories}}
+Comment=Học cờ vua cho trẻ em — Vui trí tuệ
+Exec={{exec}}
+StartupWMClass={{exec}}
+Icon={{icon}}
+Name=Dương Sinh Chess
+Terminal=false
+Type=Application
