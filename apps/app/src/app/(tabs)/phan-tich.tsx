@@ -58,7 +58,10 @@ export default function AnalysisScreen() {
   const [cursor, setCursor] = useState(0);
   const [mode, setMode] = useState<'play' | 'edit'>('play');
   const [editFen, setEditFen] = useState(START_FEN);
-  const [brush, setBrush] = useState<{ color: Color; type: PieceType } | 'eraser'>({ color: 'w', type: 'q' });
+  const [brush, setBrush] = useState<{ color: Color; type: PieceType } | 'eraser'>({
+    color: 'w',
+    type: 'q',
+  });
   const [annotate, setAnnotate] = useState(false);
   const [arrows, setArrows] = useState<Arrow[]>([]);
   const [marks, setMarks] = useState<SquareMark[]>([]);
@@ -76,7 +79,11 @@ export default function AnalysisScreen() {
   useEffect(() => {
     if (Platform.OS !== 'web' || typeof window === 'undefined') return;
     const onKey = (e: KeyboardEvent) => {
-      if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA' || (e.target as HTMLElement | null)?.tagName === 'INPUT') return;
+      if (
+        (e.target as HTMLElement | null)?.tagName === 'TEXTAREA' ||
+        (e.target as HTMLElement | null)?.tagName === 'INPUT'
+      )
+        return;
       if (e.key === 'ArrowLeft') setCursor((c) => Math.max(0, c - 1));
       if (e.key === 'ArrowRight') setCursor((c) => Math.min(entries.length, c + 1));
     };
@@ -94,7 +101,10 @@ export default function AnalysisScreen() {
     const san = toSan(pos, m);
     pos.make(m);
     play(m.captured ? 'capture' : san.includes('+') ? 'check' : 'move');
-    const next = [...entries.slice(0, cursor), { san, uci: `${from}${to}${promotion ?? ''}`, fen: pos.toFen() }];
+    const next = [
+      ...entries.slice(0, cursor),
+      { san, uci: `${from}${to}${promotion ?? ''}`, fen: pos.toFen() },
+    ];
     setEntries(next);
     setCursor(next.length);
     setArrows([]);
@@ -103,7 +113,9 @@ export default function AnalysisScreen() {
 
   const onMove = (from: Square, to: Square) => {
     const pos = Position.fromFen(fen);
-    const isPromo = pos.legalMoves().some((m) => squareName(m.from) === from && squareName(m.to) === to && m.promotion);
+    const isPromo = pos
+      .legalMoves()
+      .some((m) => squareName(m.from) === from && squareName(m.to) === to && m.promotion);
     if (isPromo) setPromo({ from, to });
     else applyMove(from, to);
   };
@@ -112,7 +124,9 @@ export default function AnalysisScreen() {
     try {
       const g = parsePgn(text);
       setStartFen(g.startFen);
-      setEntries(g.moves.map((m) => ({ san: m.san, uci: m.uci, fen: m.fenAfter, comment: m.comment })));
+      setEntries(
+        g.moves.map((m) => ({ san: m.san, uci: m.uci, fen: m.fenAfter, comment: m.comment })),
+      );
       setCursor(0);
       setTags(g.tags);
       setMode('play');
@@ -131,7 +145,10 @@ export default function AnalysisScreen() {
   };
 
   const fetchLichess = async () => {
-    const id = lichessId.trim().replace(/^https?:\/\/lichess\.org\//, '').slice(0, 8);
+    const id = lichessId
+      .trim()
+      .replace(/^https?:\/\/lichess\.org\//, '')
+      .slice(0, 8);
     if (!/^[a-zA-Z0-9]{8}$/.test(id)) {
       setMessage('⚠ Mã ván Lichess gồm 8 ký tự');
       return;
@@ -181,7 +198,12 @@ export default function AnalysisScreen() {
   };
 
   const pgnOut = () =>
-    toPgn({ tags: { ...tags, Site: 'Dương Sinh Chess' }, startFen, sans: entries.map((e) => e.san), result: tags.Result });
+    toPgn({
+      tags: { ...tags, Site: 'Dương Sinh Chess' },
+      startFen,
+      sans: entries.map((e) => e.san),
+      result: tags.Result,
+    });
 
   const k = position.kings[position.side] ?? -1;
   const comment = cursor > 0 ? entries[cursor - 1]?.comment : undefined;
@@ -212,7 +234,14 @@ export default function AnalysisScreen() {
               movable={annotate ? null : 'both'}
               targetsOf={(sq) => [...new Set(position.movesFrom(sq).map((m) => squareName(m.to)))]}
               onMove={onMove}
-              lastMove={cursor > 0 ? { from: entries[cursor - 1]!.uci.slice(0, 2) as Square, to: entries[cursor - 1]!.uci.slice(2, 4) as Square } : null}
+              lastMove={
+                cursor > 0
+                  ? {
+                      from: entries[cursor - 1]!.uci.slice(0, 2) as Square,
+                      to: entries[cursor - 1]!.uci.slice(2, 4) as Square,
+                    }
+                  : null
+              }
               check={k !== -1 && position.inCheck() ? squareName(k) : null}
               annotate={annotate}
               arrows={arrows}
@@ -224,11 +253,23 @@ export default function AnalysisScreen() {
           {mode === 'play' && (
             <View style={styles.nav}>
               <Button title="⏮" tone="ghost" size="sm" onPress={() => setCursor(0)} />
-              <Button title="◀" tone="ghost" size="sm" onPress={() => setCursor((c) => Math.max(0, c - 1))} testID="prev" />
+              <Button
+                title="◀"
+                tone="ghost"
+                size="sm"
+                onPress={() => setCursor((c) => Math.max(0, c - 1))}
+                testID="prev"
+              />
               <Text style={styles.navText}>
                 {cursor}/{entries.length}
               </Text>
-              <Button title="▶" tone="ghost" size="sm" onPress={() => setCursor((c) => Math.min(entries.length, c + 1))} testID="nextply" />
+              <Button
+                title="▶"
+                tone="ghost"
+                size="sm"
+                onPress={() => setCursor((c) => Math.min(entries.length, c + 1))}
+                testID="nextply"
+              />
               <Button title="⏭" tone="ghost" size="sm" onPress={() => setCursor(entries.length)} />
             </View>
           )}
@@ -268,7 +309,12 @@ export default function AnalysisScreen() {
                 }}
               />
             )}
-            <Button title={t('common.flip')} tone="ghost" size="sm" onPress={() => setOrientation((o) => (o === 'w' ? 'b' : 'w'))} />
+            <Button
+              title={t('common.flip')}
+              tone="ghost"
+              size="sm"
+              onPress={() => setOrientation((o) => (o === 'w' ? 'b' : 'w'))}
+            />
           </View>
 
           {mode === 'edit' && (
@@ -287,13 +333,26 @@ export default function AnalysisScreen() {
                     </Pressable>
                   );
                 })}
-                <Pressable onPress={() => setBrush('eraser')} style={[styles.paletteItem, brush === 'eraser' && styles.paletteOn]}>
+                <Pressable
+                  onPress={() => setBrush('eraser')}
+                  style={[styles.paletteItem, brush === 'eraser' && styles.paletteOn]}
+                >
                   <Text style={{ fontSize: 24 }}>🧽</Text>
                 </Pressable>
               </View>
               <View style={styles.row}>
-                <Button title={t('analysis.start')} tone="ghost" size="sm" onPress={() => setEditFen(START_FEN)} />
-                <Button title={t('analysis.empty')} tone="ghost" size="sm" onPress={() => setEditFen(EMPTY)} />
+                <Button
+                  title={t('analysis.start')}
+                  tone="ghost"
+                  size="sm"
+                  onPress={() => setEditFen(START_FEN)}
+                />
+                <Button
+                  title={t('analysis.empty')}
+                  tone="ghost"
+                  size="sm"
+                  onPress={() => setEditFen(EMPTY)}
+                />
                 <Button
                   title={`${t('analysis.turn')}: ${turnColor === 'w' ? t('common.white') : t('common.black')}`}
                   tone="ghost"
@@ -314,20 +373,33 @@ export default function AnalysisScreen() {
             </Card>
           ) : null}
 
-          {mode === 'play' && <MoveList sans={entries.map((e) => e.san)} current={cursor} onSelect={setCursor} startPly={Position.fromFen(startFen).side} />}
+          {mode === 'play' && (
+            <MoveList
+              sans={entries.map((e) => e.san)}
+              current={cursor}
+              onSelect={setCursor}
+              startPly={Position.fromFen(startFen).side}
+            />
+          )}
 
           <View style={styles.row}>
             <Button
               title={t('analysis.copyFen')}
               tone="ghost"
               size="sm"
-              onPress={() => void Clipboard.setStringAsync(mode === 'edit' ? editFen : fen).then(() => setMessage(t('common.copied')))}
+              onPress={() =>
+                void Clipboard.setStringAsync(mode === 'edit' ? editFen : fen).then(() =>
+                  setMessage(t('common.copied')),
+                )
+              }
             />
             <Button
               title={t('analysis.copyPgn')}
               tone="ghost"
               size="sm"
-              onPress={() => void Clipboard.setStringAsync(pgnOut()).then(() => setMessage(t('common.copied')))}
+              onPress={() =>
+                void Clipboard.setStringAsync(pgnOut()).then(() => setMessage(t('common.copied')))
+              }
             />
           </View>
 
@@ -344,8 +416,18 @@ export default function AnalysisScreen() {
               autoCorrect={false}
             />
             <View style={styles.row}>
-              <Button title={t('analysis.load')} size="sm" onPress={() => loadPgn(pgnText)} testID="load-pgn" />
-              <Button title={t('analysis.file')} tone="ghost" size="sm" onPress={() => void pickFile()} />
+              <Button
+                title={t('analysis.load')}
+                size="sm"
+                onPress={() => loadPgn(pgnText)}
+                testID="load-pgn"
+              />
+              <Button
+                title={t('analysis.file')}
+                tone="ghost"
+                size="sm"
+                onPress={() => void pickFile()}
+              />
             </View>
             <Text style={styles.small}>{t('analysis.fromLichess')}</Text>
             <View style={styles.row}>
@@ -370,7 +452,11 @@ export default function AnalysisScreen() {
       <Section title={t('analysis.classics')}>
         <View style={styles.classics}>
           {CLASSICS.map((c) => (
-            <Pressable key={c.id} onPress={() => router.push(`/ky-dien/${c.id}`)} testID={`classic-${c.id}`}>
+            <Pressable
+              key={c.id}
+              onPress={() => router.push(`/ky-dien/${c.id}`)}
+              testID={`classic-${c.id}`}
+            >
               <Card style={styles.classicCard}>
                 <Text style={styles.classicTitle}>{L(c.title)}</Text>
                 <Text style={styles.small}>
@@ -402,8 +488,20 @@ const styles = StyleSheet.create({
   side: { gap: space.sm, flexShrink: 1, width: '100%' },
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, alignItems: 'center' },
   nav: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  navText: { fontFamily: fonts.bold, fontSize: 14, color: colors.text, minWidth: 54, textAlign: 'center' },
-  label: { fontFamily: fonts.bold, fontSize: 12, letterSpacing: 0.6, color: colors.muted, textTransform: 'uppercase' },
+  navText: {
+    fontFamily: fonts.bold,
+    fontSize: 14,
+    color: colors.text,
+    minWidth: 54,
+    textAlign: 'center',
+  },
+  label: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    letterSpacing: 0.6,
+    color: colors.muted,
+    textTransform: 'uppercase',
+  },
   input: {
     minHeight: 90,
     borderWidth: 1,

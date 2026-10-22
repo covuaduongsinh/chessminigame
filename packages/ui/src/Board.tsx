@@ -104,10 +104,16 @@ const AnimatedPiece = memo(function AnimatedPiece({
   from?: { x: number; y: number };
   hidden?: boolean;
 }) {
-  const offset = useRef(new Animated.ValueXY(from ? { x: from.x - x, y: from.y - y } : { x: 0, y: 0 })).current;
+  const offset = useRef(
+    new Animated.ValueXY(from ? { x: from.x - x, y: from.y - y } : { x: 0, y: 0 }),
+  ).current;
   useEffect(() => {
     if (from) {
-      Animated.timing(offset, { toValue: { x: 0, y: 0 }, duration: 180, useNativeDriver: false }).start();
+      Animated.timing(offset, {
+        toValue: { x: 0, y: 0 },
+        duration: 180,
+        useNativeDriver: false,
+      }).start();
     }
   }, [from, offset]);
   return (
@@ -165,9 +171,14 @@ export const Board = memo(function Board({
   const [draftArrow, setDraftArrow] = useState<Arrow | null>(null);
   const dragXY = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const droppedByDrag = useRef(false);
-  const start = useRef<{ x: number; y: number; square: Square | null }>({ x: 0, y: 0, square: null });
+  const start = useRef<{ x: number; y: number; square: Square | null }>({
+    x: 0,
+    y: 0,
+    square: null,
+  });
 
   // Bỏ chọn khi thế cờ thay đổi.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: fen là tín hiệu kích hoạt
   useEffect(() => {
     setSelected(null);
   }, [fen]);
@@ -185,8 +196,26 @@ export const Board = memo(function Board({
   };
 
   // Dùng ref để PanResponder (tạo một lần) luôn thấy props/state mới nhất.
-  const latest = useRef({ selected, targets, annotate, arrows, marks, onMove, onSquarePress, canMovePiece });
-  latest.current = { selected, targets, annotate, arrows, marks, onMove, onSquarePress, canMovePiece };
+  const latest = useRef({
+    selected,
+    targets,
+    annotate,
+    arrows,
+    marks,
+    onMove,
+    onSquarePress,
+    canMovePiece,
+  });
+  latest.current = {
+    selected,
+    targets,
+    annotate,
+    arrows,
+    marks,
+    onMove,
+    onSquarePress,
+    canMovePiece,
+  };
 
   const responder = useMemo(
     () =>
@@ -233,7 +262,9 @@ export const Board = memo(function Board({
               const cur = L.marks ?? [];
               const exists = cur.some((m) => m.square === from);
               onMarksChange?.(
-                exists ? cur.filter((m) => m.square !== from) : [...cur, { square: from, color: MARK_COLOR }],
+                exists
+                  ? cur.filter((m) => m.square !== from)
+                  : [...cur, { square: from, color: MARK_COLOR }],
               );
             } else {
               const cur = L.arrows ?? [];
@@ -274,7 +305,10 @@ export const Board = memo(function Board({
   );
 
   const lastFromXY = lastMove && animate ? squareXY(lastMove.from, size, orientation) : undefined;
-  const allArrows = draftArrow && draftArrow.from !== draftArrow.to ? [...(arrows ?? []), draftArrow] : arrows ?? [];
+  const allArrows =
+    draftArrow && draftArrow.from !== draftArrow.to
+      ? [...(arrows ?? []), draftArrow]
+      : (arrows ?? []);
 
   return (
     <View
@@ -303,11 +337,29 @@ export const Board = memo(function Board({
         {lastMove &&
           [lastMove.from, lastMove.to].map((sq) => {
             const p = squareXY(sq, size, orientation);
-            return <Rect key={`lm-${sq}`} x={p.x} y={p.y} width={cell} height={cell} fill={theme.lastMove} />;
+            return (
+              <Rect
+                key={`lm-${sq}`}
+                x={p.x}
+                y={p.y}
+                width={cell}
+                height={cell}
+                fill={theme.lastMove}
+              />
+            );
           })}
         {(marks ?? []).map((m) => {
           const p = squareXY(m.square, size, orientation);
-          return <Rect key={`mk-${m.square}`} x={p.x} y={p.y} width={cell} height={cell} fill={m.color} />;
+          return (
+            <Rect
+              key={`mk-${m.square}`}
+              x={p.x}
+              y={p.y}
+              width={cell}
+              height={cell}
+              fill={m.color}
+            />
+          );
         })}
         {selected &&
           (() => {
@@ -317,7 +369,14 @@ export const Board = memo(function Board({
         {check &&
           (() => {
             const p = squareXY(check, size, orientation);
-            return <Circle cx={p.x + cell / 2} cy={p.y + cell / 2} r={cell * 0.48} fill="rgba(229,72,77,0.55)" />;
+            return (
+              <Circle
+                cx={p.x + cell / 2}
+                cy={p.y + cell / 2}
+                r={cell * 0.48}
+                fill="rgba(229,72,77,0.55)"
+              />
+            );
           })()}
         {(traps ?? []).map((sq) => {
           const p = squareXY(sq, size, orientation);
@@ -325,8 +384,24 @@ export const Board = memo(function Board({
           return (
             <G key={`tr-${sq}`} opacity={0.75}>
               <Rect x={p.x} y={p.y} width={cell} height={cell} fill="rgba(229,72,77,0.18)" />
-              <Line x1={p.x + pad} y1={p.y + pad} x2={p.x + cell - pad} y2={p.y + cell - pad} stroke={colors.red} strokeWidth={cell * 0.07} strokeLinecap="round" />
-              <Line x1={p.x + cell - pad} y1={p.y + pad} x2={p.x + pad} y2={p.y + cell - pad} stroke={colors.red} strokeWidth={cell * 0.07} strokeLinecap="round" />
+              <Line
+                x1={p.x + pad}
+                y1={p.y + pad}
+                x2={p.x + cell - pad}
+                y2={p.y + cell - pad}
+                stroke={colors.red}
+                strokeWidth={cell * 0.07}
+                strokeLinecap="round"
+              />
+              <Line
+                x1={p.x + cell - pad}
+                y1={p.y + pad}
+                x2={p.x + pad}
+                y2={p.y + cell - pad}
+                stroke={colors.red}
+                strokeWidth={cell * 0.07}
+                strokeLinecap="round"
+              />
             </G>
           );
         })}
@@ -405,7 +480,13 @@ export const Board = memo(function Board({
               strokeWidth={cell * 0.08}
             />
           ) : (
-            <Circle key={`t-${sq}`} cx={p.x + cell / 2} cy={p.y + cell / 2} r={cell * 0.15} fill="rgba(27,36,102,0.35)" />
+            <Circle
+              key={`t-${sq}`}
+              cx={p.x + cell / 2}
+              cy={p.y + cell / 2}
+              r={cell * 0.15}
+              fill="rgba(27,36,102,0.35)"
+            />
           );
         })}
         {allArrows.map((a, i) => {
@@ -424,7 +505,15 @@ export const Board = memo(function Board({
           const color = a.color ?? ANNOTATE_COLOR;
           return (
             <G key={`a-${i}`}>
-              <Line x1={x1} y1={y1} x2={sx} y2={sy} stroke={color} strokeWidth={cell * 0.16} strokeLinecap="round" />
+              <Line
+                x1={x1}
+                y1={y1}
+                x2={sx}
+                y2={sy}
+                stroke={color}
+                strokeWidth={cell * 0.16}
+                strokeLinecap="round"
+              />
               <Polygon points={`${x2},${y2} ${left} ${right}`} fill={color} />
             </G>
           );

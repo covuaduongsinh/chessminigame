@@ -1,6 +1,12 @@
 {
   "app": { "name": "Dương Sinh Chess", "slogan": "Vui trí tuệ" },
-  "tabs": { "learn": "Học", "play": "Chơi", "endgames": "Tàn cuộc", "analysis": "Phân tích", "club": "CLB" },
+  "tabs": {
+    "learn": "Học",
+    "play": "Chơi",
+    "endgames": "Tàn cuộc",
+    "analysis": "Phân tích",
+    "club": "CLB"
+  },
   "common": {
     "back": "Quay lại",
     "next": "Tiếp tục",

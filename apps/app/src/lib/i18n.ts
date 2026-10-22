@@ -22,6 +22,7 @@ export default i18n;
 export function useLang() {
   const { t, i18n: inst } = useTranslation();
   const lang: Lang = inst.language === 'en' ? 'en' : 'vi';
+  // biome-ignore lint/correctness/noComponentHookFactories: L là hàm chọn chuỗi song ngữ, không phải component
   const L = (text: { vi: string; en: string } | undefined) => (text ? text[lang] : '');
   return { t, lang, L };
 }

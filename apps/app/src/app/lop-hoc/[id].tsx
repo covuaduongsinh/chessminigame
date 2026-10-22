@@ -35,5 +35,11 @@ export default function ClassroomScreen() {
 }
 
 const styles = StyleSheet.create({
-  story: { fontFamily: fonts.regular, fontSize: 18, lineHeight: 26, color: colors.text, marginBottom: 12 },
+  story: {
+    fontFamily: fonts.regular,
+    fontSize: 18,
+    lineHeight: 26,
+    color: colors.text,
+    marginBottom: 12,
+  },
 });

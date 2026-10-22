@@ -11,8 +11,8 @@ import {
   fonts,
   Pill,
   type SquareMark,
-  space,
   Stars,
+  space,
 } from '@duongsinh/ui';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -37,7 +37,14 @@ export interface MiniGamePlayerProps {
 
 type Banner = { text: string; tone: 'info' | 'good' | 'bad' } | null;
 
-export function MiniGamePlayer({ def, itemId, onNext, onExit, classroom = false, skipIntro }: MiniGamePlayerProps) {
+export function MiniGamePlayer({
+  def,
+  itemId,
+  onNext,
+  onExit,
+  classroom = false,
+  skipIntro,
+}: MiniGamePlayerProps) {
   const { t, L } = useLang();
   const settings = useSettings();
   const record = useProgress((s) => s.record);
@@ -64,16 +71,22 @@ export function MiniGamePlayer({ def, itemId, onNext, onExit, classroom = false,
     },
     [],
   );
-  const later = (fn: () => void, ms: number) => {
+  const later = useCallback((fn: () => void, ms: number) => {
     timers.current.push(setTimeout(fn, ms));
-  };
+  }, []);
 
   const handle = useCallback(
     (events: SessionEvent[]) => {
       for (const e of events) {
         switch (e.type) {
           case 'move':
-            play(e.san.includes('x') ? 'capture' : e.san.includes('+') || e.san.includes('#') ? 'check' : 'move');
+            play(
+              e.san.includes('x')
+                ? 'capture'
+                : e.san.includes('+') || e.san.includes('#')
+                  ? 'check'
+                  : 'move',
+            );
             break;
           case 'collect':
             play('star');
@@ -135,7 +148,7 @@ export function MiniGamePlayer({ def, itemId, onNext, onExit, classroom = false,
         // Thế hiếm: máy vẫn còn lượt (ví dụ người chơi không còn nước) — để bộ chấm xử lý.
       }, 380);
     }
-  }, [handle, session]);
+  }, [handle, later, session]);
 
   const doMove = useCallback(
     (from: Square, to: Square, promotion?: PieceType) => {
@@ -188,7 +201,11 @@ export function MiniGamePlayer({ def, itemId, onNext, onExit, classroom = false,
       onSquarePress(h as Square);
       return;
     }
-    doMove(h.slice(0, 2) as Square, h.slice(2, 4) as Square, (h[4] as PieceType | undefined) ?? undefined);
+    doMove(
+      h.slice(0, 2) as Square,
+      h.slice(2, 4) as Square,
+      (h[4] as PieceType | undefined) ?? undefined,
+    );
   }, [busy, doMove, handle, onSquarePress, session]);
 
   const restart = useCallback(() => {
@@ -226,21 +243,28 @@ export function MiniGamePlayer({ def, itemId, onNext, onExit, classroom = false,
   const quiz = session.quizState();
   const pos = session.position;
   const kingIdx = pos.kings[pos.side] ?? -1;
-  const check = round.mode !== 'quiz' && kingIdx !== -1 && pos.inCheck() ? squareName(kingIdx) : null;
+  const check =
+    round.mode !== 'quiz' && kingIdx !== -1 && pos.inCheck() ? squareName(kingIdx) : null;
   const theme = boardTheme(settings.boardTheme);
 
   const marks: SquareMark[] = [...drawMarks];
   if (quiz?.question.kind !== 'find-square' && quiz?.question.highlight) {
-    for (const sq of quiz.question.highlight) marks.push({ square: sq, color: 'rgba(34,117,180,0.35)' });
+    for (const sq of quiz.question.highlight)
+      marks.push({ square: sq, color: 'rgba(34,117,180,0.35)' });
   }
-  if (quiz) for (const sq of quiz.selected) marks.push({ square: sq, color: 'rgba(45,164,74,0.55)' });
+  if (quiz)
+    for (const sq of quiz.selected) marks.push({ square: sq, color: 'rgba(45,164,74,0.55)' });
   const remaining = session.remainingTargets();
   if (round.mode === 'collect' && round.ordered && remaining[0]) {
     marks.push({ square: remaining[0], color: 'rgba(251,176,64,0.45)' });
   }
   const arrows: Arrow[] = [...drawArrows];
   if (hint && hint.length >= 4) {
-    arrows.push({ from: hint.slice(0, 2) as Square, to: hint.slice(2, 4) as Square, color: 'rgba(247,148,29,0.85)' });
+    arrows.push({
+      from: hint.slice(0, 2) as Square,
+      to: hint.slice(2, 4) as Square,
+      color: 'rgba(247,148,29,0.85)',
+    });
   } else if (hint && hint.length === 2) {
     marks.push({ square: hint as Square, color: 'rgba(247,148,29,0.55)' });
   }
@@ -249,19 +273,19 @@ export function MiniGamePlayer({ def, itemId, onNext, onExit, classroom = false,
   if (quiz) {
     const q = quiz.question;
     if (q.kind === 'find-square') prompt = t('game.findSquare', { square: quiz.target });
-    else if (q.kind === 'squares') prompt = `${L(q.prompt)} (${quiz.selected.length}/${q.answer.length})`;
+    else if (q.kind === 'squares')
+      prompt = `${L(q.prompt)} (${quiz.selected.length}/${q.answer.length})`;
     else prompt = L(q.prompt);
   } else if (round.mode === 'puzzle' && round.prompt) prompt = L(round.prompt);
 
   const movesLeft = session.movesLeft();
-  const status =
-    busy
-      ? t('game.thinking')
-      : session.status === 'playing' && round.mode !== 'quiz'
-        ? session.isPlayerTurn
-          ? t('game.yourTurn')
-          : ''
-        : '';
+  const status = busy
+    ? t('game.thinking')
+    : session.status === 'playing' && round.mode !== 'quiz'
+      ? session.isPlayerTurn
+        ? t('game.yourTurn')
+        : ''
+      : '';
 
   const board = (
     <Board
@@ -271,7 +295,11 @@ export function MiniGamePlayer({ def, itemId, onNext, onExit, classroom = false,
       orientation={session.playerColor}
       theme={theme}
       showCoords={settings.coords}
-      movable={annotate || round.mode === 'quiz' || busy || session.status !== 'playing' ? null : session.playerColor}
+      movable={
+        annotate || round.mode === 'quiz' || busy || session.status !== 'playing'
+          ? null
+          : session.playerColor
+      }
       targetsOf={(sq) => session.game.targets(sq)}
       onMove={onMove}
       onSquarePress={onSquarePress}
@@ -291,11 +319,31 @@ export function MiniGamePlayer({ def, itemId, onNext, onExit, classroom = false,
     <View style={[styles.side, isWide && { width: 340 }]}>
       <View style={styles.rowWrap}>
         {def.rounds.length > 1 && (
-          <Pill text={t('game.round', { current: session.roundIndex + 1, total: def.rounds.length })} />
+          <Pill
+            text={t('game.round', { current: session.roundIndex + 1, total: def.rounds.length })}
+          />
         )}
-        {quiz && <Pill text={t('game.question', { current: quiz.index + 1, total: quiz.total })} bg={colors.goldLight} color={colors.orange} />}
-        {movesLeft !== null && <Pill text={t('game.movesLeft', { count: Math.max(0, movesLeft) })} bg="#E9F7F1" color={colors.green} />}
-        {round.mode === 'collect' && <Pill text={t('game.starsCollected', { count: remaining.length })} bg={colors.goldLight} color={colors.orange} />}
+        {quiz && (
+          <Pill
+            text={t('game.question', { current: quiz.index + 1, total: quiz.total })}
+            bg={colors.goldLight}
+            color={colors.orange}
+          />
+        )}
+        {movesLeft !== null && (
+          <Pill
+            text={t('game.movesLeft', { count: Math.max(0, movesLeft) })}
+            bg="#E9F7F1"
+            color={colors.green}
+          />
+        )}
+        {round.mode === 'collect' && (
+          <Pill
+            text={t('game.starsCollected', { count: remaining.length })}
+            bg={colors.goldLight}
+            color={colors.orange}
+          />
+        )}
       </View>
       <Card style={{ gap: 6 }}>
         <Text style={styles.label}>{t('game.goal')}</Text>
@@ -346,9 +394,17 @@ export function MiniGamePlayer({ def, itemId, onNext, onExit, classroom = false,
             }}
           />
         )}
-        {session.status === 'lost' && <Button title={t('common.retry')} tone="accent" onPress={restart} testID="retry" />}
+        {session.status === 'lost' && (
+          <Button title={t('common.retry')} tone="accent" onPress={restart} testID="retry" />
+        )}
         {session.status === 'playing' && (
-          <Button title={t('common.hint')} tone="light" size="sm" onPress={showHint} testID="hint" />
+          <Button
+            title={t('common.hint')}
+            tone="light"
+            size="sm"
+            onPress={showHint}
+            testID="hint"
+          />
         )}
         {session.status === 'playing' && round.mode !== 'quiz' && round.mode !== 'puzzle' && (
           <Button
@@ -375,7 +431,9 @@ export function MiniGamePlayer({ def, itemId, onNext, onExit, classroom = false,
           </>
         )}
       </View>
-      {classroom && Platform.OS === 'web' && <Text style={styles.small}>{t('classroom.keys')}</Text>}
+      {classroom && Platform.OS === 'web' && (
+        <Text style={styles.small}>{t('classroom.keys')}</Text>
+      )}
       {!classroom && (
         <Pressable onPress={() => setIntro(true)}>
           <Text style={styles.link}>📖 {t('game.story')}</Text>
@@ -404,10 +462,34 @@ export function MiniGamePlayer({ def, itemId, onNext, onExit, classroom = false,
         text={`${t('game.wonText')}\n\n💡 ${L(def.lesson)}`}
         primary={
           onNext
-            ? { title: t('game.nextGame'), onPress: () => { setResult(null); onNext(); } }
-            : { title: t('common.retry'), onPress: () => { setResult(null); recorded.current = false; session.startRound(0); rerender(); } }
+            ? {
+                title: t('game.nextGame'),
+                onPress: () => {
+                  setResult(null);
+                  onNext();
+                },
+              }
+            : {
+                title: t('common.retry'),
+                onPress: () => {
+                  setResult(null);
+                  recorded.current = false;
+                  session.startRound(0);
+                  rerender();
+                },
+              }
         }
-        secondary={onExit ? { title: t('game.backToPath'), onPress: () => { setResult(null); onExit(); } } : undefined}
+        secondary={
+          onExit
+            ? {
+                title: t('game.backToPath'),
+                onPress: () => {
+                  setResult(null);
+                  onExit();
+                },
+              }
+            : undefined
+        }
       />
       {promo && (
         <PromotionPicker
@@ -433,11 +515,23 @@ const styles = StyleSheet.create({
   layout: { gap: space.md, flexDirection: 'column' },
   side: { gap: space.sm, flexShrink: 1, width: '100%' },
   rowWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, alignItems: 'center' },
-  label: { fontFamily: fonts.bold, fontSize: 12, letterSpacing: 0.6, color: colors.muted, textTransform: 'uppercase' },
+  label: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    letterSpacing: 0.6,
+    color: colors.muted,
+    textTransform: 'uppercase',
+  },
   prompt: { fontFamily: fonts.bold, fontSize: 18, color: colors.text, lineHeight: 25 },
   status: { fontFamily: fonts.medium, fontSize: 14, color: colors.blue },
   choices: { gap: space.sm },
-  banner: { padding: 12, borderRadius: 12, borderWidth: 1, backgroundColor: colors.primaryLight, borderColor: colors.border },
+  banner: {
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    backgroundColor: colors.primaryLight,
+    borderColor: colors.border,
+  },
   bannerText: { fontFamily: fonts.medium, fontSize: 15, color: colors.text },
   link: { fontFamily: fonts.medium, fontSize: 14, color: colors.blue, marginTop: 4 },
   small: { fontFamily: fonts.regular, fontSize: 12, color: colors.muted },

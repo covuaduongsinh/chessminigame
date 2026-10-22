@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { ProgressDelta } from '@duongsinh/sync';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import type { Lang } from './i18n';
@@ -20,7 +20,14 @@ interface ProgressState {
   /** Ghi kết quả một lần chơi (stars = 0 nghĩa là chưa thắng). */
   record: (itemId: string, stars: number, moves: number | null) => void;
   recordGame: (level: number, result: 'w' | 'd' | 'l') => void;
-  merge: (rows: Array<{ item_id: string; best_stars: number; best_moves: number | null; attempts: number }>) => void;
+  merge: (
+    rows: Array<{
+      item_id: string;
+      best_stars: number;
+      best_moves: number | null;
+      attempts: number;
+    }>,
+  ) => void;
   takeOutbox: () => ProgressDelta[];
   restoreOutbox: (items: ProgressDelta[]) => void;
   setLastSync: (t: number) => void;
@@ -52,7 +59,10 @@ export const useProgress = create<ProgressState>()(
           };
           return {
             items: { ...s.items, [itemId]: best },
-            outbox: [...s.outbox, { item_id: itemId, stars, moves: stars > 0 ? moves : null, attempts: 1 }],
+            outbox: [
+              ...s.outbox,
+              { item_id: itemId, stars, moves: stars > 0 ? moves : null, attempts: 1 },
+            ],
           };
         }),
       recordGame: (level, result) =>
@@ -69,7 +79,11 @@ export const useProgress = create<ProgressState>()(
             items[r.item_id] = {
               stars: Math.max(prev?.stars ?? 0, r.best_stars),
               moves:
-                prev?.moves == null ? r.best_moves : r.best_moves == null ? prev.moves : Math.min(prev.moves, r.best_moves),
+                prev?.moves == null
+                  ? r.best_moves
+                  : r.best_moves == null
+                    ? prev.moves
+                    : Math.min(prev.moves, r.best_moves),
               attempts: Math.max(prev?.attempts ?? 0, r.attempts),
               updatedAt: Date.now(),
             };

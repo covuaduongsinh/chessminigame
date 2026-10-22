@@ -49,19 +49,42 @@ export default function CoachHome() {
       {account.status !== 'ready' ? (
         <Card>
           <Text style={styles.text}>{t('club.notConfigured')}</Text>
-          <Button title={t('common.retry')} tone="light" size="sm" onPress={() => void account.connect()} />
+          <Button
+            title={t('common.retry')}
+            tone="light"
+            size="sm"
+            onPress={() => void account.connect()}
+          />
         </Card>
       ) : (
         <>
           <Card style={{ gap: 10 }}>
             <Text style={styles.label}>{t('coach.createGroup')}</Text>
-            <TextInput value={name} onChangeText={setName} placeholder={t('coach.groupName')} style={styles.input} testID="group-name" />
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              placeholder={t('coach.groupName')}
+              style={styles.input}
+              testID="group-name"
+            />
             <View style={styles.row}>
               {KINDS.map((k) => (
-                <Button key={k} title={t(`coach.kind.${k}`)} tone={kind === k ? 'primary' : 'ghost'} size="sm" onPress={() => setKind(k)} />
+                <Button
+                  key={k}
+                  title={t(`coach.kind.${k}`)}
+                  tone={kind === k ? 'primary' : 'ghost'}
+                  size="sm"
+                  onPress={() => setKind(k)}
+                />
               ))}
             </View>
-            <Button title={t('coach.createGroup')} tone="accent" onPress={() => void create()} disabled={name.trim().length < 2} testID="create-group" />
+            <Button
+              title={t('coach.createGroup')}
+              tone="accent"
+              onPress={() => void create()}
+              disabled={name.trim().length < 2}
+              testID="create-group"
+            />
           </Card>
           <Section title={t('club.myGroups')}>
             {groups.map((g) => (
@@ -90,7 +113,13 @@ export default function CoachHome() {
 }
 
 const styles = StyleSheet.create({
-  label: { fontFamily: fonts.bold, fontSize: 12, letterSpacing: 0.6, color: colors.muted, textTransform: 'uppercase' },
+  label: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    letterSpacing: 0.6,
+    color: colors.muted,
+    textTransform: 'uppercase',
+  },
   text: { fontFamily: fonts.regular, fontSize: 15, color: colors.text, marginBottom: 8 },
   small: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted },
   code: { fontFamily: fonts.black, color: colors.primary, letterSpacing: 2 },

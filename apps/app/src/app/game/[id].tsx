@@ -1,4 +1,11 @@
-import { type Color, Game, type PieceType, resultString, type Square, squareName } from '@duongsinh/chess-core';
+import {
+  type Color,
+  Game,
+  type PieceType,
+  resultString,
+  type Square,
+  squareName,
+} from '@duongsinh/chess-core';
 import { type GameRow, getGame, playMove, resignGame, subscribeGame } from '@duongsinh/sync';
 import { Board, Button, boardTheme, Card, colors, fonts, Piece, space } from '@duongsinh/ui';
 import { useLocalSearchParams } from 'expo-router';
@@ -44,7 +51,10 @@ export default function OnlineGameScreen() {
       gameRef.current = local;
       setGame(local);
       setRow(g);
-      const { data } = await c.from('profiles').select('id, nickname, avatar').in('id', [g.white_id, g.black_id]);
+      const { data } = await c
+        .from('profiles')
+        .select('id, nickname, avatar')
+        .in('id', [g.white_id, g.black_id]);
       const map: Record<string, Player> = {};
       for (const p of data ?? []) map[p.id] = { nickname: p.nickname, avatar: p.avatar };
       setPlayers(map);
@@ -78,12 +88,17 @@ export default function OnlineGameScreen() {
   if (!row || !game) {
     return (
       <Screen back title="…">
-        {error ? <Text style={styles.error}>{error}</Text> : <ActivityIndicator color={colors.primary} />}
+        {error ? (
+          <Text style={styles.error}>{error}</Text>
+        ) : (
+          <ActivityIndicator color={colors.primary} />
+        )}
       </Screen>
     );
   }
 
-  const myColor: Color | null = me?.id === row.white_id ? 'w' : me?.id === row.black_id ? 'b' : null;
+  const myColor: Color | null =
+    me?.id === row.white_id ? 'w' : me?.id === row.black_id ? 'b' : null;
   const myTurn = row.status === 'active' && myColor === game.turn && !sending;
   const pos = game.position;
   const k = pos.kings[pos.side] ?? -1;
@@ -124,7 +139,12 @@ export default function OnlineGameScreen() {
   const playerLine = (p: Player | undefined, color: Color) => (
     <View style={styles.player}>
       <Piece type={(p?.avatar ?? 'p') as 'p'} color={color} size={30} />
-      <Text style={[styles.playerName, game.turn === color && row.status === 'active' && { color: colors.orange }]}>
+      <Text
+        style={[
+          styles.playerName,
+          game.turn === color && row.status === 'active' && { color: colors.orange },
+        ]}
+      >
         {p?.nickname ?? '?'}
       </Text>
     </View>
@@ -132,7 +152,11 @@ export default function OnlineGameScreen() {
 
   const orientation: Color = myColor ?? 'w';
   return (
-    <Screen back title={t('online.vs', { white: white?.nickname ?? '?', black: black?.nickname ?? '?' })} testID="screen-online">
+    <Screen
+      back
+      title={t('online.vs', { white: white?.nickname ?? '?', black: black?.nickname ?? '?' })}
+      testID="screen-online"
+    >
       <View style={[styles.layout, isWide && { flexDirection: 'row', alignItems: 'flex-start' }]}>
         <View style={{ gap: 8, alignItems: 'center' }}>
           {playerLine(orientation === 'w' ? black : white, orientation === 'w' ? 'b' : 'w')}
@@ -173,7 +197,10 @@ export default function OnlineGameScreen() {
               size="sm"
               onPress={() => {
                 const c = db();
-                if (c) void resignGame(c, row.id).then(setRow).catch((e: Error) => setError(e.message));
+                if (c)
+                  void resignGame(c, row.id)
+                    .then(setRow)
+                    .catch((e: Error) => setError(e.message));
               }}
             />
           )}

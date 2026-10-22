@@ -1,6 +1,6 @@
 import { Position } from '@duongsinh/chess-core';
 import { ENDGAMES } from '@duongsinh/minigames';
-import { Board, Card, colors, fonts, space, Stars } from '@duongsinh/ui';
+import { Board, Card, colors, fonts, Stars, space } from '@duongsinh/ui';
 import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Screen } from '@/components/Screen';
@@ -20,7 +20,12 @@ export default function EndgamesScreen() {
           const s = items[`eg:${e.id}`]?.stars ?? 0;
           const turn = Position.fromFen(e.round.fen).turn;
           return (
-            <Pressable key={e.id} onPress={() => router.push(`/tan-cuoc/${e.id}`)} testID={`eg-${e.id}`} style={{ width: cardW }}>
+            <Pressable
+              key={e.id}
+              onPress={() => router.push(`/tan-cuoc/${e.id}`)}
+              testID={`eg-${e.id}`}
+              style={{ width: cardW }}
+            >
               <Card style={styles.card}>
                 <Board fen={e.round.fen} size={96} showCoords={false} orientation={turn} />
                 <View style={{ flex: 1, gap: 4 }}>
@@ -28,7 +33,13 @@ export default function EndgamesScreen() {
                   <Text style={styles.desc} numberOfLines={3}>
                     {L(e.description)}
                   </Text>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
                     <Text style={styles.diff}>
                       {t('endgames.difficulty')}: {'●'.repeat(e.difficulty)}
                       {'○'.repeat(3 - e.difficulty)}

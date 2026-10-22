@@ -25,8 +25,15 @@ export function ResultModal({
           <Text style={styles.title}>{title}</Text>
           {text ? <Text style={styles.text}>{text}</Text> : null}
           <View style={styles.row}>
-            {secondary && <Button title={secondary.title} tone="ghost" onPress={secondary.onPress} />}
-            <Button title={primary.title} tone="accent" onPress={primary.onPress} testID="result-primary" />
+            {secondary && (
+              <Button title={secondary.title} tone="ghost" onPress={secondary.onPress} />
+            )}
+            <Button
+              title={primary.title}
+              tone="accent"
+              onPress={primary.onPress}
+              testID="result-primary"
+            />
           </View>
         </View>
       </View>
@@ -35,7 +42,13 @@ export function ResultModal({
 }
 
 const styles = StyleSheet.create({
-  backdrop: { flex: 1, backgroundColor: 'rgba(26,26,46,0.5)', alignItems: 'center', justifyContent: 'center', padding: 20 },
+  backdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(26,26,46,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
   card: {
     backgroundColor: colors.white,
     borderRadius: 24,
@@ -48,6 +61,12 @@ const styles = StyleSheet.create({
     borderTopColor: colors.gold,
   },
   title: { fontFamily: fonts.black, fontSize: 26, color: colors.primary, textAlign: 'center' },
-  text: { fontFamily: fonts.regular, fontSize: 16, color: colors.text, textAlign: 'center', lineHeight: 23 },
+  text: {
+    fontFamily: fonts.regular,
+    fontSize: 16,
+    color: colors.text,
+    textAlign: 'center',
+    lineHeight: 23,
+  },
   row: { flexDirection: 'row', gap: 10, marginTop: 6, flexWrap: 'wrap', justifyContent: 'center' },
 });

@@ -17,7 +17,11 @@ export function MoveList({
   maxHeight?: number;
 }) {
   const { t } = useLang();
-  const rows: Array<{ num: number; white?: { san: string; ply: number }; black?: { san: string; ply: number } }> = [];
+  const rows: Array<{
+    num: number;
+    white?: { san: string; ply: number };
+    black?: { san: string; ply: number };
+  }> = [];
   sans.forEach((san, i) => {
     const ply = startPly + i + 1;
     const num = Math.ceil(ply / 2);
@@ -32,7 +36,10 @@ export function MoveList({
   });
   const cell = (m?: { san: string; ply: number }) =>
     m ? (
-      <Pressable onPress={() => onSelect?.(m.ply)} style={[styles.cell, current === m.ply && styles.cellOn]}>
+      <Pressable
+        onPress={() => onSelect?.(m.ply)}
+        style={[styles.cell, current === m.ply && styles.cellOn]}
+      >
         <Text style={styles.san}>{m.san}</Text>
       </Pressable>
     ) : (

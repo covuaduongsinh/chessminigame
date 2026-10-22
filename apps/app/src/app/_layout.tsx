@@ -1,3 +1,4 @@
+import { colors } from '@duongsinh/ui';
 import {
   Roboto_400Regular,
   Roboto_500Medium,
@@ -5,7 +6,6 @@ import {
   Roboto_900Black,
   useFonts,
 } from '@expo-google-fonts/roboto';
-import { colors } from '@duongsinh/ui';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -18,7 +18,12 @@ import { syncNow, useAccount } from '@/lib/sync';
 void SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
-  const [loaded] = useFonts({ Roboto_400Regular, Roboto_500Medium, Roboto_700Bold, Roboto_900Black });
+  const [loaded] = useFonts({
+    Roboto_400Regular,
+    Roboto_500Medium,
+    Roboto_700Bold,
+    Roboto_900Black,
+  });
   const lang = useSettings((s) => s.lang);
 
   useEffect(() => {

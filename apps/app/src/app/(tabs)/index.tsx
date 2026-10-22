@@ -16,8 +16,8 @@ import {
   Logo,
   Piece,
   ProgressBar,
-  space,
   Stars,
+  space,
 } from '@duongsinh/ui';
 import { Link, router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
@@ -62,10 +62,17 @@ export default function LearnScreen() {
     <Screen testID="screen-learn">
       <View style={styles.hero}>
         <CheckerPattern width={Math.min(width, 1100)} height={170} opacity={0.07} />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <View
+          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+        >
           <Logo size={44} />
           <Link href="/cai-dat" asChild>
-            <Pressable accessibilityRole="button" accessibilityLabel={t('common.settings')} style={styles.gear} testID="open-settings">
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('common.settings')}
+              style={styles.gear}
+              testID="open-settings"
+            >
               <Text style={{ fontSize: 22 }}>⚙️</Text>
             </Pressable>
           </Link>
@@ -101,7 +108,11 @@ export default function LearnScreen() {
                   const g = getMiniGame(id);
                   if (!g) return null;
                   return (
-                    <Pressable key={id} onPress={() => router.push(`/minigame/${id}`)} style={styles.assignChip}>
+                    <Pressable
+                      key={id}
+                      onPress={() => router.push(`/minigame/${id}`)}
+                      style={styles.assignChip}
+                    >
                       <Text style={styles.assignText}>{L(g.title)}</Text>
                       <Stars value={stars[id] ?? 0} size={12} />
                     </Pressable>
@@ -119,7 +130,11 @@ export default function LearnScreen() {
           const p = levelProgress(level.key, stars);
           const color = LEVEL_COLORS[level.key] ?? colors.primary;
           return (
-            <Card key={level.key} style={[styles.level, { borderLeftColor: color }]} testID={`level-${level.key}`}>
+            <Card
+              key={level.key}
+              style={[styles.level, { borderLeftColor: color }]}
+              testID={`level-${level.key}`}
+            >
               <View style={styles.levelHead}>
                 <View style={[styles.levelIcon, { backgroundColor: `${color}22` }]}>
                   <Piece type={level.piece} color="b" size={44} />
@@ -131,7 +146,12 @@ export default function LearnScreen() {
                   <Text style={styles.levelDesc}>{L(level.description)}</Text>
                   <ProgressBar value={p.earned / p.total} color={color} />
                   <Text style={styles.levelMeta}>
-                    {t('learn.progress', { done: p.completed, total: p.count, stars: p.earned, maxStars: p.total })}
+                    {t('learn.progress', {
+                      done: p.completed,
+                      total: p.count,
+                      stars: p.earned,
+                      maxStars: p.total,
+                    })}
                   </Text>
                 </View>
               </View>
@@ -204,7 +224,13 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: colors.gold,
   },
-  ctaLabel: { fontFamily: fonts.bold, fontSize: 12, color: colors.orange, letterSpacing: 0.6, textTransform: 'uppercase' },
+  ctaLabel: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    color: colors.orange,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+  },
   ctaTitle: { fontFamily: fonts.bold, fontSize: 18, color: colors.text },
   ctaArrow: { fontFamily: fonts.bold, fontSize: 32, color: colors.orange },
   cardTitle: { fontFamily: fonts.bold, fontSize: 16, color: colors.text },
@@ -220,7 +246,13 @@ const styles = StyleSheet.create({
   assignText: { fontFamily: fonts.medium, fontSize: 13, color: colors.primary },
   level: { borderLeftWidth: 6, gap: space.md },
   levelHead: { flexDirection: 'row', gap: space.md, alignItems: 'center' },
-  levelIcon: { width: 64, height: 64, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  levelIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   levelName: { fontFamily: fonts.black, fontSize: 20, color: colors.primary },
   levelDesc: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted },
   levelMeta: { fontFamily: fonts.medium, fontSize: 12, color: colors.muted },

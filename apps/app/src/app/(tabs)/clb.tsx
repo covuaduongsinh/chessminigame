@@ -41,7 +41,11 @@ export default function ClubScreen() {
     try {
       const gs = await myGroups(c, me.id);
       const views = await Promise.all(
-        gs.map(async (g) => ({ group: g, members: await groupMembers(c, g.id), games: await listGames(c, g.id) })),
+        gs.map(async (g) => ({
+          group: g,
+          members: await groupMembers(c, g.id),
+          games: await listGames(c, g.id),
+        })),
       );
       setGroups(views);
       setError(null);
@@ -56,7 +60,9 @@ export default function ClubScreen() {
     void load();
   }, [load]);
 
-  // Cập nhật lời mời/ván mới theo thời gian thực.
+  // Cập nhật lời mời/ván mới theo thời gian thực (đăng ký lại khi danh sách nhóm đổi).
+  const groupKey = groups.map((g) => g.group.id).join(',');
+  // biome-ignore lint/correctness/useExhaustiveDependencies: chỉ phụ thuộc danh sách id nhóm
   useEffect(() => {
     const c = db();
     if (!c) return;
@@ -64,9 +70,7 @@ export default function ClubScreen() {
     return () => {
       for (const u of unsubs) u();
     };
-    // chỉ đăng ký lại khi danh sách nhóm đổi
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [groups.map((g) => g.group.id).join(',')]);
+  }, [groupKey]);
 
   const join = async () => {
     const c = db();
@@ -104,7 +108,8 @@ export default function ClubScreen() {
     }
   };
 
-  const nameOf = (view: GroupView, id: string) => view.members.find((m) => m.user_id === id)?.nickname ?? '?';
+  const nameOf = (view: GroupView, id: string) =>
+    view.members.find((m) => m.user_id === id)?.nickname ?? '?';
 
   return (
     <Screen title={t('club.title')} subtitle={t('club.subtitle')} testID="screen-club">
@@ -122,10 +127,17 @@ export default function ClubScreen() {
 
       {account.status !== 'ready' ? (
         <Card style={{ gap: 10, marginTop: space.md }}>
-          <Text style={styles.text}>{account.status === 'connecting' ? t('club.connecting') : t('club.notConfigured')}</Text>
+          <Text style={styles.text}>
+            {account.status === 'connecting' ? t('club.connecting') : t('club.notConfigured')}
+          </Text>
           {account.error ? <Text style={styles.error}>{account.error}</Text> : null}
           {account.status !== 'connecting' && (
-            <Button title={t('common.retry')} tone="light" size="sm" onPress={() => void account.connect()} />
+            <Button
+              title={t('common.retry')}
+              tone="light"
+              size="sm"
+              onPress={() => void account.connect()}
+            />
           )}
         </Card>
       ) : (
@@ -141,12 +153,21 @@ export default function ClubScreen() {
                 style={styles.input}
                 testID="join-code"
               />
-              <Button title={t('club.join')} onPress={() => void join()} disabled={code.trim().length < 6} />
+              <Button
+                title={t('club.join')}
+                onPress={() => void join()}
+                disabled={code.trim().length < 6}
+              />
             </Card>
           </Section>
 
-          <Section title={t('club.myGroups')} right={loading ? <ActivityIndicator color={colors.primary} /> : undefined}>
-            {groups.length === 0 && !loading && <Text style={styles.text}>{t('club.noGroups')}</Text>}
+          <Section
+            title={t('club.myGroups')}
+            right={loading ? <ActivityIndicator color={colors.primary} /> : undefined}
+          >
+            {groups.length === 0 && !loading && (
+              <Text style={styles.text}>{t('club.noGroups')}</Text>
+            )}
             {groups.map((view) => {
               const others = view.members.filter((m) => m.user_id !== me?.id);
               const invites = view.games.filter((g) => g.status === 'waiting');
@@ -154,26 +175,50 @@ export default function ClubScreen() {
               const done = view.games.filter((g) => g.status === 'finished').slice(0, 5);
               return (
                 <Card key={view.group.id} style={{ gap: 12 }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                  <View
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}
+                  >
                     <Text style={styles.groupName}>{view.group.name}</Text>
                     <Pill text={t(`coach.kind.${view.group.kind}`)} />
                     {view.group.myRole !== 'member' && (
-                      <Button title={t('club.coachOpen')} tone="light" size="sm" onPress={() => router.push(`/hlv/${view.group.id}`)} />
+                      <Button
+                        title={t('club.coachOpen')}
+                        tone="light"
+                        size="sm"
+                        onPress={() => router.push(`/hlv/${view.group.id}`)}
+                      />
                     )}
                   </View>
 
                   {invites.map((g) => {
                     const mine = g.created_by === me?.id;
-                    const other = g.created_by === me?.id ? (g.white_id === me?.id ? g.black_id : g.white_id) : g.created_by;
+                    const other =
+                      g.created_by === me?.id
+                        ? g.white_id === me?.id
+                          ? g.black_id
+                          : g.white_id
+                        : g.created_by;
                     return (
                       <View key={g.id} style={styles.invite}>
                         <Text style={[styles.text, { flex: 1 }]}>
-                          {mine ? `⏳ ${nameOf(view, other)} — ${t('club.waiting')}` : `🎉 ${t('club.invited', { name: nameOf(view, other) })}`}
+                          {mine
+                            ? `⏳ ${nameOf(view, other)} — ${t('club.waiting')}`
+                            : `🎉 ${t('club.invited', { name: nameOf(view, other) })}`}
                         </Text>
                         {!mine && (
                           <>
-                            <Button title={t('club.accept')} tone="success" size="sm" onPress={() => void respond(g.id, true)} />
-                            <Button title={t('club.decline')} tone="ghost" size="sm" onPress={() => void respond(g.id, false)} />
+                            <Button
+                              title={t('club.accept')}
+                              tone="success"
+                              size="sm"
+                              onPress={() => void respond(g.id, true)}
+                            />
+                            <Button
+                              title={t('club.decline')}
+                              tone="ghost"
+                              size="sm"
+                              onPress={() => void respond(g.id, false)}
+                            />
                           </>
                         )}
                       </View>
@@ -183,9 +228,14 @@ export default function ClubScreen() {
                   {active.map((g) => (
                     <View key={g.id} style={styles.invite}>
                       <Text style={[styles.text, { flex: 1 }]}>
-                        ♟ {nameOf(view, g.white_id)} – {nameOf(view, g.black_id)} · {t('club.active')}
+                        ♟ {nameOf(view, g.white_id)} – {nameOf(view, g.black_id)} ·{' '}
+                        {t('club.active')}
                       </Text>
-                      <Button title={t('club.open')} size="sm" onPress={() => router.push(`/game/${g.id}`)} />
+                      <Button
+                        title={t('club.open')}
+                        size="sm"
+                        onPress={() => router.push(`/game/${g.id}`)}
+                      />
                     </View>
                   ))}
 
@@ -197,7 +247,12 @@ export default function ClubScreen() {
                         <Text style={styles.memberName} numberOfLines={1}>
                           {m.nickname}
                         </Text>
-                        <Button title={t('club.invite')} tone="light" size="sm" onPress={() => void invite(view.group.id, m.user_id)} />
+                        <Button
+                          title={t('club.invite')}
+                          tone="light"
+                          size="sm"
+                          onPress={() => void invite(view.group.id, m.user_id)}
+                        />
                       </View>
                     ))}
                   </View>
@@ -206,7 +261,11 @@ export default function ClubScreen() {
                     <>
                       <Text style={styles.label}>{t('club.finished')}</Text>
                       {done.map((g) => (
-                        <Text key={g.id} style={styles.small} onPress={() => router.push(`/game/${g.id}`)}>
+                        <Text
+                          key={g.id}
+                          style={styles.small}
+                          onPress={() => router.push(`/game/${g.id}`)}
+                        >
                           {nameOf(view, g.white_id)} – {nameOf(view, g.black_id)}: {g.result}
                         </Text>
                       ))}
@@ -219,14 +278,27 @@ export default function ClubScreen() {
         </>
       )}
 
-      {error && <Text style={[styles.error, { marginTop: space.md }]}>{t('club.error', { message: error })}</Text>}
+      {error && (
+        <Text style={[styles.error, { marginTop: space.md }]}>
+          {t('club.error', { message: error })}
+        </Text>
+      )}
 
       <Section title={t('club.coach')}>
         <Card style={{ gap: 10 }}>
           <Text style={styles.text}>{t('coach.share')}</Text>
           <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
-            <Button title={t('club.coachOpen')} onPress={() => router.push('/hlv')} testID="open-coach" />
-            <Button title={t('classroom.title')} tone="ghost" onPress={() => router.push('/lop-hoc')} testID="open-classroom" />
+            <Button
+              title={t('club.coachOpen')}
+              onPress={() => router.push('/hlv')}
+              testID="open-coach"
+            />
+            <Button
+              title={t('classroom.title')}
+              tone="ghost"
+              onPress={() => router.push('/lop-hoc')}
+              testID="open-classroom"
+            />
           </View>
         </Card>
       </Section>
@@ -236,7 +308,13 @@ export default function ClubScreen() {
 
 const styles = StyleSheet.create({
   me: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  label: { fontFamily: fonts.bold, fontSize: 12, letterSpacing: 0.6, color: colors.muted, textTransform: 'uppercase' },
+  label: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    letterSpacing: 0.6,
+    color: colors.muted,
+    textTransform: 'uppercase',
+  },
   name: { fontFamily: fonts.black, fontSize: 20, color: colors.primary },
   text: { fontFamily: fonts.regular, fontSize: 15, color: colors.text, lineHeight: 21 },
   small: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted },

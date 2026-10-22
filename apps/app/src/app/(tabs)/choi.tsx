@@ -1,5 +1,5 @@
 import { type Color, Game, type PieceType, type Square, squareName } from '@duongsinh/chess-core';
-import { getLevel, hint as engineHint, LEVELS, thinkAsync } from '@duongsinh/engine';
+import { hint as engineHint, getLevel, LEVELS, thinkAsync } from '@duongsinh/engine';
 import {
   type Arrow,
   Board,
@@ -43,7 +43,7 @@ export default function PlayScreen() {
   const token = useRef(0);
   const levelRef = useRef(level);
   levelRef.current = level;
-  const rerender = () => setTick((x) => x + 1);
+  const rerender = useCallback(() => setTick((x) => x + 1), []);
 
   const finishIfOver = useCallback(
     (g: Game) => {
@@ -84,7 +84,7 @@ export default function PlayScreen() {
       rerender();
       finishIfOver(g);
     },
-    [finishIfOver, myColor],
+    [finishIfOver, myColor, rerender],
   );
 
   const newGame = useCallback(
@@ -102,9 +102,9 @@ export default function PlayScreen() {
   );
 
   // Khi đổi màu quân: bắt đầu ván mới.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: chỉ chạy khi đổi màu quân
   useEffect(() => {
     newGame(myColor);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myColor]);
 
   const doMove = (from: Square, to: Square, promotion?: PieceType) => {
@@ -136,7 +136,12 @@ export default function PlayScreen() {
 
   const showHint = () => {
     const m = engineHint(game.position.clone());
-    if (m) setHintArrow({ from: squareName(m.from), to: squareName(m.to), color: 'rgba(247,148,29,0.85)' });
+    if (m)
+      setHintArrow({
+        from: squareName(m.from),
+        to: squareName(m.to),
+        color: 'rgba(247,148,29,0.85)',
+      });
   };
 
   const pos = game.position;
@@ -163,7 +168,9 @@ export default function PlayScreen() {
             check={k !== -1 && pos.inCheck() ? squareName(k) : null}
             arrows={hintArrow ? [hintArrow] : []}
           />
-          <Text style={styles.status}>{busy ? t('game.thinking') : game.turn === myColor ? t('game.yourTurn') : ''}</Text>
+          <Text style={styles.status}>
+            {busy ? t('game.thinking') : game.turn === myColor ? t('game.yourTurn') : ''}
+          </Text>
         </View>
         <View style={[styles.side, isWide && { width: 360 }]}>
           <Card style={{ gap: 10 }}>
@@ -182,7 +189,9 @@ export default function PlayScreen() {
                   style={[styles.levelChip, level === l.id && styles.levelChipOn]}
                 >
                   <Piece type={LEVEL_PIECES[i]!} color={level === l.id ? 'b' : 'w'} size={30} />
-                  <Text style={[styles.levelText, level === l.id && { color: colors.primary }]}>{L(l.name)}</Text>
+                  <Text style={[styles.levelText, level === l.id && { color: colors.primary }]}>
+                    {L(l.name)}
+                  </Text>
                 </Pressable>
               ))}
             </View>
@@ -192,15 +201,36 @@ export default function PlayScreen() {
           <Card style={{ gap: 10 }}>
             <Text style={styles.label}>{t('play.chooseColor')}</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
-              <Button title={t('common.white')} tone={myColor === 'w' ? 'primary' : 'ghost'} size="sm" onPress={() => setMyColor('w')} />
-              <Button title={t('common.black')} tone={myColor === 'b' ? 'primary' : 'ghost'} size="sm" onPress={() => setMyColor('b')} />
+              <Button
+                title={t('common.white')}
+                tone={myColor === 'w' ? 'primary' : 'ghost'}
+                size="sm"
+                onPress={() => setMyColor('w')}
+              />
+              <Button
+                title={t('common.black')}
+                tone={myColor === 'b' ? 'primary' : 'ghost'}
+                size="sm"
+                onPress={() => setMyColor('b')}
+              />
             </View>
           </Card>
           <View style={styles.row}>
-            <Button title={t('play.newGame')} tone="accent" size="sm" onPress={() => newGame()} testID="new-game" />
+            <Button
+              title={t('play.newGame')}
+              tone="accent"
+              size="sm"
+              onPress={() => newGame()}
+              testID="new-game"
+            />
             <Button title={t('common.hint')} tone="light" size="sm" onPress={showHint} />
             <Button title={t('common.undo')} tone="ghost" size="sm" onPress={undo} />
-            <Button title={t('common.flip')} tone="ghost" size="sm" onPress={() => setFlipped((f) => !f)} />
+            <Button
+              title={t('common.flip')}
+              tone="ghost"
+              size="sm"
+              onPress={() => setFlipped((f) => !f)}
+            />
           </View>
           <MoveList sans={game.history.map((h) => h.san)} />
         </View>
@@ -230,7 +260,13 @@ export default function PlayScreen() {
 const styles = StyleSheet.create({
   layout: { gap: space.md },
   side: { gap: space.sm, flexShrink: 1, width: '100%' },
-  label: { fontFamily: fonts.bold, fontSize: 12, letterSpacing: 0.6, color: colors.muted, textTransform: 'uppercase' },
+  label: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    letterSpacing: 0.6,
+    color: colors.muted,
+    textTransform: 'uppercase',
+  },
   levels: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   levelChip: {
     alignItems: 'center',

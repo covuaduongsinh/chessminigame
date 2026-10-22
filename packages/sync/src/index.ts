@@ -149,8 +149,13 @@ export async function sendEmailOtp(db: DB, email: string): Promise<void> {
   if (res.error) fail(res.error);
 }
 
-export async function verifyEmailOtp(db: DB, email: string, token: string): Promise<void> {
-  const res = await db.auth.verifyOtp({ email, token, type: 'email' });
+export async function verifyEmailOtp(
+  db: DB,
+  email: string,
+  token: string,
+  type: 'email' | 'email_change' = 'email',
+): Promise<void> {
+  const res = await db.auth.verifyOtp({ email, token, type });
   if (res.error) fail(res.error);
 }
 

@@ -12,7 +12,10 @@ export function endgameAsMiniGame(id: string): MiniGame | undefined {
     story: e.description,
     goal:
       e.round.mode === 'mate'
-        ? { vi: `Chiếu hết trong ${e.round.moveLimit} nước.`, en: `Checkmate within ${e.round.moveLimit} moves.` }
+        ? {
+            vi: `Chiếu hết trong ${e.round.moveLimit} nước.`,
+            en: `Checkmate within ${e.round.moveLimit} moves.`,
+          }
         : { vi: 'Phong cấp Tốt (đừng để mất Tốt!).', en: 'Promote the pawn (don’t lose it!).' },
     lesson: e.description,
     rounds: [e.round],

@@ -1,7 +1,26 @@
 import { linkEmail, randomNickname, sendEmailOtp, verifyEmailOtp } from '@duongsinh/sync';
-import { BOARD_THEMES, Board, Button, Card, colors, fonts, Logo, Piece, space } from '@duongsinh/ui';
+import {
+  BOARD_THEMES,
+  Board,
+  Button,
+  Card,
+  colors,
+  fonts,
+  Logo,
+  Piece,
+  space,
+} from '@duongsinh/ui';
 import { useState } from 'react';
-import { Alert, Platform, Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { Screen, Section } from '@/components/Screen';
 import i18n, { useLang } from '@/lib/i18n';
 import { useProgress, useSettings } from '@/lib/store';
@@ -16,13 +35,17 @@ export default function SettingsScreen() {
   const progress = useProgress();
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
+  const [otpSent, setOtpSent] = useState<null | 'email' | 'email_change'>(null);
   const [msg, setMsg] = useState<string | null>(null);
 
   const confirm = (text: string, onYes: () => void) => {
     if (Platform.OS === 'web') {
       if (typeof window !== 'undefined' && window.confirm(text)) onYes();
-    } else Alert.alert(text, undefined, [{ text: t('common.cancel'), style: 'cancel' }, { text: t('common.yes'), onPress: onYes }]);
+    } else
+      Alert.alert(text, undefined, [
+        { text: t('common.cancel'), style: 'cancel' },
+        { text: t('common.yes'), onPress: onYes },
+      ]);
   };
 
   const run = async (fn: () => Promise<void>, ok: string) => {
@@ -62,8 +85,13 @@ export default function SettingsScreen() {
             {AVATARS.map((a) => (
               <Pressable
                 key={a}
-                onPress={() => void account.rename(account.profile?.nickname ?? settings.nickname ?? '', a)}
-                style={[styles.avatar, (account.profile?.avatar ?? settings.avatar) === a && styles.avatarOn]}
+                onPress={() =>
+                  void account.rename(account.profile?.nickname ?? settings.nickname ?? '', a)
+                }
+                style={[
+                  styles.avatar,
+                  (account.profile?.avatar ?? settings.avatar) === a && styles.avatarOn,
+                ]}
               >
                 <Piece type={a} color="b" size={36} />
               </Pressable>
@@ -96,24 +124,36 @@ export default function SettingsScreen() {
               onPress={() => {
                 const c = db();
                 if (!c) return;
-                const anon = !account.profile || account.status === 'ready';
+                // Đã có phiên (ẩn danh) → liên kết email; chưa có → đăng nhập bằng mã OTP.
+                const linking = account.status === 'ready';
                 void run(async () => {
-                  if (anon) await linkEmail(c, email);
+                  if (linking) await linkEmail(c, email);
                   else await sendEmailOtp(c, email);
-                  setOtpSent(true);
+                  setOtpSent(linking ? 'email_change' : 'email');
                 }, '✓ Email đã gửi');
               }}
             />
           </View>
           {otpSent && (
             <View style={styles.row}>
-              <TextInput value={otp} onChangeText={setOtp} placeholder={t('settings.otp')} style={[styles.input, { flex: 1 }]} keyboardType="number-pad" />
+              <TextInput
+                value={otp}
+                onChangeText={setOtp}
+                placeholder={t('settings.otp')}
+                style={[styles.input, { flex: 1 }]}
+                keyboardType="number-pad"
+              />
               <Button
                 title={t('settings.verify')}
                 size="sm"
                 onPress={() => {
                   const c = db();
-                  if (c) void run(() => verifyEmailOtp(c, email, otp), '✓');
+                  if (c && otpSent)
+                    void run(
+                      () =>
+                        verifyEmailOtp(c, email, otp, otpSent).then(() => void account.connect()),
+                      '✓',
+                    );
                 }}
               />
             </View>
@@ -124,17 +164,32 @@ export default function SettingsScreen() {
       <Section title={t('settings.sync')}>
         <Card style={{ gap: 8 }}>
           <Text style={styles.small}>
-            {progress.lastSync ? t('settings.lastSync', { time: new Date(progress.lastSync).toLocaleString() }) : t('common.offline')}
+            {progress.lastSync
+              ? t('settings.lastSync', { time: new Date(progress.lastSync).toLocaleString() })
+              : t('common.offline')}
           </Text>
-          {progress.outbox.length > 0 && <Text style={styles.small}>{t('settings.pending', { count: progress.outbox.length })}</Text>}
-          <Button title={t('settings.syncNow')} tone="light" size="sm" onPress={() => void syncNow().then((ok) => setMsg(ok ? '✓' : t('common.offline')))} />
+          {progress.outbox.length > 0 && (
+            <Text style={styles.small}>
+              {t('settings.pending', { count: progress.outbox.length })}
+            </Text>
+          )}
+          <Button
+            title={t('settings.syncNow')}
+            tone="light"
+            size="sm"
+            onPress={() => void syncNow().then((ok) => setMsg(ok ? '✓' : t('common.offline')))}
+          />
         </Card>
       </Section>
 
       <Section title={t('settings.boardTheme')}>
         <View style={styles.row}>
           {BOARD_THEMES.map((th) => (
-            <Pressable key={th.id} onPress={() => settings.set({ boardTheme: th.id })} style={[styles.theme, settings.boardTheme === th.id && styles.themeOn]}>
+            <Pressable
+              key={th.id}
+              onPress={() => settings.set({ boardTheme: th.id })}
+              style={[styles.theme, settings.boardTheme === th.id && styles.themeOn]}
+            >
               <Board fen="8/8/8/3k4/4K3/8/8/8 w - - 0 1" size={96} theme={th} showCoords={false} />
               <Text style={styles.small}>{th.name[lang]}</Text>
             </Pressable>
@@ -142,11 +197,19 @@ export default function SettingsScreen() {
         </View>
         <Card style={styles.switchRow}>
           <Text style={styles.text}>{t('settings.sound')}</Text>
-          <Switch value={settings.sound} onValueChange={(v) => settings.set({ sound: v })} trackColor={{ true: colors.primary }} />
+          <Switch
+            value={settings.sound}
+            onValueChange={(v) => settings.set({ sound: v })}
+            trackColor={{ true: colors.primary }}
+          />
         </Card>
         <Card style={styles.switchRow}>
           <Text style={styles.text}>{t('settings.coords')}</Text>
-          <Switch value={settings.coords} onValueChange={(v) => settings.set({ coords: v })} trackColor={{ true: colors.primary }} />
+          <Switch
+            value={settings.coords}
+            onValueChange={(v) => settings.set({ coords: v })}
+            trackColor={{ true: colors.primary }}
+          />
         </Card>
       </Section>
 
@@ -156,7 +219,12 @@ export default function SettingsScreen() {
           <Text style={styles.text}>{t('settings.aboutText')}</Text>
           <Text style={styles.small}>{t('settings.contact')}</Text>
         </Card>
-        <Button title={t('settings.resetProgress')} tone="danger" size="sm" onPress={() => confirm(t('settings.resetConfirm'), () => progress.reset())} />
+        <Button
+          title={t('settings.resetProgress')}
+          tone="danger"
+          size="sm"
+          onPress={() => confirm(t('settings.resetConfirm'), () => progress.reset())}
+        />
       </Section>
       {msg && <Text style={styles.msg}>{msg}</Text>}
     </Screen>
@@ -165,7 +233,13 @@ export default function SettingsScreen() {
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, alignItems: 'center' },
-  label: { fontFamily: fonts.bold, fontSize: 12, letterSpacing: 0.6, color: colors.muted, textTransform: 'uppercase' },
+  label: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    letterSpacing: 0.6,
+    color: colors.muted,
+    textTransform: 'uppercase',
+  },
   name: { fontFamily: fonts.black, fontSize: 22, color: colors.primary },
   text: { fontFamily: fonts.regular, fontSize: 15, color: colors.text, lineHeight: 21 },
   small: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted },
@@ -180,8 +254,20 @@ const styles = StyleSheet.create({
     fontSize: 15,
     backgroundColor: colors.bg,
   },
-  theme: { alignItems: 'center', gap: 4, padding: 6, borderRadius: 12, borderWidth: 2, borderColor: 'transparent' },
+  theme: {
+    alignItems: 'center',
+    gap: 4,
+    padding: 6,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
   themeOn: { borderColor: colors.orange },
-  switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
+  },
   msg: { fontFamily: fonts.medium, fontSize: 14, color: colors.primary, marginTop: space.md },
 });

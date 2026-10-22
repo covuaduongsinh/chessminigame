@@ -18,7 +18,17 @@ interface ScreenProps {
 }
 
 /** Khung màn hình chung: vùng an toàn, tiêu đề, nút quay lại, giới hạn bề rộng trên màn lớn. */
-export function Screen({ title, subtitle, back, right, scroll = true, children, maxWidth = 1100, contentStyle, testID }: ScreenProps) {
+export function Screen({
+  title,
+  subtitle,
+  back,
+  right,
+  scroll = true,
+  children,
+  maxWidth = 1100,
+  contentStyle,
+  testID,
+}: ScreenProps) {
   const { t } = useLang();
   const body = (
     <View style={[styles.inner, { maxWidth }, contentStyle]}>
@@ -62,7 +72,15 @@ export function Screen({ title, subtitle, back, right, scroll = true, children, 
   );
 }
 
-export function Section({ title, children, right }: { title: string; children: ReactNode; right?: ReactNode }) {
+export function Section({
+  title,
+  children,
+  right,
+}: {
+  title: string;
+  children: ReactNode;
+  right?: ReactNode;
+}) {
   return (
     <View style={{ marginTop: space.lg, gap: space.sm }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -89,7 +107,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  backText: { fontSize: 28, lineHeight: 30, color: colors.primary, fontFamily: fonts.bold, marginTop: -2 },
+  backText: {
+    fontSize: 28,
+    lineHeight: 30,
+    color: colors.primary,
+    fontFamily: fonts.bold,
+    marginTop: -2,
+  },
   title: { fontFamily: fonts.black, fontSize: 24, color: colors.primary },
   subtitle: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, marginTop: 2 },
   section: { fontFamily: fonts.bold, fontSize: 18, color: colors.text },

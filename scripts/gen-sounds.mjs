@@ -8,7 +8,9 @@ const OUT = new URL('../apps/app/assets/sounds/', import.meta.url).pathname;
 
 function wav(samples) {
   const data = Buffer.alloc(samples.length * 2);
-  samples.forEach((s, i) => data.writeInt16LE(Math.max(-1, Math.min(1, s)) * 32767, i * 2));
+  for (let i = 0; i < samples.length; i++) {
+    data.writeInt16LE(Math.round(Math.max(-1, Math.min(1, samples[i])) * 32767), i * 2);
+  }
   const h = Buffer.alloc(44);
   h.write('RIFF', 0);
   h.writeUInt32LE(36 + data.length, 4);
@@ -63,8 +65,14 @@ const sounds = {
     tone(180, 0.08, { vol: 0.6, decay: 50, harmonics: [1, 0.7, 0.3], noise: 0.6 }),
     tone(260, 0.12, { vol: 0.5, decay: 40, harmonics: [1, 0.5, 0.2], noise: 0.4 }),
   ),
-  star: concat(tone(988, 0.09, { vol: 0.35, decay: 18 }), tone(1319, 0.18, { vol: 0.35, decay: 14 })),
-  wrong: concat(tone(330, 0.12, { vol: 0.35, decay: 12 }), tone(262, 0.22, { vol: 0.35, decay: 10 })),
+  star: concat(
+    tone(988, 0.09, { vol: 0.35, decay: 18 }),
+    tone(1319, 0.18, { vol: 0.35, decay: 14 }),
+  ),
+  wrong: concat(
+    tone(330, 0.12, { vol: 0.35, decay: 12 }),
+    tone(262, 0.22, { vol: 0.35, decay: 10 }),
+  ),
   // hợp âm Đô trưởng đi lên — chúc mừng chiến thắng
   win: concat(
     tone(523, 0.14, { vol: 0.35, decay: 9 }),

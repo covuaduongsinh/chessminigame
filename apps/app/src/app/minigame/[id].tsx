@@ -20,7 +20,12 @@ export default function MiniGameScreen() {
   const level = LEVELS.find((l) => l.key === def.level)!;
   const next = nextMiniGame(def.id);
   return (
-    <Screen back title={L(def.title)} right={<Pill text={L(level.name)} />} testID="screen-minigame">
+    <Screen
+      back
+      title={L(def.title)}
+      right={<Pill text={L(level.name)} />}
+      testID="screen-minigame"
+    >
       <MiniGamePlayer
         key={def.id}
         def={def}

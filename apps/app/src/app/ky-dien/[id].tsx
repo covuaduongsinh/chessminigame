@@ -1,4 +1,4 @@
-import { parsePgn, Position, type Square, squareName } from '@duongsinh/chess-core';
+import { Position, parsePgn, type Square, squareName } from '@duongsinh/chess-core';
 import { CLASSICS } from '@duongsinh/minigames';
 import { Board, Button, boardTheme, Card, colors, fonts, space } from '@duongsinh/ui';
 import { useLocalSearchParams } from 'expo-router';
@@ -59,7 +59,12 @@ export default function ClassicScreen() {
   const note = classic.notes[ply];
 
   return (
-    <Screen back title={L(classic.title)} subtitle={`${classic.white} – ${classic.black}${classic.year ? ` · ${classic.event} ${classic.year}` : ''}`} testID="screen-classic">
+    <Screen
+      back
+      title={L(classic.title)}
+      subtitle={`${classic.white} – ${classic.black}${classic.year ? ` · ${classic.event} ${classic.year}` : ''}`}
+      testID="screen-classic"
+    >
       <View style={[styles.layout, isWide && { flexDirection: 'row', alignItems: 'flex-start' }]}>
         <View style={{ alignItems: 'center', gap: 8 }}>
           <Board
@@ -67,14 +72,34 @@ export default function ClassicScreen() {
             size={size}
             theme={boardTheme(settings.boardTheme)}
             showCoords={settings.coords}
-            lastMove={last ? { from: last.uci.slice(0, 2) as Square, to: last.uci.slice(2, 4) as Square } : null}
+            lastMove={
+              last
+                ? { from: last.uci.slice(0, 2) as Square, to: last.uci.slice(2, 4) as Square }
+                : null
+            }
             check={k !== -1 && pos.inCheck() ? squareName(k) : null}
           />
           <View style={styles.nav}>
             <Button title="⏮" tone="ghost" size="sm" onPress={() => setPly(0)} />
-            <Button title="◀" tone="ghost" size="sm" onPress={() => setPly((p) => Math.max(0, p - 1))} />
-            <Button title={auto ? '⏸' : '▶︎ Auto'} tone={auto ? 'accent' : 'primary'} size="sm" onPress={() => setAuto((a) => !a)} />
-            <Button title="▶" tone="ghost" size="sm" onPress={() => setPly((p) => Math.min(game.moves.length, p + 1))} testID="classic-next" />
+            <Button
+              title="◀"
+              tone="ghost"
+              size="sm"
+              onPress={() => setPly((p) => Math.max(0, p - 1))}
+            />
+            <Button
+              title={auto ? '⏸' : '▶︎ Auto'}
+              tone={auto ? 'accent' : 'primary'}
+              size="sm"
+              onPress={() => setAuto((a) => !a)}
+            />
+            <Button
+              title="▶"
+              tone="ghost"
+              size="sm"
+              onPress={() => setPly((p) => Math.min(game.moves.length, p + 1))}
+              testID="classic-next"
+            />
             <Button title="⏭" tone="ghost" size="sm" onPress={() => setPly(game.moves.length)} />
           </View>
         </View>
@@ -89,8 +114,15 @@ export default function ClassicScreen() {
               </Text>
             </Card>
           )}
-          <MoveList sans={game.moves.map((m) => m.san)} current={ply} onSelect={setPly} maxHeight={260} />
-          {ply === game.moves.length && <Text style={styles.result}>{t('online.result', { result: game.result })}</Text>}
+          <MoveList
+            sans={game.moves.map((m) => m.san)}
+            current={ply}
+            onSelect={setPly}
+            maxHeight={260}
+          />
+          {ply === game.moves.length && (
+            <Text style={styles.result}>{t('online.result', { result: game.result })}</Text>
+          )}
         </View>
       </View>
     </Screen>

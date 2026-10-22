@@ -61,7 +61,16 @@ export interface ButtonProps extends Omit<PressableProps, 'style' | 'children'> 
   style?: StyleProp<ViewStyle>;
 }
 
-export function Button({ title, tone = 'primary', size = 'md', icon, loading, disabled, style, ...rest }: ButtonProps) {
+export function Button({
+  title,
+  tone = 'primary',
+  size = 'md',
+  icon,
+  loading,
+  disabled,
+  style,
+  ...rest
+}: ButtonProps) {
   const t = TONES[tone];
   const pad = size === 'lg' ? 16 : size === 'sm' ? 8 : 12;
   const fs = size === 'lg' ? 18 : size === 'sm' ? 14 : 16;
@@ -91,14 +100,28 @@ export function Button({ title, tone = 'primary', size = 'md', icon, loading, di
 
 // ------------------------------------------------------------------ thẻ
 
-export function Card({ children, style, onPress, testID }: { children: ReactNode; style?: StyleProp<ViewStyle>; onPress?: () => void; testID?: string }) {
+export function Card({
+  children,
+  style,
+  onPress,
+  testID,
+}: {
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+  onPress?: () => void;
+  testID?: string;
+}) {
   if (onPress) {
     return (
       <Pressable
         testID={testID}
         accessibilityRole="button"
         onPress={onPress}
-        style={({ pressed }) => [styles.card, pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] }, style]}
+        style={({ pressed }) => [
+          styles.card,
+          pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
+          style,
+        ]}
       >
         {children}
       </Pressable>
@@ -111,7 +134,15 @@ export function Card({ children, style, onPress, testID }: { children: ReactNode
   );
 }
 
-export function Pill({ text, color = colors.primary, bg = colors.primaryLight }: { text: string; color?: string; bg?: string }) {
+export function Pill({
+  text,
+  color = colors.primary,
+  bg = colors.primaryLight,
+}: {
+  text: string;
+  color?: string;
+  bg?: string;
+}) {
   return (
     <View style={[styles.pill, { backgroundColor: bg }]}>
       <Text style={{ color, fontFamily: fonts.bold, fontSize: 12 }}>{text}</Text>
@@ -135,7 +166,15 @@ export function StarIcon({ size = 18, filled = true }: { size?: number; filled?:
   );
 }
 
-export function Stars({ value, max = 3, size = 18 }: { value: number; max?: number; size?: number }) {
+export function Stars({
+  value,
+  max = 3,
+  size = 18,
+}: {
+  value: number;
+  max?: number;
+  size?: number;
+}) {
   return (
     <View style={{ flexDirection: 'row', gap: 2 }} accessibilityLabel={`${value}/${max} sao`}>
       {Array.from({ length: max }, (_, i) => (
@@ -145,10 +184,27 @@ export function Stars({ value, max = 3, size = 18 }: { value: number; max?: numb
   );
 }
 
-export function ProgressBar({ value, color = colors.green, height = 8 }: { value: number; color?: string; height?: number }) {
+export function ProgressBar({
+  value,
+  color = colors.green,
+  height = 8,
+}: {
+  value: number;
+  color?: string;
+  height?: number;
+}) {
   return (
-    <View style={{ height, borderRadius: height, backgroundColor: colors.border, overflow: 'hidden' }}>
-      <View style={{ width: `${Math.round(Math.min(1, Math.max(0, value)) * 100)}%`, height, backgroundColor: color, borderRadius: height }} />
+    <View
+      style={{ height, borderRadius: height, backgroundColor: colors.border, overflow: 'hidden' }}
+    >
+      <View
+        style={{
+          width: `${Math.round(Math.min(1, Math.max(0, value)) * 100)}%`,
+          height,
+          backgroundColor: color,
+          borderRadius: height,
+        }}
+      />
     </View>
   );
 }
@@ -174,11 +230,25 @@ export function Logo({ size = 40, slogan = true }: { size?: number; slogan?: boo
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
       <LogoMark size={size} />
       <View>
-        <Text style={{ fontFamily: fonts.black, fontSize: size * 0.45, color: colors.primary, letterSpacing: 0.5 }}>
+        <Text
+          style={{
+            fontFamily: fonts.black,
+            fontSize: size * 0.45,
+            color: colors.primary,
+            letterSpacing: 0.5,
+          }}
+        >
           DƯƠNG SINH
         </Text>
         {slogan && (
-          <Text style={{ fontFamily: fonts.medium, fontSize: size * 0.28, color: colors.orange, letterSpacing: 1 }}>
+          <Text
+            style={{
+              fontFamily: fonts.medium,
+              fontSize: size * 0.28,
+              color: colors.orange,
+              letterSpacing: 1,
+            }}
+          >
             VUI TRÍ TUỆ
           </Text>
         )}
@@ -188,17 +258,43 @@ export function Logo({ size = 40, slogan = true }: { size?: number; slogan?: boo
 }
 
 /** Họa tiết ô cờ mờ làm nền trang trí. */
-export function CheckerPattern({ width, height, cell = 18, opacity = 0.06 }: { width: number; height: number; cell?: number; opacity?: number }) {
+export function CheckerPattern({
+  width,
+  height,
+  cell = 18,
+  opacity = 0.06,
+}: {
+  width: number;
+  height: number;
+  cell?: number;
+  opacity?: number;
+}) {
   const cols = Math.ceil(width / cell);
   const rows = Math.ceil(height / cell);
   const rects: ReactNode[] = [];
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      if ((r + c) % 2 === 0) rects.push(<Rect key={`${r}-${c}`} x={c * cell} y={r * cell} width={cell} height={cell} fill={colors.primary} />);
+      if ((r + c) % 2 === 0)
+        rects.push(
+          <Rect
+            key={`${r}-${c}`}
+            x={c * cell}
+            y={r * cell}
+            width={cell}
+            height={cell}
+            fill={colors.primary}
+          />,
+        );
     }
   }
   return (
-    <Svg width={width} height={height} style={StyleSheet.absoluteFill} pointerEvents="none" opacity={opacity}>
+    <Svg
+      width={width}
+      height={height}
+      style={StyleSheet.absoluteFill}
+      pointerEvents="none"
+      opacity={opacity}
+    >
       {rects}
     </Svg>
   );

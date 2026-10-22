@@ -1,6 +1,12 @@
 {
   "app": { "name": "Duong Sinh Chess", "slogan": "Joy of thinking" },
-  "tabs": { "learn": "Learn", "play": "Play", "endgames": "Endgames", "analysis": "Analysis", "club": "Club" },
+  "tabs": {
+    "learn": "Learn",
+    "play": "Play",
+    "endgames": "Endgames",
+    "analysis": "Analysis",
+    "club": "Club"
+  },
   "common": {
     "back": "Back",
     "next": "Continue",

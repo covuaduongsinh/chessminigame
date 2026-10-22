@@ -1,9 +1,8 @@
 import 'react-native-url-polyfill/auto';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   createSyncClient,
-  DEFAULT_SYNC_CONFIG,
   type DB,
+  DEFAULT_SYNC_CONFIG,
   ensureSession,
   type Profile,
   pullProgress,
@@ -11,6 +10,7 @@ import {
   randomNickname,
   updateProfile,
 } from '@duongsinh/sync';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { create } from 'zustand';
 import { useProgress, useSettings } from './store';

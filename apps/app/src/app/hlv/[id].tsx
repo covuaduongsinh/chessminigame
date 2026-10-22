@@ -4,9 +4,9 @@ import {
   createAssignment,
   deleteAssignment,
   type Group,
+  type GroupProgressRow,
   groupMembers,
   groupProgress,
-  type GroupProgressRow,
   leaveGroup,
   listAssignments,
   type Member,
@@ -41,7 +41,11 @@ export default function GroupDashboard() {
     try {
       const { data } = await c.from('groups').select('*').eq('id', String(id)).single();
       setGroup(data);
-      const [m, p, a] = await Promise.all([groupMembers(c, String(id)), groupProgress(c, String(id)), listAssignments(c, String(id))]);
+      const [m, p, a] = await Promise.all([
+        groupMembers(c, String(id)),
+        groupProgress(c, String(id)),
+        listAssignments(c, String(id)),
+      ]);
       setMembers(m);
       setProgress(p);
       setAssignments(a);
@@ -62,20 +66,28 @@ export default function GroupDashboard() {
       if (!r.item_id) continue;
       const lvl = levelOf.get(r.item_id);
       if (!lvl) continue;
-      const u = (byUser[r.user_id] ??= {});
+      const u = byUser[r.user_id] ?? {};
       u[lvl] = (u[lvl] ?? 0) + (r.best_stars ?? 0);
+      byUser[r.user_id] = u;
     }
     return byUser;
   }, [progress]);
 
-  const joinUrl = group ? Linking.createURL('/clb', { queryParams: { code: group.join_code } }) : '';
+  const joinUrl = group
+    ? Linking.createURL('/clb', { queryParams: { code: group.join_code } })
+    : '';
   const students = members.filter((m) => m.user_id !== me?.id);
 
   const assign = async () => {
     const c = db();
     if (!c || !me || !group || picked.length === 0) return;
     try {
-      await createAssignment(c, { group_id: group.id, title: title.trim() || t('coach.assign'), item_ids: picked, created_by: me.id });
+      await createAssignment(c, {
+        group_id: group.id,
+        title: title.trim() || t('coach.assign'),
+        item_ids: picked,
+        created_by: me.id,
+      });
       setTitle('');
       setPicked([]);
       await load();
@@ -99,9 +111,18 @@ export default function GroupDashboard() {
                 title={t('common.copy')}
                 tone="light"
                 size="sm"
-                onPress={() => void Clipboard.setStringAsync(group.join_code).then(() => setMsg(t('common.copied')))}
+                onPress={() =>
+                  void Clipboard.setStringAsync(group.join_code).then(() =>
+                    setMsg(t('common.copied')),
+                  )
+                }
               />
-              <Button title={t('coach.classroom')} tone="ghost" size="sm" onPress={() => router.push('/lop-hoc')} />
+              <Button
+                title={t('coach.classroom')}
+                tone="ghost"
+                size="sm"
+                onPress={() => router.push('/lop-hoc')}
+              />
             </View>
           </View>
           <View style={styles.qr}>
@@ -138,9 +159,17 @@ export default function GroupDashboard() {
                         const v = u[l.key] ?? 0;
                         const max = miniGamesOf(l.key).length * 3;
                         const color = LEVEL_COLORS[l.key] ?? colors.primary;
-                        const alpha = Math.round((v / max) * 255).toString(16).padStart(2, '0');
+                        const alpha = Math.round((v / max) * 255)
+                          .toString(16)
+                          .padStart(2, '0');
                         return (
-                          <View key={l.key} style={[styles.heatCell, { backgroundColor: v ? `${color}${alpha}` : colors.bg }]}>
+                          <View
+                            key={l.key}
+                            style={[
+                              styles.heatCell,
+                              { backgroundColor: v ? `${color}${alpha}` : colors.bg },
+                            ]}
+                          >
                             <Text style={styles.heatValue}>{v || ''}</Text>
                           </View>
                         );
@@ -149,7 +178,13 @@ export default function GroupDashboard() {
                       <Pressable
                         onPress={() => {
                           const c = db();
-                          if (c && group) void setMemberRole(c, group.id, m.user_id, m.role === 'coach' ? 'member' : 'coach').then(load);
+                          if (c && group)
+                            void setMemberRole(
+                              c,
+                              group.id,
+                              m.user_id,
+                              m.role === 'coach' ? 'member' : 'coach',
+                            ).then(load);
                         }}
                       >
                         <Text style={styles.action}>{m.role === 'coach' ? '★' : '☆'}</Text>
@@ -173,7 +208,12 @@ export default function GroupDashboard() {
 
       <Section title={t('coach.assign')}>
         <Card style={{ gap: 10 }}>
-          <TextInput value={title} onChangeText={setTitle} placeholder={t('coach.assignTitle')} style={styles.input} />
+          <TextInput
+            value={title}
+            onChangeText={setTitle}
+            placeholder={t('coach.assignTitle')}
+            style={styles.input}
+          />
           <Text style={styles.label}>{t('coach.pickGames')}</Text>
           {LEVELS.map((l) => (
             <View key={l.key} style={styles.pickRow}>
@@ -182,22 +222,39 @@ export default function GroupDashboard() {
                 return (
                   <Pressable
                     key={g.id}
-                    onPress={() => setPicked((p) => (on ? p.filter((x) => x !== g.id) : [...p, g.id]))}
-                    style={[styles.pick, on && { backgroundColor: LEVEL_COLORS[l.key], borderColor: LEVEL_COLORS[l.key] }]}
+                    onPress={() =>
+                      setPicked((p) => (on ? p.filter((x) => x !== g.id) : [...p, g.id]))
+                    }
+                    style={[
+                      styles.pick,
+                      on && {
+                        backgroundColor: LEVEL_COLORS[l.key],
+                        borderColor: LEVEL_COLORS[l.key],
+                      },
+                    ]}
                   >
-                    <Text style={[styles.pickText, on && { color: colors.white }]}>{L(g.title)}</Text>
+                    <Text style={[styles.pickText, on && { color: colors.white }]}>
+                      {L(g.title)}
+                    </Text>
                   </Pressable>
                 );
               })}
             </View>
           ))}
-          <Button title={`${t('coach.assign')} (${picked.length})`} tone="accent" disabled={picked.length === 0} onPress={() => void assign()} />
+          <Button
+            title={`${t('coach.assign')} (${picked.length})`}
+            tone="accent"
+            disabled={picked.length === 0}
+            onPress={() => void assign()}
+          />
         </Card>
         {assignments.map((a) => (
           <Card key={a.id} style={styles.assignment}>
             <View style={{ flex: 1 }}>
               <Text style={styles.assignTitle}>{a.title}</Text>
-              <Text style={styles.small}>{a.item_ids.map((i) => L(MINIGAMES.find((g) => g.id === i)?.title)).join(' · ')}</Text>
+              <Text style={styles.small}>
+                {a.item_ids.map((i) => L(MINIGAMES.find((g) => g.id === i)?.title)).join(' · ')}
+              </Text>
             </View>
             <Button
               title="✕"
@@ -218,16 +275,39 @@ export default function GroupDashboard() {
 
 const styles = StyleSheet.create({
   codeCard: { flexDirection: 'row', gap: space.md, alignItems: 'center', flexWrap: 'wrap' },
-  label: { fontFamily: fonts.bold, fontSize: 12, letterSpacing: 0.6, color: colors.muted, textTransform: 'uppercase' },
+  label: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    letterSpacing: 0.6,
+    color: colors.muted,
+    textTransform: 'uppercase',
+  },
   code: { fontFamily: fonts.black, fontSize: 40, letterSpacing: 8, color: colors.primary },
   small: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted },
-  qr: { padding: 10, backgroundColor: colors.white, borderRadius: 12, borderWidth: 1, borderColor: colors.border },
-  heatRow: { flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderColor: colors.border },
+  qr: {
+    padding: 10,
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  heatRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: colors.border,
+  },
   heatHead: { fontFamily: fonts.bold },
   heatName: { width: 150, padding: 10, fontFamily: fonts.medium, fontSize: 14, color: colors.text },
   heatCell: { width: 52, height: 44, alignItems: 'center', justifyContent: 'center' },
   heatValue: { fontFamily: fonts.bold, fontSize: 14, color: colors.text },
-  heatCellText: { width: 52, textAlign: 'center', fontFamily: fonts.bold, fontSize: 14, color: colors.primary },
+  heatCellText: {
+    width: 52,
+    textAlign: 'center',
+    fontFamily: fonts.bold,
+    fontSize: 14,
+    color: colors.primary,
+  },
   action: { width: 36, textAlign: 'center', fontSize: 18, color: colors.orange },
   input: {
     borderWidth: 1.5,
@@ -239,7 +319,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
   },
   pickRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  pick: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999, borderWidth: 1.5, borderColor: colors.border },
+  pick: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+  },
   pickText: { fontFamily: fonts.medium, fontSize: 13, color: colors.text },
   assignment: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 8 },
   assignTitle: { fontFamily: fonts.bold, fontSize: 15, color: colors.text },

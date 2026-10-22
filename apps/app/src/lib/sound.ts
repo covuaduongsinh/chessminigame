@@ -35,8 +35,11 @@ export function play(name: SoundName): void {
     // Âm thanh là phụ — bỏ qua lỗi (ví dụ trình duyệt chặn tự phát).
   }
   if (Platform.OS !== 'web') {
-    if (name === 'wrong') void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
-    else if (name === 'win') void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
-    else if (name === 'capture') void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
+    if (name === 'wrong')
+      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
+    else if (name === 'win')
+      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+    else if (name === 'capture')
+      void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
   }
 }
