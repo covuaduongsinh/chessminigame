@@ -4,7 +4,7 @@ import {
   type SupabaseClient,
   type SupportedStorage,
 } from '@supabase/supabase-js';
-import type { Database, Enums, Tables } from './database.types';
+import type { Database, Enums, Json, Tables } from './database.types';
 
 export type { Database, Enums, Tables };
 export type DB = SupabaseClient<Database>;
@@ -14,6 +14,7 @@ export type GameRow = Tables<'games'>;
 export type MoveRow = Tables<'moves'>;
 export type ProgressRow = Tables<'progress'>;
 export type Assignment = Tables<'assignments'>;
+export type CustomGameRow = Tables<'custom_games'>;
 export type MemberRole = Enums<'member_role'>;
 export type GroupKind = Enums<'group_kind'>;
 
@@ -398,4 +399,62 @@ export function mergeBest(
   const moves =
     a.moves === null ? b.moves : b.moves === null ? a.moves : Math.min(a.moves, b.moves);
   return { stars: Math.max(a.stars, b.stars), moves };
+}
+
+// ------------------------------------------------------------- bài tự tạo (HLV)
+
+/** Lưu bài tự tạo lên máy chủ; `groupId` để chia sẻ cho cả nhóm (chỉ HLV của nhóm). */
+export async function saveCustomGame(
+  db: DB,
+  g: { owner_id: string; title: string; def: unknown; group_id?: string | null },
+): Promise<CustomGameRow> {
+  return must(
+    await db
+      .from('custom_games')
+      .insert({
+        owner_id: g.owner_id,
+        title: g.title,
+        def: g.def as Json,
+        group_id: g.group_id ?? null,
+      })
+      .select()
+      .single(),
+  );
+}
+
+/** Bài tự tạo mà mình xem được: của mình + được chia sẻ trong các nhóm mình tham gia. */
+export async function listCustomGames(db: DB, groupId?: string): Promise<CustomGameRow[]> {
+  let q = db.from('custom_games').select('*').order('created_at', { ascending: false }).limit(200);
+  if (groupId) q = q.eq('group_id', groupId);
+  return must(await q);
+}
+
+export async function getCustomGame(db: DB, id: string): Promise<CustomGameRow> {
+  return must(await db.from('custom_games').select('*').eq('id', id).single());
+}
+
+export async function deleteCustomGame(db: DB, id: string): Promise<void> {
+  must(await db.from('custom_games').delete().eq('id', id));
+}
+
+// ------------------------------------------------------------------- ai online
+
+/**
+ * Báo "đang online" trong nhóm (Realtime Presence) và nhận danh sách id thành viên đang online.
+ * Trả về hàm rời kênh.
+ */
+export function joinGroupPresence(
+  db: DB,
+  groupId: string,
+  me: { id: string; nickname: string },
+  onChange: (onlineIds: string[]) => void,
+): () => void {
+  const channel = db.channel(`presence:${groupId}`, { config: { presence: { key: me.id } } });
+  channel.on('presence', { event: 'sync' }, () => onChange(Object.keys(channel.presenceState())));
+  channel.subscribe((status) => {
+    if (status === 'SUBSCRIBED') void channel.track({ nickname: me.nickname, at: Date.now() });
+  });
+  return () => {
+    void db.removeChannel(channel);
+  };
 }

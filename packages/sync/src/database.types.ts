@@ -50,6 +50,33 @@ export type Database = {
   };
   public: {
     Tables: {
+      custom_games: {
+        Row: {
+          created_at: string;
+          def: Json;
+          group_id: string | null;
+          id: string;
+          owner_id: string;
+          title: string;
+        };
+        Insert: {
+          created_at?: string;
+          def: Json;
+          group_id?: string | null;
+          id?: string;
+          owner_id: string;
+          title: string;
+        };
+        Update: {
+          created_at?: string;
+          def?: Json;
+          group_id?: string | null;
+          id?: string;
+          owner_id?: string;
+          title?: string;
+        };
+        Relationships: [];
+      };
       assignments: {
         Row: {
           created_at: string;

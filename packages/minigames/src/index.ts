@@ -9,6 +9,7 @@ import { XE } from './content/xe';
 import { LEVELS } from './levels';
 import type { LevelKey, MiniGame } from './types';
 
+export * from './custom';
 export * from './explain';
 export * from './levels';
 export * from './questions';
