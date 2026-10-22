@@ -260,7 +260,7 @@ begin
       returning * into result;
       exit;
     exception when unique_violation then
-      -- mã trùng, thử mã khác
+      null; -- mã trùng, thử mã khác
     end;
   end loop;
   insert into public.group_members (group_id, user_id, role) values (result.id, uid, 'owner');
