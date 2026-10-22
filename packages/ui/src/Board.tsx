@@ -295,6 +295,8 @@ export const Board = memo(function Board({
           } else if (L.canMovePiece(end)) {
             setSelected(L.selected === end ? null : end);
           } else {
+            // Chạm vào ô không đi được: vẫn báo lên để màn chơi giải thích vì sao sai.
+            if (L.selected && L.selected !== end) L.onMove?.(L.selected, end);
             setSelected(null);
           }
         },

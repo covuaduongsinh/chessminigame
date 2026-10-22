@@ -11,7 +11,8 @@
     "export:web": "expo export --platform web --output-dir dist",
     "export:native": "expo export --platform ios --platform android --output-dir dist-native",
     "typecheck": "tsc --noEmit",
-    "doctor": "expo-doctor"
+    "doctor": "expo-doctor",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@duongsinh/chess-core": "workspace:*",
