@@ -1,6 +1,7 @@
 import { LEVELS, MINIGAMES, miniGamesOf } from '@duongsinh/minigames';
 import {
   type Assignment,
+  type CustomGameRow,
   createAssignment,
   deleteAssignment,
   type Group,
@@ -9,7 +10,9 @@ import {
   groupProgress,
   leaveGroup,
   listAssignments,
+  listCustomGames,
   type Member,
+  saveCustomGame,
   setMemberRole,
 } from '@duongsinh/sync';
 import { Button, Card, colors, fonts, LEVEL_COLORS, Piece, space } from '@duongsinh/ui';
@@ -20,6 +23,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { Screen, Section } from '@/components/Screen';
+import { useCustomGames } from '@/lib/customStore';
 import { useLang } from '@/lib/i18n';
 import { db, useAccount } from '@/lib/sync';
 
@@ -33,6 +37,9 @@ export default function GroupDashboard() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [title, setTitle] = useState('');
   const [picked, setPicked] = useState<string[]>([]);
+  const [groupCustoms, setGroupCustoms] = useState<CustomGameRow[]>([]);
+  const localCustoms = useCustomGames((s) => s.items);
+  const markShared = useCustomGames((s) => s.markShared);
   const [msg, setMsg] = useState<string | null>(null);
 
   const load = useCallback(async () => {
@@ -49,6 +56,7 @@ export default function GroupDashboard() {
       setMembers(m);
       setProgress(p);
       setAssignments(a);
+      setGroupCustoms(await listCustomGames(c, String(id)));
     } catch (e) {
       setMsg(e instanceof Error ? e.message : String(e));
     }
@@ -206,6 +214,48 @@ export default function GroupDashboard() {
         )}
       </Section>
 
+      <Section title={t('custom.list')}>
+        {Object.values(localCustoms).length === 0 ? (
+          <Text style={styles.small}>{t('custom.empty')}</Text>
+        ) : (
+          Object.values(localCustoms).map((g) => {
+            const sharedId = group ? g.shared[group.id] : undefined;
+            return (
+              <Card key={g.id} style={styles.assignment}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.assignTitle}>🎯 {g.title}</Text>
+                  <Text style={styles.small}>{L(g.def.goal)}</Text>
+                </View>
+                {sharedId ? (
+                  <Text style={styles.small}>✓ {t('custom.shared')}</Text>
+                ) : (
+                  <Button
+                    title={t('custom.share')}
+                    tone="light"
+                    size="sm"
+                    onPress={() => {
+                      const c = db();
+                      if (!c || !me || !group) return;
+                      void saveCustomGame(c, {
+                        owner_id: me.id,
+                        title: g.title,
+                        def: g.def,
+                        group_id: group.id,
+                      })
+                        .then((row) => {
+                          markShared(g.id, group.id, row.id);
+                          return load();
+                        })
+                        .catch((e: Error) => setMsg(e.message));
+                    }}
+                  />
+                )}
+              </Card>
+            );
+          })
+        )}
+      </Section>
+
       <Section title={t('coach.assign')}>
         <Card style={{ gap: 10 }}>
           <TextInput
@@ -241,6 +291,30 @@ export default function GroupDashboard() {
               })}
             </View>
           ))}
+          {groupCustoms.length > 0 && (
+            <View style={styles.pickRow}>
+              {groupCustoms.map((g) => {
+                const key = `custom:${g.id}`;
+                const on = picked.includes(key);
+                return (
+                  <Pressable
+                    key={key}
+                    onPress={() =>
+                      setPicked((p) => (on ? p.filter((x) => x !== key) : [...p, key]))
+                    }
+                    style={[
+                      styles.pick,
+                      on && { backgroundColor: colors.orange, borderColor: colors.orange },
+                    ]}
+                  >
+                    <Text style={[styles.pickText, on && { color: colors.white }]}>
+                      🎯 {g.title}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          )}
           <Button
             title={`${t('coach.assign')} (${picked.length})`}
             tone="accent"
@@ -253,7 +327,13 @@ export default function GroupDashboard() {
             <View style={{ flex: 1 }}>
               <Text style={styles.assignTitle}>{a.title}</Text>
               <Text style={styles.small}>
-                {a.item_ids.map((i) => L(MINIGAMES.find((g) => g.id === i)?.title)).join(' · ')}
+                {a.item_ids
+                  .map((i) =>
+                    i.startsWith('custom:')
+                      ? `🎯 ${groupCustoms.find((g) => `custom:${g.id}` === i)?.title ?? '?'}`
+                      : L(MINIGAMES.find((g) => g.id === i)?.title),
+                  )
+                  .join(' · ')}
               </Text>
             </View>
             <Button

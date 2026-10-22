@@ -3,6 +3,7 @@ import {
   type GameRow,
   groupMembers,
   joinGroup,
+  joinGroupPresence,
   listGames,
   type Member,
   type MyGroup,
@@ -33,6 +34,7 @@ export default function ClubScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const me = account.profile;
+  const [online, setOnline] = useState<Record<string, string[]>>({});
 
   const load = useCallback(async () => {
     const c = db();
@@ -71,6 +73,21 @@ export default function ClubScreen() {
       for (const u of unsubs) u();
     };
   }, [groupKey]);
+
+  // Ai đang online trong từng nhóm (Realtime Presence).
+  // biome-ignore lint/correctness/useExhaustiveDependencies: chỉ phụ thuộc danh sách id nhóm
+  useEffect(() => {
+    const c = db();
+    if (!c || !me) return;
+    const leaves = groups.map((g) =>
+      joinGroupPresence(c, g.group.id, { id: me.id, nickname: me.nickname }, (ids) =>
+        setOnline((o) => ({ ...o, [g.group.id]: ids })),
+      ),
+    );
+    return () => {
+      for (const l of leaves) l();
+    };
+  }, [groupKey, me?.id]);
 
   const join = async () => {
     const c = db();
@@ -246,6 +263,9 @@ export default function ClubScreen() {
                         <Piece type={m.avatar as 'p'} color="w" size={28} />
                         <Text style={styles.memberName} numberOfLines={1}>
                           {m.nickname}
+                          {online[view.group.id]?.includes(m.user_id) ? (
+                            <Text style={styles.online}> ● {t('club.online')}</Text>
+                          ) : null}
                         </Text>
                         <Button
                           title={t('club.invite')}
@@ -345,5 +365,6 @@ const styles = StyleSheet.create({
   },
   members: { gap: 6 },
   member: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  online: { fontFamily: fonts.medium, fontSize: 12, color: colors.green },
   memberName: { flex: 1, fontFamily: fonts.medium, fontSize: 15, color: colors.text },
 });

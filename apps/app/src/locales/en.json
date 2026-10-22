@@ -1,5 +1,8 @@
 {
-  "app": { "name": "Duong Sinh Chess", "slogan": "Joy of thinking" },
+  "app": {
+    "name": "Duong Sinh Chess",
+    "slogan": "Joy of thinking"
+  },
   "tabs": {
     "learn": "Learn",
     "play": "Play",
@@ -135,7 +138,8 @@
     "open": "Open",
     "coach": "For coaches / parents",
     "coachOpen": "Open dashboard",
-    "error": "Error: {{message}}"
+    "error": "Error: {{message}}",
+    "online": "online"
   },
   "online": {
     "vs": "{{white}} vs {{black}}",
@@ -147,7 +151,11 @@
     "title": "Coach dashboard",
     "createGroup": "Create group",
     "groupName": "Group name (e.g. Class 3A)",
-    "kind": { "club": "Club", "class": "Class", "family": "Family" },
+    "kind": {
+      "club": "Club",
+      "class": "Class",
+      "family": "Family"
+    },
     "code": "Group code",
     "share": "Share this code with students/parents to join",
     "progress": "Learning progress",
@@ -193,5 +201,36 @@
     "lastSync": "Last synced: {{time}}",
     "syncNow": "Sync now",
     "pending": "{{count}} results waiting to sync"
+  },
+  "custom": {
+    "title": "Create a mini-game",
+    "subtitle": "Set up the board, pick the win rule, and save it as an exercise for your students.",
+    "name": "Title",
+    "mode": "Type",
+    "modes": {
+      "collect": "Collect stars",
+      "capture": "Capture all",
+      "mate": "Checkmate",
+      "race": "Promotion race",
+      "play": "Play the computer"
+    },
+    "star": "Place star",
+    "avoid": "Avoid attacked squares",
+    "ordered": "In order",
+    "mustCapture": "Every move captures",
+    "moveLimit": "Move limit",
+    "noLimit": "No limit",
+    "level": "Computer level",
+    "save": "Check & save",
+    "saved": "Saved! Shortest solution: {{par}} moves.",
+    "savedPlain": "Saved!",
+    "play": "Try it",
+    "list": "My mini-games",
+    "empty": "Nothing yet. Use \"Set up\" to create one.",
+    "share": "Share with group",
+    "shared": "Shared",
+    "delete": "Delete",
+    "groupGames": "Group mini-games",
+    "notFound": "This mini-game was not found."
   }
 }

@@ -6,7 +6,7 @@ import {
   MINIGAMES,
   miniGamesOf,
 } from '@duongsinh/minigames';
-import { type Assignment, listAssignments, myGroups } from '@duongsinh/sync';
+import { type Assignment, listAssignments, listCustomGames, myGroups } from '@duongsinh/sync';
 import {
   Card,
   CheckerPattern,
@@ -35,6 +35,7 @@ export default function LearnScreen() {
   const stars = useMemo(() => starsMap(items), [items]);
   const { width } = useWindowDimensions();
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [customTitles, setCustomTitles] = useState<Record<string, string>>({});
 
   const next = MINIGAMES.find((g) => isUnlocked(g.id, stars) && !(stars[g.id] ?? 0));
 
@@ -47,6 +48,9 @@ export default function LearnScreen() {
         const groups = await myGroups(c, account.profile!.id);
         const lists = await Promise.all(groups.map((g) => listAssignments(c, g.id)));
         if (alive) setAssignments(lists.flat().slice(0, 6));
+        const customs = await listCustomGames(c);
+        if (alive)
+          setCustomTitles(Object.fromEntries(customs.map((x) => [`custom:${x.id}`, x.title])));
       } catch {
         // ngoại tuyến: bỏ qua
       }
@@ -105,15 +109,19 @@ export default function LearnScreen() {
               <Text style={styles.cardTitle}>{a.title}</Text>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
                 {a.item_ids.map((id) => {
-                  const g = getMiniGame(id);
-                  if (!g) return null;
+                  const custom = id.startsWith('custom:');
+                  const g = custom ? null : getMiniGame(id);
+                  const label = custom ? customTitles[id] : g ? L(g.title) : null;
+                  if (!label) return null;
                   return (
                     <Pressable
                       key={id}
-                      onPress={() => router.push(`/minigame/${id}`)}
+                      onPress={() =>
+                        router.push(custom ? `/tu-tao/${id.slice(7)}` : `/minigame/${id}`)
+                      }
                       style={styles.assignChip}
                     >
-                      <Text style={styles.assignText}>{L(g.title)}</Text>
+                      <Text style={styles.assignText}>{custom ? `🎯 ${label}` : label}</Text>
                       <Stars value={stars[id] ?? 0} size={12} />
                     </Pressable>
                   );

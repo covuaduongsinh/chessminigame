@@ -1,5 +1,8 @@
 {
-  "app": { "name": "Dương Sinh Chess", "slogan": "Vui trí tuệ" },
+  "app": {
+    "name": "Dương Sinh Chess",
+    "slogan": "Vui trí tuệ"
+  },
   "tabs": {
     "learn": "Học",
     "play": "Chơi",
@@ -135,7 +138,8 @@
     "open": "Vào ván",
     "coach": "Dành cho HLV / Phụ huynh",
     "coachOpen": "Mở bảng điều khiển",
-    "error": "Có lỗi: {{message}}"
+    "error": "Có lỗi: {{message}}",
+    "online": "đang online"
   },
   "online": {
     "vs": "{{white}} vs {{black}}",
@@ -147,7 +151,11 @@
     "title": "Bảng điều khiển HLV",
     "createGroup": "Tạo nhóm mới",
     "groupName": "Tên nhóm (ví dụ: Lớp 3A, CLB Dương Sinh)",
-    "kind": { "club": "CLB", "class": "Lớp học", "family": "Gia đình" },
+    "kind": {
+      "club": "CLB",
+      "class": "Lớp học",
+      "family": "Gia đình"
+    },
     "code": "Mã nhóm",
     "share": "Gửi mã này cho học sinh/phụ huynh để vào nhóm",
     "progress": "Tiến độ học",
@@ -193,5 +201,36 @@
     "lastSync": "Đồng bộ lần cuối: {{time}}",
     "syncNow": "Đồng bộ ngay",
     "pending": "{{count}} kết quả chờ đồng bộ"
+  },
+  "custom": {
+    "title": "Tạo mini-game",
+    "subtitle": "Xếp thế trên bàn, chọn luật thắng, rồi lưu thành bài tập cho học trò.",
+    "name": "Tên bài",
+    "mode": "Loại bài",
+    "modes": {
+      "collect": "Ăn sao",
+      "capture": "Bắt hết quân",
+      "mate": "Chiếu hết",
+      "race": "Đua phong cấp",
+      "play": "Chơi với máy"
+    },
+    "star": "Đặt sao",
+    "avoid": "Né ô bị khống chế",
+    "ordered": "Theo thứ tự",
+    "mustCapture": "Nước nào cũng phải ăn",
+    "moveLimit": "Giới hạn nước",
+    "noLimit": "Không giới hạn",
+    "level": "Cấp máy",
+    "save": "Kiểm tra & lưu",
+    "saved": "Đã lưu! Lời giải ngắn nhất: {{par}} nước.",
+    "savedPlain": "Đã lưu!",
+    "play": "Chơi thử",
+    "list": "Bài tự tạo",
+    "empty": "Chưa có bài nào. Vào \"Xếp thế\" để tạo.",
+    "share": "Chia sẻ cho nhóm",
+    "shared": "Đã chia sẻ",
+    "delete": "Xóa",
+    "groupGames": "Bài tự tạo của nhóm",
+    "notFound": "Không tìm thấy bài này."
   }
 }

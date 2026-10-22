@@ -28,9 +28,11 @@ import * as DocumentPicker from 'expo-document-picker';
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { CustomGameMaker } from '@/components/CustomGameMaker';
 import { MoveList } from '@/components/MoveList';
 import { PromotionPicker } from '@/components/PromotionPicker';
 import { Screen, Section } from '@/components/Screen';
+import { useCustomGames } from '@/lib/customStore';
 import { useBoardSize, useIsWide } from '@/lib/hooks';
 import { useLang } from '@/lib/i18n';
 import { play } from '@/lib/sound';
@@ -58,10 +60,13 @@ export default function AnalysisScreen() {
   const [cursor, setCursor] = useState(0);
   const [mode, setMode] = useState<'play' | 'edit'>('play');
   const [editFen, setEditFen] = useState(START_FEN);
-  const [brush, setBrush] = useState<{ color: Color; type: PieceType } | 'eraser'>({
+  const [brush, setBrush] = useState<{ color: Color; type: PieceType } | 'eraser' | 'star'>({
     color: 'w',
     type: 'q',
   });
+  const [editStars, setEditStars] = useState<Square[]>([]);
+  const customGames = useCustomGames((s) => s.items);
+  const removeCustom = useCustomGames((s) => s.remove);
   const [annotate, setAnnotate] = useState(false);
   const [arrows, setArrows] = useState<Arrow[]>([]);
   const [marks, setMarks] = useState<SquareMark[]>([]);
@@ -169,6 +174,10 @@ export default function AnalysisScreen() {
   };
 
   const onEditSquare = (sq: Square) => {
+    if (brush === 'star') {
+      setEditStars((st) => (st.includes(sq) ? st.filter((x) => x !== sq) : [...st, sq]));
+      return;
+    }
     const pos = Position.fromFen(editFen);
     if (brush === 'eraser') pos.put(sq, null);
     else {
@@ -224,6 +233,7 @@ export default function AnalysisScreen() {
               theme={boardTheme(settings.boardTheme)}
               showCoords={settings.coords}
               onSquarePress={onEditSquare}
+              stars={editStars}
             />
           ) : (
             <Board
@@ -323,7 +333,8 @@ export default function AnalysisScreen() {
             <Card style={{ gap: 10 }}>
               <View style={styles.palette}>
                 {PALETTE.map((p) => {
-                  const on = brush !== 'eraser' && brush.color === p.color && brush.type === p.type;
+                  const on =
+                    typeof brush === 'object' && brush.color === p.color && brush.type === p.type;
                   return (
                     <Pressable
                       key={`${p.color}${p.type}`}
@@ -341,6 +352,14 @@ export default function AnalysisScreen() {
                 >
                   <Text style={{ fontSize: 24 }}>🧽</Text>
                 </Pressable>
+                <Pressable
+                  onPress={() => setBrush('star')}
+                  style={[styles.paletteItem, brush === 'star' && styles.paletteOn]}
+                  testID="brush-star"
+                  accessibilityLabel={t('custom.star')}
+                >
+                  <Text style={{ fontSize: 24 }}>⭐</Text>
+                </Pressable>
               </View>
               <View style={styles.row}>
                 <Button
@@ -353,7 +372,10 @@ export default function AnalysisScreen() {
                   title={t('analysis.empty')}
                   tone="ghost"
                   size="sm"
-                  onPress={() => setEditFen(EMPTY)}
+                  onPress={() => {
+                    setEditFen(EMPTY);
+                    setEditStars([]);
+                  }}
                 />
                 <Button
                   title={`${t('analysis.turn')}: ${turnColor === 'w' ? t('common.white') : t('common.black')}`}
@@ -368,6 +390,7 @@ export default function AnalysisScreen() {
               </View>
             </Card>
           )}
+          {mode === 'edit' && <CustomGameMaker fen={editFen} stars={editStars} />}
 
           {comment ? (
             <Card style={{ backgroundColor: colors.goldLight, borderColor: colors.gold }}>
@@ -450,6 +473,36 @@ export default function AnalysisScreen() {
           ) : null}
         </View>
       </View>
+
+      <Section title={t('custom.list')}>
+        {Object.values(customGames).length === 0 ? (
+          <Text style={styles.small}>{t('custom.empty')}</Text>
+        ) : (
+          <View style={styles.classics}>
+            {Object.values(customGames)
+              .sort((a, b) => b.createdAt - a.createdAt)
+              .map((g) => (
+                <Card key={g.id} style={styles.classicCard}>
+                  <Text style={styles.classicTitle}>{g.title}</Text>
+                  <Text style={styles.small}>{L(g.def.goal)}</Text>
+                  <View style={styles.row}>
+                    <Button
+                      title={t('custom.play')}
+                      size="sm"
+                      onPress={() => router.push(`/tu-tao/${g.id}`)}
+                    />
+                    <Button
+                      title={t('custom.delete')}
+                      tone="ghost"
+                      size="sm"
+                      onPress={() => removeCustom(g.id)}
+                    />
+                  </View>
+                </Card>
+              ))}
+          </View>
+        )}
+      </Section>
 
       <Section title={t('analysis.classics')}>
         <View style={styles.classics}>
