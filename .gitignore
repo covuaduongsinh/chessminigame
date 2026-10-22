@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.expo/
+.turbo/
+web-build/
+*.tsbuildinfo
+.env
+.env.local
+.env.*.local
+coverage/
+playwright-report/
+test-results/
+# Expo Continuous Native Generation
+apps/app/ios/
+apps/app/android/
+# Tauri
+apps/desktop/src-tauri/target/
+apps/desktop/src-tauri/gen/
+.DS_Store
