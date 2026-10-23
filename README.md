@@ -8,10 +8,10 @@ Lộ trình 6 cấp: **Tốt → Mã → Tượng → Xe → Hậu → Vua**.
 
 | Khu vực | Nội dung |
 |---|---|
-| **Học** | 40 mini-game theo 6 cấp, mở khóa dần, chấm 1–3 sao. 8 kiểu luật: ăn sao (có biến thể "ăn liên hoàn"), chặn Tốt, đua phong cấp, sống sót, chiếu hết, giải thế, câu hỏi nhìn bàn cờ, đấu với máy. Đi sai thì app giải thích lý do (14 trường hợp, ví dụ "Tốt không đi lùi", "Quân đang bị ghim"). |
+| **Học** | 52 mini-game theo 6 cấp, mở khóa dần, chấm 1–3 sao. 8 kiểu luật: ăn sao (có biến thể "ăn liên hoàn"), chặn Tốt, đua phong cấp, sống sót, chiếu hết, giải thế, câu hỏi nhìn bàn cờ, đấu với máy. Đi sai thì app giải thích lý do (14 trường hợp, ví dụ "Tốt không đi lùi", "Quân đang bị ghim"). |
 | **Chơi** | Chơi với máy theo 6 cấp, từ "Máy Tốt" (hay đi hớ) tới "Máy Vua". Có gợi ý, đi lại và lật bàn. |
 | **Tàn cuộc** | 12 thế tàn cuộc cơ bản (KQ–K, KR–K, KP–K, …), có máy đóng vai bên phòng thủ. |
-| **Phân tích** | Bàn xếp thế, vẽ mũi tên và tô ô, nhập PGN (dán, mở file hoặc lấy từ Lichess), 10 ván kinh điển có chú giải tiếng Việt. HLV tự tạo mini-game ngay trên bàn: đặt sao, chọn luật, app tự kiểm tra bài có giải được không. |
+| **Phân tích** | Bàn xếp thế, vẽ mũi tên và tô ô, nhập PGN (dán, mở file hoặc lấy từ Lichess), 15 ván kinh điển (từ Légal 1750 tới Kasparov–Topalov 1999) có chú giải tiếng Việt. HLV tự tạo mini-game ngay trên bàn: đặt sao, chọn luật, app tự kiểm tra bài có giải được không. |
 | **CLB** | Nhóm riêng, vào bằng mã 6 ký tự hoặc QR. Tên tự sinh (ví dụ "Mã Xanh 27") nên trẻ không cần khai tên thật hay email. Chơi online theo thời gian thực với bạn trong nhóm, có chấm xanh cho bạn đang online. Không có chat, không quảng cáo. |
 | **HLV / Phụ huynh** | Tạo lớp, xem bảng sao của từng em, giao bài (bài có sẵn hoặc bài tự tạo), mở **Lớp học**: bàn cờ lớn cho máy chiếu/bảng tương tác, điều khiển bằng phím ← → F D R. |
 | **Offline** | Học, chơi với máy, tàn cuộc và phân tích chạy không cần mạng. Tiến độ được lưu trên máy và tự đẩy lên server khi có mạng. |
