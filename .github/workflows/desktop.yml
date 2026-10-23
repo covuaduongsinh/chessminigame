@@ -14,7 +14,24 @@ on:
         default: v0.1.0
 
 jobs:
+  # Xóa bản nháp cũ cùng phiên bản (nếu có) để build lại không bị lỗi "file đã tồn tại".
+  # Chỉ đụng tới bản nháp; Release đã Publish thì giữ nguyên.
+  prepare:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TAG: ${{ github.ref_type == 'tag' && github.ref_name || inputs.tag }}
+    steps:
+      - name: Xóa bản nháp cũ của ${{ env.TAG }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/releases" --paginate \
+            --jq '.[] | select(.draft and .tag_name == env.TAG) | .id' |
+            xargs -r -I{} gh api -X DELETE "repos/$GITHUB_REPOSITORY/releases/{}"
+
   build:
+    needs: prepare
     name: ${{ matrix.name }}
     strategy:
       fail-fast: false

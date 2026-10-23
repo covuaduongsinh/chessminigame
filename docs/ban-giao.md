@@ -17,7 +17,7 @@ Cập nhật: 23/10/2026. Toàn bộ mã đã được merge vào nhánh `main`.
 
 ## 2. Việc Thầy cần làm trên dashboard (Claude không tự làm được)
 
-1. **Phát hành bản desktop:** mở [Releases](https://github.com/covuaduongsinh/chessminigame/releases), vào bản nháp "Dương Sinh Chess v0.1.0", kiểm tra các file cài đặt rồi bấm **Publish release**. Tag `v0.1.0` sẽ được tạo khi Publish. Lần sau muốn ra bản mới: Actions → Desktop (Tauri) → Run workflow, nhập `v0.1.1`.
+1. **Phát hành bản desktop:** mở [Releases](https://github.com/covuaduongsinh/chessminigame/releases), vào bản nháp "Dương Sinh Chess v0.1.0", kiểm tra các file cài đặt rồi bấm **Publish release**. Tag `v0.1.0` sẽ được tạo khi Publish. Muốn build lại cùng phiên bản (khi chưa Publish): Actions → Desktop (Tauri) → Run workflow, nhập lại `v0.1.0`, bản nháp cũ tự được thay. Ra bản mới thì nhập `v0.1.1`.
 2. **Đưa bản web lên mạng (Vercel):** vào vercel.com → Add New → Project → Import `covuaduongsinh/chessminigame` → bấm Deploy, không cần chỉnh gì vì `vercel.json` đã cấu hình sẵn. Từ đó mỗi lần push lên `main` web tự cập nhật. Gói Hobby (miễn phí) của Vercel chỉ cho dùng phi thương mại; nếu dùng cho kinh doanh thì cần nâng lên gói Pro. Kết nối Vercel trong phiên Claude trên mây không có quyền tạo project (lỗi 403), nên bước này Thầy làm tay.
 3. Supabase → project `duongsinh-chess` → Authentication → Sign In / Providers → bật **Allow anonymous sign-ins**.
 4. Authentication → Emails → Templates. Trong mẫu **Magic Link** và **Change Email Address**, thêm dòng `Mã xác nhận: {{ .Token }}`.
