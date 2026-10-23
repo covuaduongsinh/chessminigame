@@ -1,4 +1,4 @@
-import { knightQuestion } from '../questions';
+import { knightQuestion, outcomeQuestion, squaresQuestion } from '../questions';
 import type { MiniGame } from '../types';
 
 export const MA: MiniGame[] = [
@@ -189,5 +189,127 @@ export const MA: MiniGame[] = [
       },
     ],
     skills: ['knight', 'calculation'],
+  },
+  {
+    id: 'ma-8',
+    level: 'ma',
+    order: 8,
+    title: { vi: 'Đòn đôi của Mã', en: 'Knight Forks' },
+    story: {
+      vi: 'Bông kể rằng chú Mã rất tinh nghịch: chỉ một cú nhảy là nhìn thấy hai quân đen cùng lúc, như bắt được hai chú bướm bằng một cái vợt. Đối phương chỉ cứu được một, quân còn lại thuộc về chú Mã!',
+      en: 'Bong says the knight is a cheeky jumper: one hop and it spots two black pieces at once, like catching two butterflies with one net. Your opponent can only save one — the other belongs to the knight!',
+    },
+    goal: {
+      vi: 'Tìm ô Mã nhảy tới để tấn công hai quân cùng một lúc.',
+      en: 'Find the square where the knight attacks two pieces at once.',
+    },
+    lesson: {
+      vi: 'Mã nhảy qua đầu mọi quân nên đòn đôi của Mã rất khó đỡ. Nếu một mục tiêu là Vua thì đối phương buộc phải lo cho Vua trước.',
+      en: 'The knight jumps over everything, so its forks are hard to stop. If one target is the king, your opponent must save the king first.',
+    },
+    rounds: [
+      {
+        mode: 'quiz',
+        questions: [
+          squaresQuestion(
+            {
+              vi: 'Mã trắng ở d5 đang tấn công những quân đen nào? Chạm vào từng quân.',
+              en: 'Which black pieces does the white knight on d5 attack? Tap each one.',
+            },
+            ['c7', 'e7'],
+            '6k1/2r1q3/p5p1/3N4/8/8/8/6K1 w - - 0 1',
+            ['d5'],
+          ),
+          squaresQuestion(
+            {
+              vi: 'Mã ở e4 nhảy tới ô nào thì tấn công cùng lúc cả Hậu và Xe đen?',
+              en: 'Which square lets the knight on e4 attack the black queen and rook at the same time?',
+            },
+            ['d6'],
+            '2r1q2k/6pp/8/8/4N3/8/8/6K1 w - - 0 1',
+            ['e4'],
+          ),
+        ],
+      },
+      {
+        mode: 'puzzle',
+        fen: 'r3k3/p7/4N3/8/8/8/8/6K1 w - - 0 1',
+        solution: ['e6c7', 'e8f7', 'c7a8'],
+        prompt: {
+          vi: 'Mã nhảy chiếu Vua và nhắm luôn vào Xe a8.',
+          en: 'Jump with check and attack the rook on a8 as well.',
+        },
+      },
+      {
+        mode: 'puzzle',
+        fen: '3q3k/6pp/8/6N1/8/8/8/6K1 w - - 0 1',
+        solution: ['g5f7', 'h8g8', 'f7d8'],
+        prompt: {
+          vi: 'Chiếu Vua đen và tấn công Hậu cùng lúc!',
+          en: 'Check the black king and attack the queen at the same time!',
+        },
+      },
+    ],
+    skills: ['knight', 'tactics', 'fork'],
+  },
+  {
+    id: 'ma-9',
+    level: 'ma',
+    order: 9,
+    title: { vi: 'Chiếu hết ngạt', en: 'Smothered Mate' },
+    story: {
+      vi: 'Vua đen ngồi trong góc nhà, xung quanh toàn quân nhà đứng sát. Bin thì thầm: "Ôi, Vua tự nhốt mình rồi!" Đúng lúc đó chú Mã lao tới. Mã nhảy qua đầu mọi quân nên không ai chặn nổi — Vua không còn đường chạy!',
+      en: 'The black king sits in a corner with its own pieces packed around it. Bin whispers: "Oh no, the king locked itself in!" Then the knight swoops in. Knights jump over everything, so nobody can block — the king has nowhere to run!',
+    },
+    goal: {
+      vi: 'Nhận ra và tìm nước Mã chiếu hết ngạt.',
+      en: "Spot and find the knight's smothered mate.",
+    },
+    lesson: {
+      vi: 'Vua nằm trong góc và bị chính quân nhà vây quanh rất dễ bị Mã chiếu hết. Đôi khi phải thí Hậu để dụ Xe đen vào chặn đường Vua.',
+      en: 'A king in the corner, boxed in by its own pieces, is easy prey for a knight. Sometimes you sacrifice the queen to lure a rook next to the king.',
+    },
+    rounds: [
+      {
+        mode: 'quiz',
+        questions: [
+          outcomeQuestion('6rk/5Npp/8/8/8/8/8/6K1 b - - 0 1'),
+          outcomeQuestion('7k/5Npp/8/8/8/8/8/6K1 b - - 0 1'),
+          outcomeQuestion('kr6/ppN5/8/8/8/8/8/6K1 b - - 0 1'),
+          outcomeQuestion('6rk/5N1p/8/8/8/8/8/6K1 b - - 0 1'),
+        ],
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: '6rk/6pp/8/4N3/8/8/8/6K1 w - - 0 1',
+        solution: ['e5f7'],
+        prompt: {
+          vi: 'Vua đen bị Xe và Tốt vây kín. Mã nhảy vào đâu để chiếu hết?',
+          en: 'The black king is boxed in by its rook and pawns. Where does the knight jump to checkmate?',
+        },
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: 'kr6/pp6/8/3N4/8/8/8/6K1 w - - 0 1',
+        solution: ['d5c7'],
+        prompt: {
+          vi: 'Lần này Vua đen ở góc bên trái. Mã chiếu hết ở đâu?',
+          en: 'This time the black king hides in the left corner. Where is the mate?',
+        },
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: '5r1k/6pp/7N/3Q4/8/8/8/6K1 w - - 0 1',
+        solution: ['d5g8', 'f8g8', 'h6f7'],
+        prompt: {
+          vi: 'Thí Hậu để dụ Xe đen vào g8, rồi Mã chiếu hết!',
+          en: 'Sacrifice the queen to lure the rook onto g8, then the knight mates!',
+        },
+      },
+    ],
+    skills: ['knight', 'checkmate', 'tactics', 'smothered-mate'],
   },
 ];

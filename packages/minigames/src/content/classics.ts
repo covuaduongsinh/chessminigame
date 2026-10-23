@@ -1,6 +1,6 @@
 import type { ClassicGame } from '../types';
 
-/** Ván cờ kinh điển (thuộc phạm vi công cộng), lời bình do Dương Sinh biên soạn. */
+/** Ván cờ kinh điển: nước đi là dữ kiện lịch sử công khai, lời bình do Dương Sinh biên soạn. */
 export const CLASSICS: ClassicGame[] = [
   {
     id: 'fool-mate',
@@ -67,6 +67,49 @@ export const CLASSICS: ClassicGame[] = [
       },
       10: { vi: 'Đen tham ăn Hậu...', en: 'Black greedily takes the queen...' },
       13: { vi: 'Ba quân nhẹ phối hợp chiếu hết!', en: 'Three minor pieces deliver mate!' },
+    },
+  },
+  {
+    id: 'knight-mate-trap',
+    title: { vi: 'Bẫy Mã chiếu hết', en: 'The Knight Mate Trap' },
+    white: 'Trắng',
+    black: 'Đen',
+    event: 'Bài học',
+    year: 0,
+    pgn: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4 4. Nxe5 Qg5 5. Nxf7 Qxg2 6. Rf1 Qxe4+ 7. Be2 Nf3# 0-1',
+    intro: {
+      vi: 'Trắng thấy hai Tốt "biếu không" ở e5 và f7 nên ăn liền, không để ý Đen đang giăng bẫy. Kết thúc là Mã đen chiếu hết ngạt! Bài học: quân "biếu không" đôi khi là mồi nhử, hãy luôn hỏi xem đối phương định làm gì.',
+      en: 'White sees two "free" pawns on e5 and f7 and grabs them without noticing the trap. It ends with a black knight delivering smothered mate! Lesson: a "free" piece can be bait — always ask what your opponent is planning.',
+    },
+    notes: {
+      6: {
+        vi: 'Mã đen nhảy vào d4 như mời Trắng ăn Tốt e5.',
+        en: 'The black knight hops to d4, inviting White to take the e5 pawn.',
+      },
+      7: {
+        vi: 'Trắng tham ăn Tốt e5 — bẫy đã sẵn sàng!',
+        en: 'White grabs the e5 pawn — the trap is set!',
+      },
+      8: {
+        vi: 'Hậu đen nhắm cùng lúc vào Mã e5 và Tốt g2.',
+        en: 'The queen eyes the e5 knight and the g2 pawn at once.',
+      },
+      9: {
+        vi: 'Trắng ăn thêm Tốt f7, dọa Hậu và Xe, nhưng quên mất Vua nhà.',
+        en: 'White grabs f7, hitting queen and rook, but forgets about his own king.',
+      },
+      10: {
+        vi: 'Hậu đen ăn g2, nhắm Xe h1 và đường chéo tới Vua trắng.',
+        en: 'The queen takes g2, hitting the h1 rook and the diagonal to the white king.',
+      },
+      12: {
+        vi: 'Hậu chiếu từ e4. Trắng chặn bằng Tượng e2.',
+        en: 'The queen checks from e4. White blocks with the bishop on e2.',
+      },
+      14: {
+        vi: 'Mã f3 chiếu hết! Vua trắng bị chính quân nhà vây kín.',
+        en: 'Knight f3 is checkmate! The white king is boxed in by his own pieces.',
+      },
     },
   },
   {
@@ -177,6 +220,56 @@ export const CLASSICS: ClassicGame[] = [
     },
   },
   {
+    id: 'rubinstein-1907',
+    title: { vi: 'Kiệt tác của Rubinstein', en: "Rubinstein's Masterpiece" },
+    white: 'Georg Rotlewi',
+    black: 'Akiba Rubinstein',
+    event: 'Łódź',
+    year: 1907,
+    pgn: `1. d4 d5 2. Nf3 e6 3. e3 c5 4. c4 Nc6 5. Nc3 Nf6 6. dxc5 Bxc5 7. a3 a6
+8. b4 Bd6 9. Bb2 O-O 10. Qd2 Qe7 11. Bd3 dxc4 12. Bxc4 b5 13. Bd3 Rd8 14. Qe2 Bb7
+15. O-O Ne5 16. Nxe5 Bxe5 17. f4 Bc7 18. e4 Rac8 19. e5 Bb6+ 20. Kh1 Ng4 21. Be4 Qh4
+22. g3 Rxc3 23. gxh4 Rd2 24. Qxd2 Bxe4+ 25. Qg2 Rh3 0-1`,
+    intro: {
+      vi: 'Cầm quân Đen, Rubinstein bỏ cả Hậu rồi một Xe để kéo Hậu trắng vào bẫy và thắng gọn gàng. Nhiều người xem đây là một trong những ván thí quân đẹp nhất mọi thời. Bài học: khi quân mình đã hoạt động tốt, đừng sợ nhường quân để mở đường tấn công.',
+      en: 'Playing Black, Rubinstein gave up his queen and then a rook to drag the white queen into a trap, winning in style. Many call it one of the most beautiful sacrificial games ever. Lesson: when your pieces are active, do not fear giving up material to open the attack.',
+    },
+    notes: {
+      22: {
+        vi: 'Đen ăn Tốt c4, mở đường cho Tượng và Xe cùng hoạt động.',
+        en: 'Black takes the c4 pawn, freeing his bishop and rook.',
+      },
+      30: {
+        vi: 'Mã đen nhảy vào giữa bàn cờ, chuẩn bị nhắm sang cánh Vua trắng.',
+        en: "The black knight jumps into the centre, eyeing the white king's side.",
+      },
+      38: {
+        vi: 'Tượng đen chiếu Vua, đẩy Vua trắng vào góc h1.',
+        en: 'The black bishop checks, pushing the white king into the h1 corner.',
+      },
+      42: {
+        vi: 'Hậu đen lên h4: đe dọa Qxh2 chiếu hết.',
+        en: 'The queen jumps to h4, threatening Qxh2 checkmate.',
+      },
+      44: {
+        vi: 'Đen không cứu Hậu mà ăn Mã c3 — một nước đi bất ngờ!',
+        en: 'Black ignores his attacked queen and captures on c3 — a surprise!',
+      },
+      46: {
+        vi: 'Xe đen nhảy tới d2, nhường thêm quân để kéo Hậu trắng đi.',
+        en: 'The rook lands on d2, offering more material to drag the white queen away.',
+      },
+      48: {
+        vi: 'Tượng đen ăn e4 và chiếu Vua. Trắng chặn bằng Hậu ở g2.',
+        en: 'The black bishop takes on e4 with check. White blocks with the queen on g2.',
+      },
+      50: {
+        vi: 'Hậu trắng bị ghim và Đen sắp chiếu hết. Trắng xin thua.',
+        en: 'The white queen is pinned and mate is near. White resigns.',
+      },
+    },
+  },
+  {
     id: 'reti-1910',
     title: { vi: 'Réti – Tartakower', en: 'Réti vs Tartakower' },
     white: 'Richard Réti',
@@ -247,6 +340,140 @@ export const CLASSICS: ClassicGame[] = [
       82: {
         vi: 'Chiếu hết. Quân nhẹ phối hợp hoàn hảo.',
         en: 'Mate. Perfect teamwork by the minor pieces.',
+      },
+    },
+  },
+  {
+    id: 'fischer-spassky-1972',
+    title: { vi: 'Ván tranh ngôi vô địch', en: 'The Championship Game' },
+    white: 'Robert James Fischer',
+    black: 'Boris Spassky',
+    event: 'Reykjavik',
+    year: 1972,
+    pgn: `1. c4 e6 2. Nf3 d5 3. d4 Nf6 4. Nc3 Be7 5. Bg5 O-O 6. e3 h6 7. Bh4 b6 8. cxd5 Nxd5
+9. Bxe7 Qxe7 10. Nxd5 exd5 11. Rc1 Be6 12. Qa4 c5 13. Qa3 Rc8 14. Bb5 a6 15. dxc5 bxc5
+16. O-O Ra7 17. Be2 Nd7 18. Nd4 Qf8 19. Nxe6 fxe6 20. e4 d4 21. f4 Qe7 22. e5 Rb8
+23. Bc4 Kh8 24. Qh3 Nf8 25. b3 a5 26. f5 exf5 27. Rxf5 Nh7 28. Rcf1 Qd8 29. Qg3 Re7
+30. h4 Rbb7 31. e6 Rbc7 32. Qe5 Qe8 33. a4 Qd8 34. R1f2 Qe8 35. R2f3 Qd8 36. Bd3 Qe8
+37. Qe4 Nf6 38. Rxf6 gxf6 39. Rxf6 Kg8 40. Bc4 Kh8 41. Qf4 1-0`,
+    intro: {
+      vi: 'Ván thứ 6 của trận tranh ngôi vô địch thế giới. Fischer mở màn bằng nước 1.c4 hiếm khi dùng, rồi cải thiện thế trận từng bước cho tới khi mọi quân Trắng cùng nhắm vào Vua đen. Người ta kể rằng ngay cả Spassky cũng vỗ tay khen đối thủ. Bài học: kiên nhẫn đặt quân vào chỗ đẹp, đòn quyết định sẽ tự tìm đến.',
+      en: 'Game 6 of the World Championship match. Fischer surprised everyone with the rarely used 1.c4, then improved his position step by step until every white piece aimed at the black king. It is said that even Spassky applauded his opponent. Lesson: place your pieces patiently on good squares and the decisive blow will come.',
+    },
+    notes: {
+      1: {
+        vi: 'Fischer bất ngờ mở màn bằng Tốt c4, nước mà ông hiếm khi chơi.',
+        en: 'Fischer surprises everyone with 1.c4, a move he rarely played.',
+      },
+      39: {
+        vi: 'Tốt e4 chiếm trung tâm: Trắng bắt đầu giành thêm không gian.',
+        en: 'The e4 pawn grabs the centre: White starts to win space.',
+      },
+      41: {
+        vi: 'Tốt f4 tiếp tục tiến, mở rộng thế trận ở cánh Vua.',
+        en: "The f-pawn advances, widening White's grip on the kingside.",
+      },
+      51: {
+        vi: 'Tốt f5! Trắng mở đường để Xe vào tấn công.',
+        en: 'f5! White opens the lines for the rooks to join the attack.',
+      },
+      61: {
+        vi: 'Tốt e6 xông vào hàng 6, xé toang phòng tuyến của Đen.',
+        en: "The e-pawn storms to the sixth rank, tearing apart Black's defence.",
+      },
+      75: {
+        vi: 'Trắng đổi một Xe lấy Mã và Tốt để phá hàng Tốt che chắn quanh Vua đen.',
+        en: 'White trades a rook for a knight and a pawn to break the pawn shield around the black king.',
+      },
+      81: {
+        vi: 'Mọi quân Trắng đều nhắm vào Vua đen. Spassky xin thua.',
+        en: 'Every white piece aims at the black king. Spassky resigns.',
+      },
+    },
+  },
+  {
+    id: 'deepblue-1997',
+    title: { vi: 'Người đấu với Máy', en: 'Man vs Machine' },
+    white: 'Deep Blue',
+    black: 'Garry Kasparov',
+    event: 'New York',
+    year: 1997,
+    pgn: `1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nd7 5. Ng5 Ngf6 6. Bd3 e6 7. N1f3 h6
+8. Nxe6 Qe7 9. O-O fxe6 10. Bg6+ Kd8 11. Bf4 b5 12. a4 Bb7 13. Re1 Nd5 14. Bg3 Kc8
+15. axb5 cxb5 16. Qd3 Bc6 17. Bf5 exf5 18. Rxe7 Bxe7 19. c4 1-0`,
+    intro: {
+      vi: 'Năm 1997, siêu máy tính Deep Blue đấu sáu ván với Garry Kasparov, nhà vô địch thế giới. Ván thứ 6 kết thúc chỉ sau 19 nước khi Kasparov xin thua, và máy thắng chung cuộc 3,5–2,5. Bài học: Vua kẹt giữa bàn cờ rất nguy hiểm, hãy nhập thành sớm.',
+      en: 'In 1997 the supercomputer Deep Blue played a six-game match against world champion Garry Kasparov. Game 6 ended after only 19 moves when Kasparov resigned, and the machine won the match 3.5–2.5. Lesson: a king stuck in the middle is in danger — castle early.',
+    },
+    notes: {
+      15: {
+        vi: 'Máy thí Mã ở e6 để kéo Vua đen ra giữa bàn cờ.',
+        en: 'The machine sacrifices a knight on e6 to drag the black king into the open.',
+      },
+      19: {
+        vi: 'Tượng chiếu Vua: Vua đen từ giờ không thể nhập thành nữa.',
+        en: 'The bishop checks, and from now on the black king can no longer castle.',
+      },
+      20: {
+        vi: 'Vua đen đứng giữa bàn cờ, rất xa nơi an toàn.',
+        en: 'The black king stands in the middle of the board, far from safety.',
+      },
+      33: {
+        vi: 'Tượng trắng lao vào f5, mở đường để Xe ăn Hậu đen.',
+        en: 'The white bishop dives into f5, opening the way for the rook to take the queen.',
+      },
+      35: {
+        vi: 'Xe ăn Hậu: Trắng đổi một Xe lấy Hậu và giữ thế tấn công mạnh.',
+        en: 'The rook takes the queen: White trades a rook for the queen and keeps a strong attack.',
+      },
+      37: {
+        vi: 'Vua đen vẫn kẹt giữa bàn cờ và quân Trắng đe dọa dồn dập. Kasparov xin thua.',
+        en: 'The black king is still stuck in the centre and White keeps up the threats. Kasparov resigns.',
+      },
+    },
+  },
+  {
+    id: 'kasparov-1999',
+    title: { vi: 'Săn Vua xuyên bàn cờ', en: 'The Great King Hunt' },
+    white: 'Garry Kasparov',
+    black: 'Veselin Topalov',
+    event: 'Wijk aan Zee',
+    year: 1999,
+    pgn: `1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. Be3 Bg7 5. Qd2 c6 6. f3 b5 7. Nge2 Nbd7
+8. Bh6 Bxh6 9. Qxh6 Bb7 10. a3 e5 11. O-O-O Qe7 12. Kb1 a6 13. Nc1 O-O-O 14. Nb3 exd4
+15. Rxd4 c5 16. Rd1 Nb6 17. g3 Kb8 18. Na5 Ba8 19. Bh3 d5 20. Qf4+ Ka7 21. Rhe1 d4
+22. Nd5 Nbxd5 23. exd5 Qd6 24. Rxd4 cxd4 25. Re7+ Kb6 26. Qxd4+ Kxa5 27. b4+ Ka4
+28. Qc3 Qxd5 29. Ra7 Bb7 30. Rxb7 Qc4 31. Qxf6 Kxa3 32. Qxa6+ Kxb4 33. c3+ Kxc3
+34. Qa1+ Kd2 35. Qb2+ Kd1 36. Bf1 Rd2 37. Rd7 Rxd7 38. Bxc4 bxc4 39. Qxh8 Rd3
+40. Qa8 c3 41. Qa4+ Ke1 42. f4 f5 43. Kc1 Rd2 44. Qa7 1-0`,
+    intro: {
+      vi: 'Kasparov thí Xe hai lần rồi đuổi Vua đen từ góc a7 xuống tận hàng 1. Nhiều người xem đây là ván hay nhất của ông. Bài học: khi Vua đối phương bị hở, hãy kiên trì đưa quân vào tấn công và tính thật kỹ từng nước chiếu.',
+      en: 'Kasparov sacrifices a rook twice and chases the black king from a7 all the way down to the first rank. Many call it his finest game. Lesson: when the enemy king is exposed, keep bringing pieces to the attack and calculate every check carefully.',
+    },
+    notes: {
+      15: {
+        vi: 'Trắng đổi Tượng ô đen để làm yếu ngôi nhà của Vua đen.',
+        en: "White trades off the dark-squared bishop to weaken the black king's home.",
+      },
+      39: {
+        vi: 'Hậu chiếu Vua: Vua đen bị đẩy về góc a7.',
+        en: 'The queen checks, and the black king is pushed to the a7 corner.',
+      },
+      47: {
+        vi: 'Thí Xe! Trắng đổi Xe lấy Tốt để mở đường cho quân còn lại.',
+        en: 'Rook sacrifice! White gives a rook to open lines for the other pieces.',
+      },
+      49: {
+        vi: 'Lại thí thêm một Xe nữa: Xe e7 chiếu Vua.',
+        en: 'Another rook goes forward: the e7 rook checks the king.',
+      },
+      71: {
+        vi: 'Một nước đi lặng lẽ tuyệt đẹp: Tượng f1 cắt đường thoát của Vua đen.',
+        en: "A beautiful quiet move: the f1 bishop cuts off the black king's escape.",
+      },
+      87: {
+        vi: 'Hậu vào a7 và Đen xin thua sau cuộc săn Vua dài xuyên bàn cờ.',
+        en: 'The queen lands on a7 and Black resigns after the long king hunt across the board.',
       },
     },
   },

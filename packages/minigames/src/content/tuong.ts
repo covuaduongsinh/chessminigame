@@ -153,4 +153,91 @@ export const TUONG: MiniGame[] = [
     ],
     skills: ['bishop', 'knight', 'coordination'],
   },
+  {
+    id: 'tuong-7',
+    level: 'tuong',
+    order: 7,
+    title: { vi: 'Tượng vượt ba chặng', en: "The Bishop's Three Trials" },
+    story: {
+      vi: 'Chú Tượng muốn trở thành "Tượng cừ khôi" nên phải vượt qua ba thử thách của thầy: chặng một đi theo đúng thứ tự các ngôi sao, chặng hai né những ô có Tốt đen canh gác, chặng ba ăn liên hoàn mà nước nào cũng phải bắt quân. Na thì thầm: "Tượng ơi, nhớ luôn đi trên ô cùng màu nhé!"',
+      en: 'The bishop wants to become a "star bishop", so it must pass three trials: collect the stars in order, dodge the squares guarded by black pawns, and capture on every single move. Na whispers: "Remember — always stay on your own colour!"',
+    },
+    goal: {
+      vi: 'Vượt cả ba chặng: đi đúng thứ tự, né ô bẫy, ăn liên hoàn.',
+      en: 'Pass all three trials: follow the order, dodge the traps, chain the captures.',
+    },
+    lesson: {
+      vi: 'Nếu đường không bị cản, Tượng tới mọi ô cùng màu chỉ trong tối đa 2 nước. Muốn vào ô đang bị Tốt canh, hãy ăn quân canh gác trước.',
+      en: 'With a clear road, a bishop reaches any square of its colour in at most two moves. To enter a guarded square, capture the guard first.',
+    },
+    rounds: [
+      {
+        mode: 'collect',
+        ordered: true,
+        fen: '8/8/8/8/8/8/8/2B5 w - - 0 1',
+        targets: ['g5', 'b8', 'h2', 'd6', 'a3'],
+      },
+      {
+        mode: 'collect',
+        avoidAttacked: true,
+        fen: '8/8/8/8/5p1p/p7/3B4/8 w - - 0 1',
+        targets: ['e5', 'e3', 'c5'],
+      },
+      {
+        mode: 'collect',
+        mustCapture: true,
+        fen: '8/1p5p/p7/8/4p3/3p4/2B5/8 w - - 0 1',
+        targets: ['b7', 'h7', 'a6', 'e4', 'd3'],
+      },
+    ],
+    skills: ['bishop', 'calculation', 'safety'],
+  },
+  {
+    id: 'tuong-8',
+    level: 'tuong',
+    order: 8,
+    title: { vi: 'Mưu mẹo của Tượng', en: 'Bishop Tricks' },
+    story: {
+      vi: 'Minh khoe với An: "Tượng nhà mình có hai chiêu bí mật!" Chiêu thứ nhất: nhảy tới một ô vừa chiếu Vua vừa nhắm vào Xe — đòn đôi. Chiêu thứ hai: đứng chắn trước Xe nhà, rồi nhường đường để Xe chiếu Vua, trong lúc Tượng tranh thủ bắt luôn Hậu đối phương!',
+      en: 'Minh brags to An: "My bishop knows two secret tricks!" Trick one: hop to a square that checks the king and hits a rook at once — a fork. Trick two: stand in front of your own rook, then step aside so the rook gives check while the bishop grabs the enemy queen!',
+    },
+    goal: {
+      vi: 'Tìm đòn đôi và đòn nhường đường của Tượng.',
+      en: "Find the bishop's fork and its step-aside trick.",
+    },
+    lesson: {
+      vi: 'Đòn đôi: một quân tấn công hai mục tiêu, trong đó có Vua. Nhường đường: quân đứng trước đi đi, quân đứng sau chiếu Vua, còn quân vừa đi tiện tay ăn thêm quân khác.',
+      en: 'A fork attacks two targets, one of them the king. A step-aside (discovered check): the front piece moves, the piece behind gives check, and the mover captures something on the way.',
+    },
+    rounds: [
+      {
+        mode: 'puzzle',
+        fen: '3k4/p7/8/4B3/7r/8/P7/6K1 w - - 0 1',
+        solution: ['e5f6', 'd8e8', 'f6h4'],
+        prompt: {
+          vi: 'Tượng nhảy tới ô chiếu Vua d8 và nhắm luôn Xe h4.',
+          en: 'Move the bishop to check the king on d8 and attack the rook on h4.',
+        },
+      },
+      {
+        mode: 'puzzle',
+        fen: '8/7p/1k6/8/K7/7P/3B1r2/8 w - - 0 1',
+        solution: ['d2e3', 'b6c6', 'e3f2'],
+        prompt: {
+          vi: 'Chiếu Vua b6 và tấn công Xe f2 cùng một lúc.',
+          en: 'Check the king on b6 and attack the rook on f2 at the same time.',
+        },
+      },
+      {
+        mode: 'puzzle',
+        fen: '4k3/5ppp/8/3q4/4B3/8/5PPP/4R1K1 w - - 0 1',
+        solution: ['e4d5'],
+        prompt: {
+          vi: 'Xe e1 đứng sau Tượng. Tượng ăn Hậu và nhường đường cho Xe chiếu Vua!',
+          en: "The rook on e1 stands behind the bishop. Capture the queen and open the rook's check!",
+        },
+      },
+    ],
+    skills: ['bishop', 'tactics', 'fork', 'discovered-attack'],
+  },
 ];

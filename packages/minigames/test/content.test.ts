@@ -13,8 +13,8 @@ import {
 } from '../src';
 
 describe('danh mục mini-game', () => {
-  it('có ít nhất 40 bài, mỗi cấp ít nhất 6 bài, id không trùng', () => {
-    expect(MINIGAMES.length).toBeGreaterThanOrEqual(40);
+  it('có ít nhất 52 bài, mỗi cấp ít nhất 6 bài, id không trùng', () => {
+    expect(MINIGAMES.length).toBeGreaterThanOrEqual(52);
     for (const l of LEVELS) expect(miniGamesOf(l.key).length).toBeGreaterThanOrEqual(6);
     expect(new Set(MINIGAMES.map((g) => g.id)).size).toBe(MINIGAMES.length);
   });
@@ -160,8 +160,8 @@ describe('ván kinh điển', () => {
         expect(Number(ply)).toBeLessThanOrEqual(g.moves.length);
     });
   }
-  it('đủ 10 ván và 12 thế tàn cuộc', () => {
-    expect(CLASSICS).toHaveLength(10);
+  it('đủ 15 ván và 12 thế tàn cuộc', () => {
+    expect(CLASSICS).toHaveLength(15);
     expect(ENDGAMES).toHaveLength(12);
   });
 });

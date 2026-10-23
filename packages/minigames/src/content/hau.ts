@@ -179,4 +179,107 @@ export const HAU: MiniGame[] = [
     ],
     skills: ['queen', 'calculation'],
   },
+  {
+    id: 'hau-8',
+    level: 'hau',
+    order: 8,
+    title: { vi: 'Hậu và Vua cùng nhau', en: 'Queen and King Together' },
+    story: {
+      vi: 'Hậu rất mạnh, nhưng một mình Hậu khó chiếu hết lắm. Khi có Vua nhà đứng cạnh bảo vệ, Hậu mới "cắn" được Vua đối phương. Na bảo: "Giống hai chị em đi chơi: một người dẫn đường, một người che chở!" Nhưng nhớ cẩn thận, dồn Vua đen chặt quá mà nó hết nước đi thì ván cờ hòa đấy.',
+      en: 'The queen is mighty, but alone she struggles to deliver mate. With her own king standing guard, she can finally bite the enemy king. Na says: "Like two sisters out together — one leads, one protects!" But be careful: squeeze too hard and the black king has no moves left, which is a draw.',
+    },
+    goal: {
+      vi: 'Dùng Hậu và Vua phối hợp để chiếu hết.',
+      en: 'Use the queen and king as a team to give checkmate.',
+    },
+    lesson: {
+      vi: 'Hậu đứng sát Vua đối phương phải được Vua mình bảo vệ. Hậu cách Vua đối phương một nước Mã sẽ nhốt Vua lại mà không làm hòa.',
+      en: "A queen right next to the enemy king must be protected by her own king. A queen a knight's move away traps the king without stalemating it.",
+    },
+    rounds: [
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: '7k/8/5K2/8/8/8/8/6Q1 w - - 0 1',
+        solution: ['g1g7'],
+        prompt: {
+          vi: 'Hậu sát Vua đen và được Vua trắng bảo vệ. Chiếu hết!',
+          en: 'Put the queen next to the black king, protected by your own king. Checkmate!',
+        },
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: 'k7/7Q/2K5/8/8/8/8/8 w - - 0 1',
+        solution: ['h7b7'],
+        prompt: {
+          vi: 'Cẩn thận! Chỉ một nước chiếu hết, còn vài nước khác làm Vua đen hết nước đi (hòa).',
+          en: 'Careful! Only one move mates — a few others leave the king with no moves (a draw).',
+        },
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: '3k4/Q7/5K2/8/8/8/8/8 w - - 0 1',
+        solution: ['a7b7', 'd8e8', 'b7e7'],
+        prompt: {
+          vi: 'Chưa chiếu hết ngay được. Đặt Hậu cách Vua đen một nước Mã để nhốt nó lại!',
+          en: "No mate yet. Put the queen a knight's move from the black king to lock it in!",
+        },
+      },
+      { mode: 'mate', fen: '8/8/8/8/3k4/8/8/Q3K3 w - - 0 1', engineLevel: 6, moveLimit: 15 },
+    ],
+    skills: ['queen', 'king', 'checkmate', 'endgame'],
+  },
+  {
+    id: 'hau-9',
+    level: 'hau',
+    order: 9,
+    title: { vi: 'Thí Hậu giành chiến thắng', en: 'The Queen Sacrifice' },
+    story: {
+      vi: 'Hôm nay thầy kể chuyện "hy sinh để chiến thắng". Có lúc ta bỏ cả Hậu, quân quý nhất, chỉ để dụ quân đen rời khỏi vị trí rồi chiếu hết gọn gàng bằng một Xe. Minh tròn mắt: "Bỏ Hậu mà vẫn thắng ạ?" Thầy cười: "Miễn là em tính kỹ được nước chiếu hết!"',
+      en: 'Today the coach tells a story about "giving up something to win". Sometimes you give away even the queen, your most precious piece, just to lure a defender away — then a rook delivers a tidy checkmate. Minh stares: "You can give up the queen and still win?" The coach grins: "As long as you have calculated the mate!"',
+    },
+    goal: {
+      vi: 'Tìm nước thí Hậu dẫn tới chiếu hết.',
+      en: 'Find the queen sacrifice that leads to checkmate.',
+    },
+    lesson: {
+      vi: 'Chỉ thí Hậu khi đã thấy rõ nước chiếu hết. Hãy hỏi: quân nào đang giữ nhà cho Vua? Có cách nào dụ nó đi chỗ khác không?',
+      en: "Only sacrifice the queen once you can see the mate. Ask: which piece guards the king's house? Can I lure it away?",
+    },
+    rounds: [
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: '5rk1/5ppp/8/8/8/3Q4/8/6KR w - - 0 1',
+        solution: ['d3h7'],
+        prompt: {
+          vi: 'Hậu ăn Tốt h7 và có Xe h1 bảo vệ. Vua đen không có chỗ chạy!',
+          en: 'The queen takes h7, protected by the rook on h1. The black king has nowhere to run!',
+        },
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: 'q5k1/5ppp/8/8/3Q4/8/3R4/6K1 w - - 0 1',
+        solution: ['d4d8', 'a8d8', 'd2d8'],
+        prompt: {
+          vi: 'Thí Hậu ở d8 để dụ Hậu đen ra khỏi hàng cuối, rồi Xe chiếu hết!',
+          en: 'Sacrifice the queen on d8 to lure the black queen off the back rank, then the rook mates!',
+        },
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: 'Q5rk/5ppp/8/8/2R5/8/8/6K1 w - - 0 1',
+        solution: ['a8g8', 'h8g8', 'c4c8'],
+        prompt: {
+          vi: 'Hậu ăn Xe g8 bằng nước chiếu. Vua đen buộc phải ăn lại, rồi Xe c4 chiếu hết!',
+          en: 'The queen takes the g8 rook with check. The king must recapture — then the c4 rook mates!',
+        },
+      },
+    ],
+    skills: ['queen', 'checkmate', 'tactics', 'sacrifice'],
+  },
 ];

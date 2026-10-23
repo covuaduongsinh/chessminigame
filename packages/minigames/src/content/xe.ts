@@ -1,4 +1,4 @@
-import { castleQuestion } from '../questions';
+import { castleQuestion, outcomeQuestion } from '../questions';
 import type { MiniGame } from '../types';
 
 export const XE: MiniGame[] = [
@@ -193,5 +193,97 @@ export const XE: MiniGame[] = [
       },
     ],
     skills: ['rook', 'calculation'],
+  },
+  {
+    id: 'xe-8',
+    level: 'xe',
+    order: 8,
+    title: { vi: 'Chiếu hết hàng cuối', en: 'Back-Rank Mate' },
+    story: {
+      vi: 'Vua đen xây nhà ở hàng cuối rồi xếp ba chú Tốt đứng chắn ngay trước mặt, như ba cánh cửa đóng kín. Bin cười: "Vua ơi, cửa đóng hết thì cũng không có lối thoát đâu!" Xe trắng chỉ việc lao xuống hàng cuối là xong.',
+      en: 'The black king builds a home on the back rank and lines up three pawns right in front, like three closed doors. Bin laughs: "King, with every door shut you have no way out!" The white rook just slides down to the back rank.',
+    },
+    goal: {
+      vi: 'Nhận ra thế chiếu hết hàng cuối và tự tay chiếu hết.',
+      en: 'Recognise a back-rank mate, then deliver one yourself.',
+    },
+    lesson: {
+      vi: 'Hãy luôn chừa cho Vua một "ô thở" bằng cách đi một Tốt lên. Khi tấn công, tìm cách loại quân đang canh hàng cuối trước.',
+      en: 'Always give your king a "breathing square" by moving a pawn up. When attacking, get rid of the piece guarding the back rank first.',
+    },
+    rounds: [
+      {
+        mode: 'quiz',
+        questions: [
+          outcomeQuestion('R5k1/5ppp/8/8/8/8/8/6K1 b - - 0 1'),
+          outcomeQuestion('R5k1/5pp1/7p/8/8/8/8/6K1 b - - 0 1'),
+          outcomeQuestion('R4rk1/5ppp/8/8/8/8/8/6K1 b - - 0 1'),
+          outcomeQuestion('4R1k1/5ppp/8/8/8/8/8/6K1 b - - 0 1'),
+        ],
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: 'k7/pp6/8/8/8/8/8/3R2K1 w - - 0 1',
+        solution: ['d1d8'],
+        prompt: {
+          vi: 'Vua đen trốn trong góc sau hai Tốt. Xe đi đâu để chiếu hết?',
+          en: 'The black king hides in the corner behind two pawns. Where does the rook go to mate?',
+        },
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: 'r5k1/5ppp/8/8/8/8/4R3/4R1K1 w - - 0 1',
+        solution: ['e2e8', 'a8e8', 'e1e8'],
+        prompt: {
+          vi: 'Hai Xe cùng cột e. Thí một Xe để dụ Xe đen đi chỗ khác, rồi chiếu hết!',
+          en: 'Two rooks stand on the e-file. Sacrifice one to lure the black rook away, then mate!',
+        },
+      },
+    ],
+    skills: ['rook', 'checkmate', 'tactics', 'back-rank'],
+  },
+  {
+    id: 'xe-9',
+    level: 'xe',
+    order: 9,
+    title: { vi: 'Hai Xe leo thang', en: 'Rook Ladder' },
+    story: {
+      vi: 'Hai chú Xe chơi trò leo thang: một chú đứng chắn ngang, chú kia chạy lên chiếu, rồi đổi vai cho nhau. Mỗi bậc thang đẩy Vua đen sát mép bàn cờ thêm một chút. Bông reo lên: "Hai Xe phối hợp thì Vua nào cũng phải chịu thua!"',
+      en: 'Two rooks play ladder: one stands guard across a rank, the other runs up and gives check, then they swap roles. Every rung pushes the black king closer to the edge. Bong cheers: "Two rooks working together can beat any king!"',
+    },
+    goal: {
+      vi: 'Dùng hai Xe để chiếu hết Vua đen.',
+      en: 'Use two rooks to checkmate the black king.',
+    },
+    lesson: {
+      vi: 'Một Xe chặn Vua ở một hàng, Xe kia chiếu — rồi đổi vai. Hai Xe nên đứng xa nhau để Vua không ăn được quân nào.',
+      en: 'One rook cuts the king off along a rank while the other gives check — then swap. Keep the rooks far apart so the king can never attack one.',
+    },
+    rounds: [
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: '1k6/8/8/R7/8/8/7R/3K4 w - - 0 1',
+        solution: ['h2h7', 'b8c8', 'a5a8'],
+        prompt: {
+          vi: 'Xe h2 lên hàng 7 để chặn Vua, rồi Xe a5 chiếu hết.',
+          en: 'Send the h2 rook to the 7th rank to cut the king off, then mate with the a5 rook.',
+        },
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: '4k3/8/5R2/8/8/7R/8/7K w - - 0 1',
+        solution: ['h3h7', 'e8d8', 'f6f8'],
+        prompt: {
+          vi: 'Chặn hàng 7 trước. Vua đen chỉ còn một bước để đi!',
+          en: 'Cut off the 7th rank first. The black king will have just one square left!',
+        },
+      },
+      { mode: 'mate', fen: '8/8/8/3k4/8/8/R7/1R2K3 w - - 0 1', engineLevel: 6, moveLimit: 12 },
+    ],
+    skills: ['rook', 'endgame', 'checkmate', 'coordination'],
   },
 ];

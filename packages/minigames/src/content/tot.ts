@@ -1,4 +1,11 @@
-import { colorQuestion, diagonal, fileSquares, rankSquares, squaresQuestion } from '../questions';
+import {
+  colorQuestion,
+  diagonal,
+  fileSquares,
+  movesQuestion,
+  rankSquares,
+  squaresQuestion,
+} from '../questions';
 import type { MiniGame } from '../types';
 
 export const TOT: MiniGame[] = [
@@ -181,5 +188,106 @@ export const TOT: MiniGame[] = [
       },
     ],
     skills: ['pawn', 'tactics'],
+  },
+  {
+    id: 'tot-7',
+    level: 'tot',
+    order: 7,
+    title: { vi: 'Cầu thang Tốt', en: 'Pawn Staircase' },
+    story: {
+      vi: 'Bin và Bông rủ nhau chơi trò leo cầu thang: mỗi bậc thang là một chú Tốt đen. Tốt trắng không bước thẳng lên được, chỉ có cách ăn chéo để bước qua từng bậc. Cùng giúp chú Tốt nhỏ leo lên nào!',
+      en: 'Bin and Bong play a staircase game where every step is a black pawn. The white pawn cannot walk straight up — it has to capture diagonally to climb each step. Help the little pawn climb!',
+    },
+    goal: {
+      vi: 'Ăn hết Tốt đen, nước nào cũng phải ăn quân. Sau đó chọn các ô mà Tốt đi tới được.',
+      en: 'Capture every black pawn — every move must capture. Then pick the squares a pawn can reach.',
+    },
+    lesson: {
+      vi: 'Tốt đi thẳng nhưng ăn chéo. Tốt bị chặn ngay trước mặt vẫn ăn chéo được nếu có quân địch đứng đó.',
+      en: 'Pawns walk straight but capture diagonally. A blocked pawn can still capture diagonally if an enemy stands there.',
+    },
+    rounds: [
+      {
+        mode: 'collect',
+        mustCapture: true,
+        fen: '8/5p2/4p3/3p4/2p5/1p6/P7/8 w - - 0 1',
+        targets: ['b3', 'c4', 'd5', 'e6', 'f7'],
+      },
+      {
+        mode: 'collect',
+        mustCapture: true,
+        fen: '8/8/8/3pp3/2p2p2/1p4p1/P6P/8 w - - 0 1',
+        targets: ['b3', 'c4', 'd5', 'g3', 'f4', 'e5'],
+      },
+      {
+        mode: 'quiz',
+        questions: [
+          movesQuestion('8/8/8/8/8/8/4P3/8 w - - 0 1', 'e2', {
+            vi: 'Tốt trắng ở e2 chưa đi lần nào. Nó đi được những ô nào?',
+            en: 'The white pawn on e2 has not moved yet. Where can it go?',
+          }),
+          movesQuestion('8/8/8/3p1p2/4P3/8/8/8 w - - 0 1', 'e4', {
+            vi: 'Tốt e4 có hai Tốt đen đứng chéo phía trước. Nó đi được những ô nào?',
+            en: 'The pawn on e4 has two black pawns diagonally ahead. Where can it go?',
+          }),
+          movesQuestion('8/8/8/3pp3/4P3/8/8/8 w - - 0 1', 'e4', {
+            vi: 'Tốt e4 bị Tốt đen e5 chắn ngay trước mặt. Nó còn đi được ô nào?',
+            en: 'The pawn on e4 is blocked by the black pawn on e5. Where can it still go?',
+          }),
+        ],
+      },
+    ],
+    skills: ['pawn', 'calculation'],
+  },
+  {
+    id: 'tot-8',
+    level: 'tot',
+    order: 8,
+    title: { vi: 'Tốt thông minh', en: 'Clever Pawns' },
+    story: {
+      vi: 'Bông phát hiện một bí mật: những chú Tốt đen đứng xếp hàng chéo là đang "nắm tay" bảo vệ nhau! Ai ăn nhầm chú đang được bảo vệ sẽ bị ăn lại ngay. Bông còn khoe thêm: "Tốt chạy tới hàng cuối còn được ăn chéo để lên đời nữa đấy!"',
+      en: 'Bong has found a secret: black pawns standing in a diagonal line are "holding hands" to protect each other! Capture a protected pawn and you get captured right back. Bong adds: "A pawn reaching the last rank may even capture diagonally to promote!"',
+    },
+    goal: {
+      vi: 'Ăn đúng thứ tự để không bị ăn lại, rồi phong cấp thật khéo.',
+      en: 'Capture in the right order so you are not taken back, then promote cleverly.',
+    },
+    lesson: {
+      vi: 'Trước khi ăn, hãy hỏi: "Có Tốt nào đang bảo vệ quân này không?". Tốt cũng được ăn chéo để phong cấp.',
+      en: 'Before capturing, ask: "Is any pawn protecting this piece?" A pawn may also capture diagonally to promote.',
+    },
+    rounds: [
+      {
+        mode: 'collect',
+        avoidAttacked: true,
+        fen: '8/8/8/1p6/P1p5/1P6/8/8 w - - 0 1',
+        targets: ['b5', 'c4'],
+      },
+      {
+        mode: 'collect',
+        avoidAttacked: true,
+        fen: '8/8/3p4/2p1P3/1p1P4/2P5/8/8 w - - 0 1',
+        targets: ['d6', 'c5', 'b4'],
+      },
+      {
+        mode: 'puzzle',
+        fen: 'r4k2/1P6/8/8/8/8/8/6K1 w - - 0 1',
+        solution: ['b7a8q'],
+        prompt: {
+          vi: 'Tốt b7 đi thế nào để vừa phong Hậu vừa chiếu Vua, lại còn bắt được Xe?',
+          en: 'How can the b7 pawn promote to a queen, give check and win the rook all at once?',
+        },
+      },
+      {
+        mode: 'puzzle',
+        fen: '1n1r2k1/2P5/8/8/8/8/8/1K6 w - - 0 1',
+        solution: ['c7d8q'],
+        prompt: {
+          vi: 'Tốt c7 có hai quân để ăn. Chọn quân nào để Hậu mới không bị ăn lại và còn chiếu Vua?',
+          en: 'The c7 pawn can capture two pieces. Which one keeps the new queen safe and gives check?',
+        },
+      },
+    ],
+    skills: ['pawn', 'safety', 'promotion'],
   },
 ];

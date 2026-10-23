@@ -198,4 +198,141 @@ export const VUA: MiniGame[] = [
     ],
     skills: ['king', 'checkmate', 'board-vision'],
   },
+  {
+    id: 'vua-8',
+    level: 'vua',
+    order: 8,
+    title: { vi: 'Thế đối Vua', en: 'The Opposition' },
+    story: {
+      vi: 'Hai Vua đứng đối mặt nhau, cách đúng một ô ở giữa, như hai bạn nhỏ chơi trò "ai chớp mắt trước". Bên nào buộc phải bước đi trước thì phải lùi lại hoặc nhường đường. Thầy gọi đó là "thế đối", bí quyết của mọi cuộc đua Tốt cuối ván.',
+      en: 'Two kings stand face to face with exactly one square between them, like two kids playing "who blinks first". The side forced to move has to step back or give way. The coach calls it the opposition — the secret of every pawn ending.',
+    },
+    goal: {
+      vi: 'Hiểu thế đối rồi dùng nó để chiếu hết.',
+      en: 'Understand the opposition, then use it to give checkmate.',
+    },
+    lesson: {
+      vi: 'Khi hai Vua đối nhau, bên KHÔNG phải đi giữ thế đối. Giữ được thế đối thì Vua mình tiến lên được, còn Vua kia phải nhường đường.',
+      en: 'When the kings face each other, the side NOT to move holds the opposition. Hold it and your king advances while the other must give way.',
+    },
+    rounds: [
+      {
+        mode: 'quiz',
+        questions: [
+          {
+            kind: 'choice',
+            prompt: {
+              vi: 'Vua trắng e4 và Vua đen e6 đối nhau. Đến lượt Trắng đi. Ai đang giữ thế đối?',
+              en: 'The white king on e4 and the black king on e6 face each other. It is White to move. Who holds the opposition?',
+            },
+            fen: '8/8/4k3/8/4K3/8/8/8 w - - 0 1',
+            options: [
+              { vi: 'Trắng', en: 'White' },
+              { vi: 'Đen', en: 'Black' },
+              { vi: 'Chưa ai', en: 'Nobody' },
+            ],
+            answer: 1,
+            highlight: ['e4', 'e6'],
+          },
+          {
+            kind: 'choice',
+            prompt: {
+              vi: 'Vẫn hai Vua đó, nhưng lần này đến lượt Đen đi. Ai giữ thế đối?',
+              en: 'Same two kings, but now it is Black to move. Who holds the opposition?',
+            },
+            fen: '8/8/4k3/8/4K3/8/8/8 b - - 0 1',
+            options: [
+              { vi: 'Trắng', en: 'White' },
+              { vi: 'Đen', en: 'Black' },
+              { vi: 'Chưa ai', en: 'Nobody' },
+            ],
+            answer: 0,
+            highlight: ['e4', 'e6'],
+          },
+          {
+            kind: 'choice',
+            prompt: {
+              vi: 'Vua d6 và Vua e4 không đứng đối mặt nhau. Ai giữ thế đối?',
+              en: 'The kings on d6 and e4 are not facing each other. Who holds the opposition?',
+            },
+            fen: '8/8/3k4/8/4K3/8/8/8 w - - 0 1',
+            options: [
+              { vi: 'Trắng', en: 'White' },
+              { vi: 'Đen', en: 'Black' },
+              { vi: 'Chưa ai', en: 'Nobody' },
+            ],
+            answer: 2,
+            highlight: ['d6', 'e4'],
+          },
+          movesQuestion('8/8/4k3/8/4K3/8/8/8 w - - 0 1', 'e4', {
+            vi: 'Hai Vua đối nhau. Vua trắng không được bước lên các ô trước mặt. Chạm vào những ô Vua trắng đi được.',
+            en: 'The kings face each other. The white king may not step forward. Tap the squares it can go to.',
+          }),
+        ],
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: '4k3/8/4K3/8/8/8/8/R7 w - - 0 1',
+        solution: ['a1a8'],
+        prompt: {
+          vi: 'Vua trắng giữ thế đối ở e6, nên Vua đen không bước lên được. Xe đi đâu để chiếu hết?',
+          en: 'The white king holds the opposition on e6, so the black king cannot step forward. Where does the rook mate?',
+        },
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: '2k5/8/2K5/8/8/8/8/7R w - - 0 1',
+        solution: ['h1h8'],
+        prompt: {
+          vi: 'Hai Vua lại đối nhau, lần này ở cột c. Xe đi đâu để chiếu hết?',
+          en: 'The kings face each other again, this time on the c-file. Where does the rook mate?',
+        },
+      },
+    ],
+    skills: ['king', 'endgame', 'opposition', 'checkmate'],
+  },
+  {
+    id: 'vua-9',
+    level: 'vua',
+    order: 9,
+    title: { vi: 'Những kiểu chiếu hết', en: 'Mating Patterns' },
+    story: {
+      vi: 'Thầy mở "bảo tàng chiếu hết": mỗi kiểu chiếu hết có một cái tên riêng, như mỗi loại bánh có một công thức riêng. Hôm nay là kiểu Ả Rập của Xe và Mã, rồi kiểu Anastasia. Bin thích nhất: "Thuộc kiểu rồi thì nhìn là biết ngay!" Cuối cùng, em thử áp dụng vào một ván thật với Máy Mã.',
+      en: 'The coach opens a "museum of checkmates": every pattern has its own name, like every cake has its own recipe. Today: the Arabian mate with rook and knight, then the Anastasia mate. Bin loves it: "Learn the patterns and you spot them at a glance!" Finally, you try it all in a real game against the Knight Bot.',
+    },
+    goal: {
+      vi: 'Nhận ra các kiểu chiếu hết, rồi chiếu hết Máy Mã trong một ván thật.',
+      en: 'Recognise the mating patterns, then checkmate the Knight Bot in a real game.',
+    },
+    lesson: {
+      vi: 'Mỗi kiểu chiếu hết là một "bức tranh": Vua bị nhốt sát mép bàn, một quân chiếu và quân khác khóa các ô thoát. Nhìn ra bức tranh là tìm được nước đi.',
+      en: 'Each mating pattern is a picture: the king is trapped near the edge, one piece checks and another seals the escape squares. Spot the picture and you find the move.',
+    },
+    rounds: [
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: '7k/R7/5N2/8/8/8/8/6K1 w - - 0 1',
+        solution: ['a7h7'],
+        prompt: {
+          vi: 'Kiểu Ả Rập: Mã f6 khóa g8 và bảo vệ h7. Xe a7 lao vào đâu để chiếu hết?',
+          en: 'The Arabian mate: the f6 knight seals g8 and protects h7. Where does the a7 rook go to mate?',
+        },
+      },
+      {
+        mode: 'puzzle',
+        anyMate: true,
+        fen: '8/4N1pk/8/8/8/8/8/K2R4 w - - 0 1',
+        solution: ['d1h1'],
+        prompt: {
+          vi: 'Kiểu Anastasia: Mã e7 khóa g8 và g6, Tốt g7 chắn đường. Xe d1 đi đâu để chiếu hết?',
+          en: 'The Anastasia mate: the e7 knight seals g8 and g6 while the g7 pawn blocks the way. Where does the d1 rook mate?',
+        },
+      },
+      { mode: 'play', fen: START_FEN, engineLevel: 2 },
+    ],
+    skills: ['checkmate', 'tactics', 'game', 'patterns'],
+  },
 ];
