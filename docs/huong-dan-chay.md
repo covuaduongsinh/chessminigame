@@ -16,7 +16,6 @@ Lấy mã nguồn:
 cd D:\code
 git clone https://github.com/covuaduongsinh/chessminigame.git
 cd chessminigame
-git checkout claude/funny-darwin-sw2bgp
 pnpm install
 ```
 

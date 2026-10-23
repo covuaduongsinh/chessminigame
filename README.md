@@ -39,6 +39,8 @@ pnpm check        # lint + typecheck + test
 
 Hướng dẫn đầy đủ cho Windows, gồm build desktop và mobile: [docs/huong-dan-chay.md](docs/huong-dan-chay.md).
 
+Trạng thái dự án, việc cần làm tiếp và lệnh bàn giao cho Claude Code: [docs/ban-giao.md](docs/ban-giao.md).
+
 ## Cấu trúc thư mục
 
 ```
