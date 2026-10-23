@@ -110,6 +110,8 @@ EXPO_PUBLIC_SUPABASE_KEY=sb_publishable_...
 | `ci.yml` | Mỗi lần push/PR | Lint, typecheck, unit test, xuất bản web, chạy e2e Playwright |
 | `desktop.yml` | Khi đẩy tag `v*` hoặc bấm tay | Build bộ cài Windows, macOS (Apple Silicon + Intel), Linux; tạo bản nháp Release |
 | `mobile.yml` | Bấm tay (Actions → Mobile (EAS) → Run workflow) | Gửi lệnh build iOS/Android lên EAS. Cần secret `EXPO_TOKEN` |
+| `pages.yml` | Mỗi lần push lên `main` | Xuất bản web và đăng lên GitHub Pages: https://covuaduongsinh.github.io/chessminigame/ |
+| `publish-release.yml` | Bấm tay | Chuyển bản nháp Release desktop thành bản chính thức |
 
 Phát hành bản desktop:
 

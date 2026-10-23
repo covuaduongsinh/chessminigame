@@ -1,0 +1,26 @@
+name: Phát hành bản desktop
+
+# Chuyển bản nháp Release (do workflow Desktop tạo) thành bản chính thức; tag được tạo lúc này.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Phiên bản cần phát hành
+        required: true
+        default: v0.1.0
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TAG: ${{ inputs.tag }}
+    steps:
+      - name: Publish bản nháp ${{ inputs.tag }}
+        run: |
+          id=$(gh api "repos/$GITHUB_REPOSITORY/releases" --paginate \
+            --jq '[.[] | select(.draft and .tag_name == env.TAG)][0].id // empty' | head -1)
+          if [ -z "$id" ]; then echo "::error::Không có bản nháp $TAG"; exit 1; fi
+          gh api -X PATCH "repos/$GITHUB_REPOSITORY/releases/$id" -F draft=false --jq '.html_url'

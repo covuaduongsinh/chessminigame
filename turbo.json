@@ -12,7 +12,7 @@
     "export:web": {
       "dependsOn": [],
       "outputs": ["dist/**"],
-      "env": ["EXPO_PUBLIC_*"]
+      "env": ["EXPO_PUBLIC_*", "EXPO_BASE_URL"]
     }
   },
   "globalPassThroughEnv": ["CHROMIUM_PATH"]

@@ -9,16 +9,16 @@ Cập nhật: 23/10/2026. Toàn bộ mã đã được merge vào nhánh `main`.
 | Lõi luật cờ, máy 6 cấp | Xong. 35 + 6 test đạt, perft chuẩn CPW. |
 | Nội dung | 52 mini-game (6 cấp), 12 tàn cuộc, 15 ván kinh điển. 132 test tự giải bài đều đạt. |
 | App (Expo SDK 58) | Đủ màn hình: Học, Chơi, Tàn cuộc, Phân tích, CLB, HLV, Lớp học, Cài đặt, mini-game tự tạo. |
-| Web | Xuất được, Playwright 8/8 đạt trên Chromium. Đã kiểm thêm trên WebKit. |
-| Desktop (Tauri 2) | Bộ cài Windows, macOS (Apple Silicon + Intel), Linux đã build xong trên GitHub, nằm trong bản nháp Release **v0.1.0** chờ Thầy bấm Publish. |
+| Web | Tự triển khai lên GitHub Pages mỗi lần push `main`: <https://covuaduongsinh.github.io/chessminigame/>. Playwright 8/8 đạt, đã kiểm thêm trên WebKit. |
+| Desktop (Tauri 2) | Bộ cài Windows, macOS (Apple Silicon + Intel), Linux đã phát hành ở [Release v0.1.0](https://github.com/covuaduongsinh/chessminigame/releases). Chưa ký số nên Windows/macOS sẽ cảnh báo khi mở lần đầu. |
 | Mobile | Bundle iOS/Android (Hermes) xuất được. **Chưa chạy trên máy thật.** |
 | Supabase | Đã áp 3 migration, RLS/RPC đã kiểm với 3 tài khoản giả lập. |
 | CI | `ci.yml` xanh trên GitHub. |
 
 ## 2. Việc Thầy cần làm trên dashboard (Claude không tự làm được)
 
-1. **Phát hành bản desktop:** mở [Releases](https://github.com/covuaduongsinh/chessminigame/releases), vào bản nháp "Dương Sinh Chess v0.1.0", kiểm tra các file cài đặt rồi bấm **Publish release**. Tag `v0.1.0` sẽ được tạo khi Publish. Muốn build lại cùng phiên bản (khi chưa Publish): Actions → Desktop (Tauri) → Run workflow, nhập lại `v0.1.0`, bản nháp cũ tự được thay. Ra bản mới thì nhập `v0.1.1`.
-2. **Đưa bản web lên mạng (Vercel):** vào vercel.com → Add New → Project → Import `covuaduongsinh/chessminigame` → bấm Deploy, không cần chỉnh gì vì `vercel.json` đã cấu hình sẵn. Từ đó mỗi lần push lên `main` web tự cập nhật. Gói Hobby (miễn phí) của Vercel chỉ cho dùng phi thương mại; nếu dùng cho kinh doanh thì cần nâng lên gói Pro. Kết nối Vercel trong phiên Claude trên mây không có quyền tạo project (lỗi 403), nên bước này Thầy làm tay.
+1. **Ra bản desktop mới:** Actions → *Desktop (Tauri)* → Run workflow, nhập phiên bản (ví dụ `v0.1.1`, nhớ tăng `version` trong `apps/desktop/src-tauri/tauri.conf.json`) → chờ xong thì Actions → *Phát hành bản desktop* → Run workflow với cùng phiên bản. Nhập lại phiên bản chưa phát hành thì bản nháp cũ tự được thay.
+2. **Web** đã tự động: mỗi lần push `main`, workflow *Web (GitHub Pages)* build và cập nhật <https://covuaduongsinh.github.io/chessminigame/>. Nếu sau này muốn tên miền riêng (ví dụ `hoc.covuaduongsinh.vn`), vào Settings → Pages → Custom domain. Muốn dùng Vercel thay thế thì `vercel.json` đã có sẵn, chỉ cần Import repo trên vercel.com.
 3. Supabase → project `duongsinh-chess` → Authentication → Sign In / Providers → bật **Allow anonymous sign-ins**.
 4. Authentication → Emails → Templates. Trong mẫu **Magic Link** và **Change Email Address**, thêm dòng `Mã xác nhận: {{ .Token }}`.
 5. Authentication → Users: xóa 3 tài khoản test có id bắt đầu bằng `aaaaaaaa-0000-4000-8000-`. Nhóm, ván và tiến độ test sẽ tự xóa theo. Lệnh xóa từ Claude bị treo vì chờ xác nhận.
@@ -27,7 +27,7 @@ Cập nhật: 23/10/2026. Toàn bộ mã đã được merge vào nhánh `main`.
 ## 3. Việc nên làm tiếp (theo thứ tự ưu tiên)
 
 1. **Chạy thử trên điện thoại thật:** `pnpm dev` + Expo Go, hoặc `eas build -p android --profile preview` để có file APK. Kiểm kéo thả quân, âm thanh, màn hình nhỏ.
-2. **Kiểm tra bản web sau khi import Vercel** (mục 2.2): mở thử trên điện thoại và máy tính bảng.
+2. **Kiểm tra bản web** trên điện thoại và máy tính bảng tại <https://covuaduongsinh.github.io/chessminigame/>.
 3. **Mở rộng nội dung:**
    - Mini-game: Acorn có hơn 150 bài, mình có 52. Bổ sung theo giáo trình Dương Sinh và nguồn tiếng Nga đang Việt hóa.
    - Ván kinh điển: hiện có 15 ván, nên lên vài chục. Chú giải phải tự viết. Nước đi của 4 ván mới (Rotlewi–Rubinstein 1907, Fischer–Spassky 1972 ván 6, Deep Blue–Kasparov 1997 ván 6, Kasparov–Topalov 1999) đã được đối chiếu chéo, nhưng Thầy nên soát lại lời bình.

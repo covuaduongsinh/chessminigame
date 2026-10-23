@@ -1,0 +1,46 @@
+name: Web (GitHub Pages)
+
+# Mỗi lần push lên main: xuất bản web dưới /<tên repo> rồi đẩy lên nhánh gh-pages.
+# Địa chỉ: https://covuaduongsinh.github.io/chessminigame/
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Xuất bản web
+        run: pnpm --filter @duongsinh/app export:web
+        env:
+          EXPO_BASE_URL: /${{ github.event.repository.name }}
+
+      - name: Trang 404 cho đường dẫn sâu (app là SPA)
+        run: |
+          cp apps/app/dist/index.html apps/app/dist/404.html
+          touch apps/app/dist/.nojekyll
+
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: apps/app/dist
+          force_orphan: true
+          commit_message: Cập nhật web từ ${{ github.sha }}

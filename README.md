@@ -4,6 +4,8 @@
 
 Lộ trình 6 cấp: **Tốt → Mã → Tượng → Xe → Hậu → Vua**.
 
+**Dùng thử ngay trên web:** <https://covuaduongsinh.github.io/chessminigame/> · **Bộ cài desktop:** [Releases](https://github.com/covuaduongsinh/chessminigame/releases)
+
 ## Có gì trong app
 
 | Khu vực | Nội dung |
