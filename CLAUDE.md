@@ -51,6 +51,17 @@ Chạy test của một package: `pnpm --filter @duongsinh/minigames test`.
 - Supabase project `duongsinh-chess` (id `agsydzfefbawezpunxwd`, ap-southeast-1). URL và khóa publishable (công khai) nằm trong `DEFAULT_SYNC_CONFIG` của `packages/sync`. Có thể ghi đè bằng `EXPO_PUBLIC_SUPABASE_URL` / `EXPO_PUBLIC_SUPABASE_KEY`, hoặc tắt đồng bộ bằng `EXPO_PUBLIC_SYNC=off`. Không bao giờ đưa khóa `service_role` vào app.
 - E2E chọn bàn cờ đang hiển thị bằng `getByTestId('board').filter({ visible: true }).first()`, vì stack màn hình web giữ cả bàn cờ của màn trước.
 
+## Tiết kiệm hạn mức (bắt buộc)
+
+Thầy dùng gói thuê bao. Hạn mức dùng chung cho chat, Claude Code trên máy và trên mây.
+
+- Mỗi phiên chỉ làm một việc rõ ràng. Xong thì commit và nhắc Thầy gõ `/clear` trước việc tiếp theo. Ngữ cảnh dài làm mỗi lần gọi đắt hơn.
+- Trước việc lớn (hơn khoảng 30 phút làm, viết nhiều file, build desktop), báo ước tính và hỏi trước.
+- Việc thường ngày (viết nội dung, sửa nhỏ, chạy test) nên dùng `/model sonnet`. Opus để dành cho thiết kế khó hoặc lỗi khó.
+- Không chụp và xem ảnh màn hình nếu không có lỗi giao diện. Ưu tiên kiểm tra bằng test, curl, grep.
+- Không chạy lại build hoặc e2e khi chưa đổi gì liên quan. E2E chạy một lần trước khi push.
+- Đọc file theo đoạn cần thiết (`offset`/`limit`, grep), không đọc cả file lớn.
+
 ## Kiểm tra trước khi push
 
 `pnpm check` → `pnpm build:web` → `pnpm --filter @duongsinh/app e2e`. GitHub Actions `ci.yml` chạy đúng chuỗi này trên mọi push và PR.

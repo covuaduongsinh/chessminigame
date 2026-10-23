@@ -1,10 +1,17 @@
 name: Desktop (Tauri)
 
-# Build bản cài Windows / macOS / Linux. Đẩy tag dạng v0.1.0 để tạo bản nháp Release.
+# Build bộ cài Windows / macOS / Linux và tạo bản nháp Release.
+# Chạy khi đẩy tag dạng v0.1.0, hoặc bấm tay (Actions → Desktop → Run workflow) và nhập phiên bản;
+# tag được tạo khi Thầy bấm Publish bản nháp.
 on:
   push:
     tags: ["v*"]
   workflow_dispatch:
+    inputs:
+      tag:
+        description: Phiên bản phát hành (ví dụ v0.1.0)
+        required: true
+        default: v0.1.0
 
 jobs:
   build:
@@ -61,8 +68,8 @@ jobs:
           projectPath: apps/desktop
           tauriScript: pnpm tauri
           args: ${{ matrix.args }}
-          tagName: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
-          releaseName: Dương Sinh Chess ${{ github.ref_name }}
+          tagName: ${{ github.ref_type == 'tag' && github.ref_name || inputs.tag }}
+          releaseName: Dương Sinh Chess ${{ github.ref_type == 'tag' && github.ref_name || inputs.tag }}
           releaseBody: Bản cài đặt Dương Sinh Chess cho Windows, macOS và Linux.
           releaseDraft: true
           prerelease: false
