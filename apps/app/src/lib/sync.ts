@@ -3,6 +3,7 @@ import {
   createSyncClient,
   type DB,
   DEFAULT_SYNC_CONFIG,
+  deleteMyAccount,
   ensureSession,
   type Profile,
   pullProgress,
@@ -13,6 +14,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { create } from 'zustand';
+import i18n from './i18n';
 import { useProgress, useSettings } from './store';
 
 const url = process.env.EXPO_PUBLIC_SUPABASE_URL ?? DEFAULT_SYNC_CONFIG.url;
@@ -42,6 +44,8 @@ interface AccountState {
   error: string | null;
   connect: () => Promise<Profile | null>;
   rename: (nickname: string, avatar?: string) => Promise<void>;
+  /** Xóa hẳn tài khoản và dữ liệu trên máy chủ; tiến độ trên máy này vẫn giữ. */
+  deleteAccount: () => Promise<void>;
   setProfile: (p: Profile) => void;
 }
 
@@ -78,6 +82,13 @@ export const useAccount = create<AccountState>()((set, get) => ({
     if (!c || get().status !== 'ready') return;
     const p = await updateProfile(c, { nickname, avatar });
     set({ profile: p });
+  },
+  deleteAccount: async () => {
+    const c = db();
+    if (!c || get().status !== 'ready') throw new Error(i18n.t('common.offline'));
+    await deleteMyAccount(c);
+    useProgress.getState().setLastSync(null);
+    set({ status: 'idle', profile: null });
   },
 }));
 

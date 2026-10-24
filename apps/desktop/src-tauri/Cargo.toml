@@ -1,6 +1,6 @@
 [package]
 name = "duongsinh-chess"
-version = "0.1.0"
+version = "0.1.1"
 description = "Dương Sinh Chess — ứng dụng học cờ vua cho trẻ em (bản desktop)"
 authors = ["Công ty CP Cờ vua Dương Sinh"]
 license = "MIT"

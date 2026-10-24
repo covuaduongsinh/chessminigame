@@ -1,0 +1,32 @@
+name: Kiểm tra Supabase VPS
+
+# Chạy luồng CLB trên máy chủ thật: 3 tài khoản ẩn danh tạo nhóm, chơi online (Realtime),
+# Presence, đồng bộ tiến độ, phân quyền, rồi tự xóa tài khoản. Không cần secret: URL và khóa
+# anon (công khai) đã có trong packages/sync.
+on:
+  workflow_run:
+    workflows: ["Database (Supabase VPS)"]
+    types: [completed]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Luồng CLB trên supabase.dsc.edu.vn
+        run: pnpm --filter @duongsinh/sync test
+        env:
+          SUPABASE_LIVE: "1"

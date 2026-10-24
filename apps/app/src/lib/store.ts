@@ -30,7 +30,7 @@ interface ProgressState {
   ) => void;
   takeOutbox: () => ProgressDelta[];
   restoreOutbox: (items: ProgressDelta[]) => void;
-  setLastSync: (t: number) => void;
+  setLastSync: (t: number | null) => void;
   reset: () => void;
 }
 

@@ -179,6 +179,22 @@ export default function SettingsScreen() {
             size="sm"
             onPress={() => void syncNow().then((ok) => setMsg(ok ? '✓' : t('common.offline')))}
           />
+          {account.status === 'ready' && (
+            <Button
+              title={t('settings.deleteAccount')}
+              tone="danger"
+              size="sm"
+              testID="delete-account"
+              onPress={() =>
+                confirm(t('settings.deleteAccountConfirm'), () =>
+                  confirm(
+                    t('settings.deleteAccountConfirm2'),
+                    () => void run(() => account.deleteAccount(), t('settings.deleteAccountDone')),
+                  ),
+                )
+              }
+            />
+          )}
         </Card>
       </Section>
 

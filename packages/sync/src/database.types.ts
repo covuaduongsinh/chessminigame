@@ -241,6 +241,10 @@ export type Database = {
         };
         Returns: GameRow;
       };
+      delete_my_account: {
+        Args: Record<PropertyKey, never>;
+        Returns: undefined;
+      };
       resign_game: {
         Args: { p_game: string };
         Returns: GameRow;

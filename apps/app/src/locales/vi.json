@@ -200,7 +200,11 @@
     "sync": "Đồng bộ",
     "lastSync": "Đồng bộ lần cuối: {{time}}",
     "syncNow": "Đồng bộ ngay",
-    "pending": "{{count}} kết quả chờ đồng bộ"
+    "pending": "{{count}} kết quả chờ đồng bộ",
+    "deleteAccount": "Xóa tài khoản trên máy chủ",
+    "deleteAccountConfirm": "Xóa hẳn tài khoản này cùng tiến độ, ván cờ, bài tự tạo đã lưu trên máy chủ? Nếu em là chủ nhóm, nhóm và các ván trong nhóm cũng bị xóa.",
+    "deleteAccountConfirm2": "Không khôi phục được. Thầy cô/phụ huynh chắc chắn muốn xóa?",
+    "deleteAccountDone": "Đã xóa tài khoản trên máy chủ. Tiến độ trên máy này vẫn còn."
   },
   "custom": {
     "title": "Tạo mini-game",

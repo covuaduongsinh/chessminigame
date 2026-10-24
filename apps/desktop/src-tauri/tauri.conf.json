@@ -2,7 +2,7 @@
   "$schema": "../../../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Dương Sinh Chess",
   "mainBinaryName": "duongsinh-chess",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "identifier": "vn.duongsinh.chess",
   "build": {
     "frontendDist": "../../app/dist",
@@ -32,7 +32,7 @@
         "img-src": "'self' data: blob:",
         "font-src": "'self' data:",
         "media-src": "'self' data: blob:",
-        "connect-src": "'self' ipc: http://ipc.localhost https://*.supabase.co wss://*.supabase.co https://lichess.org"
+        "connect-src": "'self' ipc: http://ipc.localhost https://supabase.dsc.edu.vn wss://supabase.dsc.edu.vn https://lichess.org"
       },
       "dangerousDisableAssetCspModification": ["style-src"]
     }

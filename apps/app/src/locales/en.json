@@ -200,7 +200,11 @@
     "sync": "Sync",
     "lastSync": "Last synced: {{time}}",
     "syncNow": "Sync now",
-    "pending": "{{count}} results waiting to sync"
+    "pending": "{{count}} results waiting to sync",
+    "deleteAccount": "Delete account on the server",
+    "deleteAccountConfirm": "Permanently delete this account with its progress, games and custom puzzles on the server? If you own a group, the group and its games are deleted too.",
+    "deleteAccountConfirm2": "This cannot be undone. Are you sure?",
+    "deleteAccountDone": "Account deleted on the server. Progress on this device is kept."
   },
   "custom": {
     "title": "Create a mini-game",

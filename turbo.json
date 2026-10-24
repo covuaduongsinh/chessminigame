@@ -15,5 +15,5 @@
       "env": ["EXPO_PUBLIC_*", "EXPO_BASE_URL"]
     }
   },
-  "globalPassThroughEnv": ["CHROMIUM_PATH"]
+  "globalPassThroughEnv": ["CHROMIUM_PATH", "SUPABASE_LIVE", "SUPABASE_URL", "SUPABASE_ANON_KEY"]
 }

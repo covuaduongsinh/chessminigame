@@ -18,10 +18,13 @@ export type CustomGameRow = Tables<'custom_games'>;
 export type MemberRole = Enums<'member_role'>;
 export type GroupKind = Enums<'group_kind'>;
 
-/** Project Supabase của Dương Sinh (khóa publishable dùng công khai được, dữ liệu được bảo vệ bằng RLS). */
+/**
+ * Supabase tự cài trên VPS, dành riêng cho Dương Sinh Chess. Khóa anon dùng công khai được:
+ * dữ liệu được bảo vệ bằng RLS.
+ */
 export const DEFAULT_SYNC_CONFIG = {
-  url: 'https://agsydzfefbawezpunxwd.supabase.co',
-  key: 'sb_publishable_uLTSoRIzEiD_0t0sg2UhdQ_gHJqEe0Q',
+  url: 'https://supabase.dsc.edu.vn',
+  key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3OTI3OTU2MzksImV4cCI6MTg5MzQ1NjAwMCwicm9sZSI6ImFub24iLCJpc3MiOiJzdXBhYmFzZSJ9.0xxez7QwBYlqEaQbD0jTA373nB4MC-zkACWeyz9Fucs',
 } as const;
 
 export interface SyncConfig {
@@ -158,6 +161,16 @@ export async function verifyEmailOtp(
 ): Promise<void> {
   const res = await db.auth.verifyOtp({ email, token, type });
   if (res.error) fail(res.error);
+}
+
+/**
+ * Xóa hẳn tài khoản đang đăng nhập cùng toàn bộ dữ liệu trên máy chủ (tiến độ, nhóm mình làm
+ * chủ, ván cờ, bài tự tạo), rồi đăng xuất trên máy này.
+ */
+export async function deleteMyAccount(db: DB): Promise<void> {
+  const res = await db.rpc('delete_my_account');
+  if (res.error) fail(res.error);
+  await db.auth.signOut({ scope: 'local' });
 }
 
 // -------------------------------------------------------------------- tiến độ
