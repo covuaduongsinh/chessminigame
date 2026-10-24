@@ -17,6 +17,8 @@ Cập nhật: 23/10/2026. Toàn bộ mã đã được merge vào nhánh `main`.
 
 ## 2. Việc Thầy cần làm trên dashboard (Claude không tự làm được)
 
+> **Đang chuyển Supabase sang VPS `https://supabase.dsc.edu.vn`.** Kế hoạch chi tiết ở [ke-hoach-supabase-vps.md](ke-hoach-supabase-vps.md). Các mục 3–5 dưới đây (dành cho Supabase Cloud) không cần làm nữa; Cloud sẽ bị xóa sau khi VPS chạy ổn.
+
 1. **Ra bản desktop mới:** Actions → *Desktop (Tauri)* → Run workflow, nhập phiên bản (ví dụ `v0.1.1`, nhớ tăng `version` trong `apps/desktop/src-tauri/tauri.conf.json`) → chờ xong thì Actions → *Phát hành bản desktop* → Run workflow với cùng phiên bản. Nhập lại phiên bản chưa phát hành thì bản nháp cũ tự được thay.
 2. **Web** đã tự động: mỗi lần push `main`, workflow *Web (GitHub Pages)* build và cập nhật <https://covuaduongsinh.github.io/chessminigame/>. Nếu sau này muốn tên miền riêng (ví dụ `hoc.covuaduongsinh.vn`), vào Settings → Pages → Custom domain. Muốn dùng Vercel thay thế thì `vercel.json` đã có sẵn, chỉ cần Import repo trên vercel.com.
 3. Supabase → project `duongsinh-chess` → Authentication → Sign In / Providers → bật **Allow anonymous sign-ins**.
