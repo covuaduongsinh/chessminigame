@@ -85,23 +85,22 @@ Mã ứng dụng (bundle id) hiện là `vn.duongsinh.chess`. Có thể đổi t
 
 ## 6. Biến môi trường
 
-App đã có sẵn địa chỉ và khóa công khai của project Supabase `duongsinh-chess`. Muốn trỏ sang project khác, tạo file `apps\app\.env.local`:
+App đã có sẵn địa chỉ và khóa anon (công khai) của Supabase tự cài trên VPS `https://supabase.dsc.edu.vn`, dành riêng cho Dương Sinh Chess. Muốn trỏ sang máy chủ khác (ví dụ Supabase chạy thử trên máy), tạo file `apps\app\.env.local`:
 
 ```ini
-EXPO_PUBLIC_SUPABASE_URL=https://<project-id>.supabase.co
-EXPO_PUBLIC_SUPABASE_KEY=sb_publishable_...
+EXPO_PUBLIC_SUPABASE_URL=https://<địa chỉ máy chủ>
+EXPO_PUBLIC_SUPABASE_KEY=<ANON_KEY>
 # Tắt hẳn đồng bộ (app chạy offline hoàn toàn):
 # EXPO_PUBLIC_SYNC=off
 ```
 
-Đây là khóa **publishable** (công khai, được phép nằm trong app). Không bao giờ đưa khóa `service_role`/`secret` vào app.
+Chỉ dùng khóa **anon** (công khai). Không bao giờ đưa `SERVICE_ROLE_KEY` hay `JWT_SECRET` vào app.
 
-## 7. Cấu hình Supabase (làm một lần)
+## 7. Supabase trên VPS
 
-1. **Bật đăng nhập ẩn danh**: Supabase Dashboard → project `duongsinh-chess` → Authentication → Sign In / Providers → bật **Allow anonymous sign-ins**. Chưa bật thì trẻ vẫn học offline được, nhưng không đồng bộ, không vào CLB và không chơi online được.
-2. **Email OTP cho HLV/phụ huynh**: Authentication → Emails → Templates. Trong mẫu **Magic Link** và **Change Email Address**, thêm dòng `Mã xác nhận: {{ .Token }}` để email có mã 6 số cho người dùng nhập vào app.
-3. Nên cấu hình SMTP riêng (Authentication → Emails → SMTP Settings), vì máy chủ email mặc định của Supabase chỉ gửi được vài email mỗi giờ.
-4. Dựng lại database trên project mới: cài Supabase CLI, chạy `supabase link --project-ref <id>` rồi `supabase db push`. Lệnh này áp các file trong `supabase\migrations`.
+- Cấu hình máy chủ (khóa, đăng nhập ẩn danh, SMTP Gmail, mẫu email, sao lưu): xem [ke-hoach-supabase-vps.md](ke-hoach-supabase-vps.md).
+- **Schema tự áp:** sửa hoặc thêm file trong `supabase\migrations` rồi push lên `main` → workflow *Database (Supabase VPS)* áp lên VPS (cần secret `SUPABASE_DB_URL`) → workflow *Kiểm tra Supabase VPS* chạy luồng CLB trên máy chủ thật.
+- Chạy kiểm tra máy chủ thật từ máy Thầy: `$env:SUPABASE_LIVE="1"; pnpm --filter @duongsinh/sync test`.
 
 ## 8. GitHub Actions
 
@@ -112,6 +111,8 @@ EXPO_PUBLIC_SUPABASE_KEY=sb_publishable_...
 | `mobile.yml` | Bấm tay (Actions → Mobile (EAS) → Run workflow) | Gửi lệnh build iOS/Android lên EAS. Cần secret `EXPO_TOKEN` |
 | `pages.yml` | Mỗi lần push lên `main` | Xuất bản web và đăng lên GitHub Pages: https://covuaduongsinh.github.io/chessminigame/ |
 | `publish-release.yml` | Bấm tay | Chuyển bản nháp Release desktop thành bản chính thức |
+| `db-migrate.yml` | Push `main` có đổi `supabase/migrations`, hoặc bấm tay | Áp schema lên Supabase VPS (secret `SUPABASE_DB_URL`) |
+| `supabase-smoke.yml` | Sau `db-migrate`, hoặc bấm tay | Chạy luồng CLB trên máy chủ thật rồi tự dọn tài khoản test |
 
 Phát hành bản desktop:
 

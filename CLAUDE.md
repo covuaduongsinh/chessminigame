@@ -29,7 +29,7 @@ Chạy test của một package: `pnpm --filter @duongsinh/minigames test`.
 - `packages/sync`: Supabase client và các RPC (`ensureSession`, `pushProgress`, nhóm, ván online, `custom_games`, Presence).
 - `apps/app`: Expo Router, route tiếng Việt không dấu: `(tabs)/index|choi|tan-cuoc|phan-tich|clb`, `minigame/[id]`, `hlv/`, `lop-hoc/`, `tu-tao/[id]`, `game/[id]`, `cai-dat`. Store Zustand ở `src/lib/store.ts`, chuỗi giao diện ở `src/locales/vi.json` và `en.json`.
 - `apps/desktop`: Tauri 2, nạp `../app/dist`. Có cấu hình riêng `tauri.linux.conf.json` và `tauri.windows.conf.json`.
-- `supabase/migrations`: schema, RLS, RPC. Đã áp lên project `duongsinh-chess`.
+- `supabase/migrations`: schema, RLS, RPC. Tự áp lên Supabase VPS qua workflow `db-migrate.yml`; `packages/sync/test/live.test.ts` kiểm tra trên máy chủ thật (chỉ chạy khi `SUPABASE_LIVE=1`, workflow `supabase-smoke.yml`).
 - `docs/`: `kien-truc.md`, `huong-dan-chay.md`, `ban-giao.md` (trạng thái và việc tiếp theo), `research/acorn-feature-map.md`.
 
 ## Quy ước bắt buộc
@@ -48,7 +48,7 @@ Chạy test của một package: `pnpm --filter @duongsinh/minigames test`.
 - Tauri: `dangerousDisableAssetCspModification: ["style-src"]` là bắt buộc. Nếu bỏ, Tauri chèn nonce làm `'unsafe-inline'` mất tác dụng và react-native-web mất toàn bộ style.
 - Gói `.deb` phải có tên không dấu (đã đặt trong `tauri.linux.conf.json`). Windows chỉ build NSIS vì MSI/WiX không nhận tên có dấu.
 - Ván online: server (`play_move`) chỉ kiểm tra lượt, ply và tư cách người chơi. Luật cờ do client kiểm tra.
-- Đang chuyển sang Supabase tự cài **dành riêng cho app này** tại `https://supabase.dsc.edu.vn` (xem `docs/ke-hoach-supabase-vps.md`); không đặt bảng/schema của dự án khác vào đó. Project Cloud cũ: `duongsinh-chess` (id `agsydzfefbawezpunxwd`, ap-southeast-1), sẽ xóa sau khi chuyển xong. URL và khóa publishable (công khai) nằm trong `DEFAULT_SYNC_CONFIG` của `packages/sync`. Có thể ghi đè bằng `EXPO_PUBLIC_SUPABASE_URL` / `EXPO_PUBLIC_SUPABASE_KEY`, hoặc tắt đồng bộ bằng `EXPO_PUBLIC_SYNC=off`. Không bao giờ đưa khóa `service_role` vào app.
+- Supabase tự cài **dành riêng cho app này** tại `https://supabase.dsc.edu.vn` (xem `docs/ke-hoach-supabase-vps.md`); không đặt bảng/schema của dự án khác vào đó. Máy Claude trên mây không kết nối được tới VPS: mọi thao tác/kiểm tra trên VPS chạy qua GitHub Actions. Project Supabase Cloud cũ `duongsinh-chess` đã bỏ, sẽ xóa. URL và khóa anon (công khai) nằm trong `DEFAULT_SYNC_CONFIG` của `packages/sync`. Có thể ghi đè bằng `EXPO_PUBLIC_SUPABASE_URL` / `EXPO_PUBLIC_SUPABASE_KEY`, hoặc tắt đồng bộ bằng `EXPO_PUBLIC_SYNC=off`. Không bao giờ đưa khóa `service_role` vào app.
 - E2E chọn bàn cờ đang hiển thị bằng `getByTestId('board').filter({ visible: true }).first()`, vì stack màn hình web giữ cả bàn cờ của màn trước.
 
 ## Tiết kiệm hạn mức (bắt buộc)

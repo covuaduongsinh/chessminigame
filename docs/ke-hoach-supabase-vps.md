@@ -106,7 +106,7 @@ Gửi **ANON_KEY** của VPS. Khóa này công khai, vốn nằm sẵn trong app
 
 ---
 
-## Giai đoạn 1 — Claude làm trên repo (một phiên ngắn)
+## Giai đoạn 1 — Claude làm trên repo ✅ (24/10/2026)
 
 1. **Workflow `db-migrate.yml`:** chạy khi push lên `main` có thay đổi trong `supabase/migrations/**`, hoặc khi bấm tay.
    - Dùng `supabase/setup-cli`, rồi `supabase db push --db-url "$SUPABASE_DB_URL"`.
