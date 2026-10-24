@@ -1,6 +1,6 @@
 # Kế hoạch chuyển sang Supabase tự cài trên VPS
 
-Địa chỉ mới: **https://supabase.dsc.edu.vn**. Lập ngày 24/10/2026.
+Địa chỉ mới: **https://supabase.dsc.edu.vn**. Lập ngày 24/10/2026. Instance này **chỉ dùng cho Dương Sinh Chess**.
 
 ## Đã chốt
 
@@ -10,6 +10,7 @@
 | Supabase Cloud (`duongsinh-chess`) | **Xóa hẳn** sau khi VPS chạy ổn. Cloud chỉ có dữ liệu test nên không phải chuyển dữ liệu. |
 | Email gửi mã OTP | **Google Workspace/Gmail** (SMTP + App Password) |
 | Bản web | **Giữ GitHub Pages**. Có thể gắn tên miền riêng, ví dụ `chess.dsc.edu.vn`. |
+| Phạm vi | **Supabase trên VPS chỉ dành riêng cho Dương Sinh Chess.** Không chạy chung với dự án khác. |
 
 ## Vì sao phải làm theo thứ tự
 
@@ -20,6 +21,17 @@
 ---
 
 ## Giai đoạn 0 — Thầy chuẩn bị VPS (khoảng 45 phút)
+
+### 0.0 Dành riêng cho dự án này
+
+Toàn bộ instance (database, tài khoản người dùng, khóa API, email gửi đi) chỉ phục vụ Dương Sinh Chess. Vì vậy:
+
+- **Không tạo bảng hay schema của dự án khác** trong database này. Schema `public` và `private` là của app cờ; bảng `auth.users` chỉ chứa học sinh, HLV và phụ huynh của Dương Sinh. Dự án khác nếu cần Supabase thì cài một instance riêng, có `.env`, khóa và database riêng.
+- **Cấu hình Auth chỉnh thẳng theo app**, không phải dung hòa với ai: `SITE_URL` trỏ về app cờ, bật đăng nhập ẩn danh cho trẻ, email gửi đi mang tên "Cờ vua Dương Sinh".
+- **Khóa và mật khẩu chỉ dùng cho dự án này.** `SUPABASE_DB_URL` trên GitHub chỉ mở được database của app cờ; lộ khóa thì không ảnh hưởng hệ thống khác.
+- **Sao lưu và khôi phục theo nguyên instance.** `pg_dump` cả database chính là sao lưu toàn bộ app; khôi phục không sợ đè dữ liệu của dự án khác.
+- **Tắt dịch vụ app không dùng để tiết kiệm RAM VPS** (tùy chọn): app không lưu file nên có thể tắt `storage` và `imgproxy`; `functions` để tắt cho tới giai đoạn 4 (kiểm luật cờ phía server). Nếu tắt, xóa luôn route tương ứng trong `volumes/api/kong.yml` rồi `docker compose up -d`.
+- Tên miền `supabase.dsc.edu.vn` dùng được. Nếu muốn tên thể hiện rõ là của app cờ, có thể đổi sang ví dụ `api-chess.dsc.edu.vn`; báo Claude trước khi Giai đoạn 1 để em ghi đúng địa chỉ vào app.
 
 ### 0.1 Kiểm tra bảo mật (bắt buộc)
 
@@ -85,7 +97,7 @@ Nếu đặt Nginx hoặc Caddy trước Kong, đường dẫn `/realtime/v1/` p
 
 ### 0.6 Sao lưu
 
-Đặt cron chạy `pg_dump` mỗi đêm và chép bản sao lưu ra ngoài VPS (Google Drive qua `rclone`). Mỗi quý nên thử khôi phục một lần.
+Đặt cron chạy `pg_dump` cả database (toàn bộ là dữ liệu app cờ) mỗi đêm và chép bản sao lưu ra ngoài VPS (Google Drive qua `rclone`). Mỗi quý nên thử khôi phục một lần.
 
 ### 0.7 Gửi cho Claude
 
