@@ -10,7 +10,7 @@ Cập nhật: 30/10/2026. Toàn bộ mã đã được merge vào nhánh `main`.
 | Nội dung | 52 mini-game (6 cấp), 12 tàn cuộc, 15 ván kinh điển. 132 test tự giải bài đều đạt. |
 | App (Expo SDK 58) | Đủ màn hình: Học, Chơi, Tàn cuộc, Phân tích, CLB, HLV, Lớp học, Cài đặt, mini-game tự tạo. |
 | Web | Tự triển khai lên GitHub Pages mỗi lần push `main`: <https://covuaduongsinh.github.io/chessminigame/>. Playwright 8/8 đạt, đã kiểm thêm trên WebKit. |
-| Desktop (Tauri 2) | Bộ cài Windows, macOS (Apple Silicon + Intel), Linux đã phát hành ở [Release v0.1.0](https://github.com/covuaduongsinh/chessminigame/releases). Chưa ký số nên Windows/macOS sẽ cảnh báo khi mở lần đầu. |
+| Desktop (Tauri 2) | Bộ cài Windows, macOS (Apple Silicon + Intel), Linux đã phát hành ở [Release v0.1.1](https://github.com/covuaduongsinh/chessminigame/releases/tag/v0.1.1), trỏ Supabase VPS mới. Chưa ký số nên Windows/macOS sẽ cảnh báo khi mở lần đầu. |
 | Mobile | Bundle iOS/Android (Hermes) xuất được. **Chưa chạy trên máy thật.** |
 | Supabase | Chuyển sang VPS `https://supabasechessminigame.dsc.edu.vn` (VPS riêng, dành riêng cho app). Schema tự áp qua workflow `db-migrate.yml`, kiểm tra trên máy chủ thật qua `supabase-smoke.yml`. App có nút xóa tài khoản. |
 | CI | `ci.yml` xanh trên GitHub. |
