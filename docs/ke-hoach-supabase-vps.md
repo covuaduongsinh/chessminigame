@@ -87,8 +87,22 @@ Phương án đã chọn là kết nối thẳng, nên cổng database sẽ mở
 - **Bắt buộc bật TLS** trên cổng Postgres hoặc pooler (Supavisor), dùng chứng chỉ của `supabasechessminigame.dsc.edu.vn`. Nếu không có TLS, mật khẩu database sẽ đi qua mạng dưới dạng chữ thường.
 - Kiểm tra từ máy Thầy:
   `psql "postgresql://postgres.<POOLER_TENANT_ID>:<mật khẩu>@supabasechessminigame.dsc.edu.vn:5432/postgres?sslmode=verify-full" -c "select 1"`
-- GitHub → Settings → Secrets and variables → Actions → **New repository secret**:
-  - `SUPABASE_DB_URL` = chuỗi kết nối ở trên.
+- Tạo chuỗi kết nối ngay trên VPS (đứng trong thư mục có file `.env` của Supabase). Lệnh tự mã hóa ký tự đặc biệt trong mật khẩu:
+  ```bash
+  python3 - <<'EOF'
+  from urllib.parse import quote
+  env = {}
+  for line in open('.env'):
+      if '=' in line and not line.lstrip().startswith('#'):
+          k, v = line.split('=', 1)
+          env[k.strip()] = v.strip().strip('"\'')
+  print(f"postgresql://postgres.{env['POOLER_TENANT_ID']}:{quote(env['POSTGRES_PASSWORD'], safe='')}"
+        "@supabasechessminigame.dsc.edu.vn:5432/postgres?sslmode=require")
+  EOF
+  ```
+- GitHub → Settings → Secrets and variables → Actions → tab **Secrets** (không phải Variables, không phải Environments) → **New repository secret**:
+  - Name: `SUPABASE_DB_URL`, Secret: dòng in ra ở trên.
+  - Workflow *Database (Supabase VPS)* báo rõ nếu secret đặt nhầm tab Variables, thiếu `postgresql://` hoặc thiếu `sslmode`.
 - Sau này có thể chuyển sang SSH tunnel để đóng hẳn cổng database. Workflow chỉ cần đổi bước kết nối.
 
 ### 0.5 Realtime qua reverse proxy

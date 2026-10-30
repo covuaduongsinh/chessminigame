@@ -20,12 +20,27 @@ jobs:
     env:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
     steps:
+      # Chỉ kiểm tra dạng chuỗi, không in giá trị ra log.
       - name: Kiểm tra secret
+        env:
+          IN_VARIABLES: ${{ vars.SUPABASE_DB_URL != '' }}
         run: |
           if [ -z "$SUPABASE_DB_URL" ]; then
-            echo "::error::Chưa có secret SUPABASE_DB_URL. Vào Settings → Secrets and variables → Actions để thêm."
+            if [ "$IN_VARIABLES" = "true" ]; then
+              echo "::error::SUPABASE_DB_URL đang nằm ở tab Variables (ai xem repo cũng đọc được mật khẩu). Chuyển sang tab Secrets rồi xóa Variable đó."
+            else
+              echo "::error::Chưa có secret SUPABASE_DB_URL. Vào Settings → Secrets and variables → Actions → tab Secrets → New repository secret."
+            fi
             exit 1
           fi
+          case "$SUPABASE_DB_URL" in
+            postgres://* | postgresql://*) ;;
+            *) echo "::error::SUPABASE_DB_URL phải bắt đầu bằng postgresql://"; exit 1 ;;
+          esac
+          case "$SUPABASE_DB_URL" in
+            *sslmode=require* | *sslmode=verify-*) ;;
+            *) echo "::error::SUPABASE_DB_URL thiếu ?sslmode=require: kết nối tới VPS bắt buộc mã hóa."; exit 1 ;;
+          esac
 
       - uses: actions/checkout@v4
 
