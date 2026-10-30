@@ -85,7 +85,7 @@ Mã ứng dụng (bundle id) hiện là `vn.duongsinh.chess`. Có thể đổi t
 
 ## 6. Biến môi trường
 
-App đã có sẵn địa chỉ và khóa anon (công khai) của Supabase tự cài trên VPS `https://supabase.dsc.edu.vn`, dành riêng cho Dương Sinh Chess. Muốn trỏ sang máy chủ khác (ví dụ Supabase chạy thử trên máy), tạo file `apps\app\.env.local`:
+App đã có sẵn địa chỉ và khóa anon (công khai) của Supabase tự cài trên VPS `https://supabasechessminigame.dsc.edu.vn`, dành riêng cho Dương Sinh Chess. Muốn trỏ sang máy chủ khác (ví dụ Supabase chạy thử trên máy), tạo file `apps\app\.env.local`:
 
 ```ini
 EXPO_PUBLIC_SUPABASE_URL=https://<địa chỉ máy chủ>

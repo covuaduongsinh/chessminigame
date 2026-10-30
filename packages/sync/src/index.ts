@@ -19,12 +19,12 @@ export type MemberRole = Enums<'member_role'>;
 export type GroupKind = Enums<'group_kind'>;
 
 /**
- * Supabase tự cài trên VPS, dành riêng cho Dương Sinh Chess. Khóa anon dùng công khai được:
+ * Supabase tự cài trên VPS riêng, dành riêng cho Dương Sinh Chess. Khóa anon dùng công khai được:
  * dữ liệu được bảo vệ bằng RLS.
  */
 export const DEFAULT_SYNC_CONFIG = {
-  url: 'https://supabase.dsc.edu.vn',
-  key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3OTI3OTU2MzksImV4cCI6MTg5MzQ1NjAwMCwicm9sZSI6ImFub24iLCJpc3MiOiJzdXBhYmFzZSJ9.0xxez7QwBYlqEaQbD0jTA373nB4MC-zkACWeyz9Fucs',
+  url: 'https://supabasechessminigame.dsc.edu.vn',
+  key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzkyOTg3NDM3LCJleHAiOjE4OTM0NTYwMDB9.Zxf-5UeWZShutFzm3SCoyaI1znP9NvAssLfqaGnMjr8',
 } as const;
 
 export interface SyncConfig {

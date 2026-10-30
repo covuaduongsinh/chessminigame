@@ -10,7 +10,7 @@
       "outputs": []
     },
     "export:web": {
-      "dependsOn": [],
+      "dependsOn": ["^typecheck"],
       "outputs": ["dist/**"],
       "env": ["EXPO_PUBLIC_*", "EXPO_BASE_URL"]
     }

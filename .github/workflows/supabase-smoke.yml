@@ -26,7 +26,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Luồng CLB trên supabase.dsc.edu.vn
+      - name: Luồng CLB trên supabasechessminigame.dsc.edu.vn
         run: pnpm --filter @duongsinh/sync test
         env:
           SUPABASE_LIVE: "1"

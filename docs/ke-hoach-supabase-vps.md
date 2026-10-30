@@ -1,6 +1,6 @@
 # Kế hoạch chuyển sang Supabase tự cài trên VPS
 
-Địa chỉ mới: **https://supabase.dsc.edu.vn**. Lập ngày 24/10/2026. Instance này **chỉ dùng cho Dương Sinh Chess**.
+Địa chỉ mới: **https://supabasechessminigame.dsc.edu.vn** (chạy trên **VPS riêng** cho app; thay cho `supabase.dsc.edu.vn` dự định lúc đầu, không dùng nữa). Lập ngày 24/10/2026. Instance này **chỉ dùng cho Dương Sinh Chess**.
 
 ## Đã chốt
 
@@ -14,7 +14,7 @@
 
 ## Vì sao phải làm theo thứ tự
 
-- Máy Claude trên mây **không kết nối được** tới `supabase.dsc.edu.vn`, vì proxy chặn. Mọi thao tác và kiểm tra trên VPS đều chạy qua **GitHub Actions** (runner có Internet) hoặc trên máy Thầy.
+- Máy Claude trên mây **không kết nối được** tới `supabasechessminigame.dsc.edu.vn`, vì proxy chặn. Mọi thao tác và kiểm tra trên VPS đều chạy qua **GitHub Actions** (runner có Internet) hoặc trên máy Thầy.
 - Công cụ Supabase MCP chỉ quản lý được project trên Cloud, không quản lý được VPS.
 - Bản web và bộ cài desktop v0.1.0 đang trỏ tới Cloud. Phải chuyển xong và kiểm tra trên VPS rồi mới xóa Cloud.
 
@@ -31,7 +31,7 @@ Toàn bộ instance (database, tài khoản người dùng, khóa API, email g�
 - **Khóa và mật khẩu chỉ dùng cho dự án này.** `SUPABASE_DB_URL` trên GitHub chỉ mở được database của app cờ; lộ khóa thì không ảnh hưởng hệ thống khác.
 - **Sao lưu và khôi phục theo nguyên instance.** `pg_dump` cả database chính là sao lưu toàn bộ app; khôi phục không sợ đè dữ liệu của dự án khác.
 - **Tắt dịch vụ app không dùng để tiết kiệm RAM VPS** (tùy chọn): app không lưu file nên có thể tắt `storage` và `imgproxy`; `functions` để tắt cho tới giai đoạn 4 (kiểm luật cờ phía server). Nếu tắt, xóa luôn route tương ứng trong `volumes/api/kong.yml` rồi `docker compose up -d`.
-- Tên miền `supabase.dsc.edu.vn` dùng được. Nếu muốn tên thể hiện rõ là của app cờ, có thể đổi sang ví dụ `api-chess.dsc.edu.vn`; báo Claude trước khi Giai đoạn 1 để em ghi đúng địa chỉ vào app.
+- Tên miền `supabasechessminigame.dsc.edu.vn` dùng được. Nếu muốn tên thể hiện rõ là của app cờ, có thể đổi sang ví dụ `api-chess.dsc.edu.vn`; báo Claude trước khi Giai đoạn 1 để em ghi đúng địa chỉ vào app.
 
 ### 0.1 Kiểm tra bảo mật (bắt buộc)
 
@@ -46,8 +46,8 @@ Bản Supabase tự cài đi kèm **khóa mẫu công khai trên mạng**. Mở 
 
 ```ini
 SITE_URL=https://covuaduongsinh.github.io/chessminigame/
-API_EXTERNAL_URL=https://supabase.dsc.edu.vn
-SUPABASE_PUBLIC_URL=https://supabase.dsc.edu.vn
+API_EXTERNAL_URL=https://supabasechessminigame.dsc.edu.vn
+SUPABASE_PUBLIC_URL=https://supabasechessminigame.dsc.edu.vn
 ADDITIONAL_REDIRECT_URLS=duongsinh://**,http://localhost:8081/**,tauri://localhost/**
 
 # Trẻ em vào app không cần email
@@ -84,9 +84,9 @@ Rồi chạy `docker compose up -d auth`.
 
 Phương án đã chọn là kết nối thẳng, nên cổng database sẽ mở ra Internet. Để an toàn:
 
-- **Bắt buộc bật TLS** trên cổng Postgres hoặc pooler (Supavisor), dùng chứng chỉ của `supabase.dsc.edu.vn`. Nếu không có TLS, mật khẩu database sẽ đi qua mạng dưới dạng chữ thường.
+- **Bắt buộc bật TLS** trên cổng Postgres hoặc pooler (Supavisor), dùng chứng chỉ của `supabasechessminigame.dsc.edu.vn`. Nếu không có TLS, mật khẩu database sẽ đi qua mạng dưới dạng chữ thường.
 - Kiểm tra từ máy Thầy:
-  `psql "postgresql://postgres.<POOLER_TENANT_ID>:<mật khẩu>@supabase.dsc.edu.vn:5432/postgres?sslmode=verify-full" -c "select 1"`
+  `psql "postgresql://postgres.<POOLER_TENANT_ID>:<mật khẩu>@supabasechessminigame.dsc.edu.vn:5432/postgres?sslmode=verify-full" -c "select 1"`
 - GitHub → Settings → Secrets and variables → Actions → **New repository secret**:
   - `SUPABASE_DB_URL` = chuỗi kết nối ở trên.
 - Sau này có thể chuyển sang SSH tunnel để đóng hẳn cổng database. Workflow chỉ cần đổi bước kết nối.
@@ -126,7 +126,7 @@ Gửi **ANON_KEY** của VPS. Khóa này công khai, vốn nằm sẵn trong app
      - Cuối cùng xóa cả 3 tài khoản.
 4. **Chuyển app sang VPS:**
    - `DEFAULT_SYNC_CONFIG` trong `packages/sync`: URL mới và ANON_KEY của VPS.
-   - CSP desktop trong `tauri.conf.json`: thay `*.supabase.co` bằng `https://supabase.dsc.edu.vn wss://supabase.dsc.edu.vn`.
+   - CSP desktop trong `tauri.conf.json`: thay `*.supabase.co` bằng `https://supabasechessminigame.dsc.edu.vn wss://supabasechessminigame.dsc.edu.vn`.
    - Mẫu email tiếng Việt, đúng nhận diện Dương Sinh, có `{{ .Token }}`, đặt ở `apps/app/public/email/` để GitHub Pages phục vụ.
    - Cập nhật `CLAUDE.md`, `docs/ban-giao.md`, `docs/huong-dan-chay.md`.
 5. **Phát hành:**

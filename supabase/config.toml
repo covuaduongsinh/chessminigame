@@ -1,3 +1,3 @@
 # Cấu hình tối thiểu cho Supabase CLI: chỉ dùng để áp migration lên Supabase tự cài trên VPS
-# (https://supabase.dsc.edu.vn, dành riêng cho Dương Sinh Chess) qua workflow db-migrate.yml.
+# (https://supabasechessminigame.dsc.edu.vn, dành riêng cho Dương Sinh Chess) qua workflow db-migrate.yml.
 project_id = "duongsinh-chess"

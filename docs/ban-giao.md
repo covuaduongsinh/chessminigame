@@ -1,6 +1,6 @@
 # Bàn giao dự án Dương Sinh Chess
 
-Cập nhật: 24/10/2026. Toàn bộ mã đã được merge vào nhánh `main`.
+Cập nhật: 30/10/2026. Toàn bộ mã đã được merge vào nhánh `main`.
 
 ## 1. Trạng thái hiện tại
 
@@ -12,12 +12,12 @@ Cập nhật: 24/10/2026. Toàn bộ mã đã được merge vào nhánh `main`.
 | Web | Tự triển khai lên GitHub Pages mỗi lần push `main`: <https://covuaduongsinh.github.io/chessminigame/>. Playwright 8/8 đạt, đã kiểm thêm trên WebKit. |
 | Desktop (Tauri 2) | Bộ cài Windows, macOS (Apple Silicon + Intel), Linux đã phát hành ở [Release v0.1.0](https://github.com/covuaduongsinh/chessminigame/releases). Chưa ký số nên Windows/macOS sẽ cảnh báo khi mở lần đầu. |
 | Mobile | Bundle iOS/Android (Hermes) xuất được. **Chưa chạy trên máy thật.** |
-| Supabase | Chuyển sang VPS `https://supabase.dsc.edu.vn` (dành riêng cho app). Schema tự áp qua workflow `db-migrate.yml`, kiểm tra trên máy chủ thật qua `supabase-smoke.yml`. App có nút xóa tài khoản. |
+| Supabase | Chuyển sang VPS `https://supabasechessminigame.dsc.edu.vn` (VPS riêng, dành riêng cho app). Schema tự áp qua workflow `db-migrate.yml`, kiểm tra trên máy chủ thật qua `supabase-smoke.yml`. App có nút xóa tài khoản. |
 | CI | `ci.yml` xanh trên GitHub. |
 
 ## 2. Việc Thầy cần làm trên dashboard (Claude không tự làm được)
 
-> **Supabase đã chuyển sang VPS `https://supabase.dsc.edu.vn`.** Việc còn lại ở mục "Giai đoạn 2–3" trong [ke-hoach-supabase-vps.md](ke-hoach-supabase-vps.md).
+> **Supabase đã chuyển sang VPS `https://supabasechessminigame.dsc.edu.vn`.** Việc còn lại ở mục "Giai đoạn 2–3" trong [ke-hoach-supabase-vps.md](ke-hoach-supabase-vps.md).
 
 1. **Ra bản desktop mới:** Actions → *Desktop (Tauri)* → Run workflow, nhập phiên bản (ví dụ `v0.1.2`, nhớ tăng `version` trong `apps/desktop/src-tauri/tauri.conf.json`) → chờ xong thì Actions → *Phát hành bản desktop* → Run workflow với cùng phiên bản. Nhập lại phiên bản chưa phát hành thì bản nháp cũ tự được thay.
 2. **Web** đã tự động: mỗi lần push `main`, workflow *Web (GitHub Pages)* build và cập nhật <https://covuaduongsinh.github.io/chessminigame/>. Muốn tên miền riêng (ví dụ `chess.dsc.edu.vn`), vào Settings → Pages → Custom domain.
